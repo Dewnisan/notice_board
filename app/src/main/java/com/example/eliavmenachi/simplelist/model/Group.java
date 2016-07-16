@@ -1,26 +1,29 @@
 package com.example.eliavmenachi.simplelist.model;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by eliav.menachi on 25/03/2015.
  */
 public class Group {
-    String id;
-    String name;
+    private String mName;
+    private String mOwner;
 
-    public Group() {
+    private List<User> mMembers;
 
-    }
+    public Group(String name, String owner) {
+        this.mName = name;
+        this.mOwner = owner;
 
-    public Group(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public String getId() {
-        return id;
+        this.mMembers = new LinkedList<User>();
     }
 
     public String getName() {
-        return name;
+        return mName;
+    }
+
+    public String getOwner() {
+        return mOwner;
     }
 }

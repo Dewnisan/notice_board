@@ -10,7 +10,7 @@ import android.os.Bundle;
  * Created by Tal on 20/04/2016.
  */
 public class MyAlertDialog extends DialogFragment {
-    public static String EXTRA_MESSAGE = "message";
+    public static String ARG_MESSAGE = "MESSAGE";
 
     private Delegate delegate;
     private String mMessage;
@@ -18,7 +18,7 @@ public class MyAlertDialog extends DialogFragment {
     public static final MyAlertDialog newInstance(String message) {
         MyAlertDialog fragment = new MyAlertDialog();
         Bundle bundle = new Bundle(1);
-        bundle.putString(EXTRA_MESSAGE, message);
+        bundle.putString(ARG_MESSAGE, message);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -32,7 +32,7 @@ public class MyAlertDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         if (getArguments() != null) {
-            mMessage = getArguments().getString(EXTRA_MESSAGE);
+            mMessage = getArguments().getString(ARG_MESSAGE);
         } else {
             mMessage = "Success";
         }

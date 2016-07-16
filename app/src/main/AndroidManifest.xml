@@ -24,13 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".StudentDetailsActivity"
-            android:label="@string/title_activity_student_details" />
-        <activity
-            android:name=".NewStudentActivity"
-            android:label="@string/title_activity_new_student"></activity>
-        <activity android:name=".GroupListRowActivity"></activity>
+        <activity android:name=".GroupListRowActivity" />
     </application>
 
 </manifest>

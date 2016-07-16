@@ -24,7 +24,8 @@
             android:id="@id/fragment_login_et_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:inputType="textEmailAddress"
+            android:text="tal@mail.com" />
     </LinearLayout>
 
     <LinearLayout
@@ -42,7 +43,8 @@
             android:id="@id/fragment_login_et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:text="123456" />
     </LinearLayout>
 
     <RelativeLayout

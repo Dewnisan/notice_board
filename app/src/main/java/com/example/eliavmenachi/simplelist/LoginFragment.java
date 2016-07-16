@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -57,11 +60,18 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void onDone(String userId, Exception e) {
                         if (e == null) {
-                            Log.d("LoginFragment", "Login success");
                             mListener = (OnFragmentInteractionListener) getActivity();
-                            mListener.onLogin(userId);
+                            mListener.onLogin();
                         } else {
-                            Log.d("LoginFragment", e.getMessage());
+                            MyAlertDialog dialog = MyAlertDialog.newInstance("Login failed: " + e.getMessage());
+                            dialog.setDelegate(new MyAlertDialog.Delegate() {
+                                @Override
+                                public void onOk() {
+                                    Log.d("LoginFragment", "OK pressed");
+                                }
+                            });
+
+                            dialog.show(getFragmentManager(), "LoginFragment");
                         }
                     }
                 });
@@ -86,10 +96,18 @@ public class LoginFragment extends Fragment {
                                 }
                             });
 
-                            FragmentManager fragmentManager = getFragmentManager();
-                            dialog.show(fragmentManager, "LoginFragment");
+                            dialog.show(getFragmentManager(), "LoginFragment");
                         } else {
-                            Log.d("LoginFragment", e.getMessage());
+                            MyAlertDialog dialog = MyAlertDialog.newInstance("Registration Failed: " + e.getMessage());
+                            dialog.setDelegate(new MyAlertDialog.Delegate() {
+                                @Override
+                                public void onOk() {
+                                    Log.d("LoginFragment", "OK pressed");
+                                }
+                            });
+
+                            dialog.show(getFragmentManager(), "LoginFragment");
+                            ;
                         }
                     }
                 });
@@ -105,7 +123,27 @@ public class LoginFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_groups, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_profile) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     public interface OnFragmentInteractionListener {
-        void onLogin(String userId);
+        void onLogin();
     }
 }

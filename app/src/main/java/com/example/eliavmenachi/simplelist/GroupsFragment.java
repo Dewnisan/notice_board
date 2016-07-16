@@ -4,6 +4,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -62,27 +65,20 @@ public class GroupsFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        mList = (ListView) view.findViewById(R.id.fragment_group_list_lv);
-        mData = Model.getInstance().getGroups();
+//        mList = (ListView) view.findViewById(R.id.fragment_group_list_lv);
+//        Model.getInstance().getAllUserGroupsAsync(null);
 
-        mAdapter = new MyAdapter();
-        mList.setAdapter(mAdapter);
-
-        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String studentId = mData.get(position).getId();
-            }
-        });
+//        mAdapter = new MyAdapter();
+//        mList.setAdapter(mAdapter);
+//
+//        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                String studentId = mData.get(position).getId();
+//            }
+//        });
 
         return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -91,19 +87,39 @@ public class GroupsFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onCreateGroupItemSelected();
+
+        void onProfileItemSelected();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_groups, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        switch (id) {
+            case R.id.action_profile:
+                mListener = (OnFragmentInteractionListener) getActivity();
+                mListener.onProfileItemSelected();
+                return true;
+
+            case R.id.action_create_group:
+                mListener = (OnFragmentInteractionListener) getActivity();
+                mListener.onCreateGroupItemSelected();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     class MyAdapter extends BaseAdapter {

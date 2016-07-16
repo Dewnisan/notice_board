@@ -10,11 +10,26 @@
     tools:context="com.example.eliavmenachi.simplelist.GroupListRowActivity">
 
 
-    <ImageView
-        android:id="@+id/activity_students_list_row_img"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:adjustViewBounds="true" />
+    <FrameLayout
+        android:id="@+id/rowImageFrame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:src="@mipmap/ic_launcher" />
+
+        <ProgressBar
+            android:id="@+id/rowImageProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+    </FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

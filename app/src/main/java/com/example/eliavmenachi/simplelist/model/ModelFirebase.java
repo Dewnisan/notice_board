@@ -53,6 +53,19 @@ public class ModelFirebase {
         });
     }
 
+    public String getUserId() {
+        AuthData authData = mFirebase.getAuth();
+        if (authData != null) {
+            return authData.getUid();
+        } else {
+            return null;
+        }
+    }
+
+    public void addGroup(Group group) {
+        Firebase ref = mFirebase.child("groups");
+        ref.push().setValue(group);
+    }
 
     public void getAllStudentsAsynch(final Model.GetStudentsListener listener) {
         Firebase stRef = mFirebase.child("student");
@@ -99,6 +112,32 @@ public class ModelFirebase {
     public void add(Student st) {
         Firebase stRef = mFirebase.child("student").child(st.getId());
         stRef.setValue(st);
+    }
+
+    public void getAllUserGroupsAsync(final Model.GetGroupsListener listener) {
+        Firebase ref = mFirebase.child("groups");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                final List<Group> list = new LinkedList<Group>();
+                Log.d("ModelFirebase", "There are " + snapshot.getChildrenCount() + " groups");
+
+                for (DataSnapshot groupSnapshot : snapshot.getChildren()) {
+                    Group group = groupSnapshot.getValue(Group.class);
+
+                    list.add(group);
+                }
+
+                listener.onResult(list);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+                listener.onCancel();
+            }
+        });
     }
 }
 

@@ -16,6 +16,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+        }
     }
     packagingOptions {
         exclude 'META-INF/LICENSE'
@@ -25,12 +28,15 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/cloudinary-core-1.2.2.jar')
     compile files('libs/cloudinary-android-1.2.2.jar')
     compile 'com.firebase:firebase-client-android:2.5.2+'
     compile 'com.android.support:support-v4:19.1.0'
 }
+
+
+
 
 
 

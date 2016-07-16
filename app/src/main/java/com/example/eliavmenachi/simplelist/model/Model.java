@@ -41,20 +41,35 @@ public class Model {
         return mInstance;
     }
 
-    public List<Group> getGroups() {
-        return null;
-    }
-
-    public interface AuthListener {
-        void onDone(String userId, Exception e);
-    }
-
     public void login(String email, String pwd, AuthListener listener) {
         mModelFirebase.login(email, pwd, listener);
     }
 
     public void register(String email, String pwd, AuthListener listener) {
         mModelFirebase.register(email, pwd, listener);
+    }
+
+
+    public String getUserId() {
+        return mModelFirebase.getUserId();
+    }
+
+    public interface GetGroupsListener {
+        public void onResult(List<Group> groups);
+
+        public void onCancel();
+    }
+
+    public void getAllUserGroupsAsync(GetGroupsListener listener) {
+        mModelFirebase.getAllUserGroupsAsync(listener);
+    }
+
+    public interface AuthListener {
+        void onDone(String userId, Exception e);
+    }
+
+    public void addGroup(Group group) {
+        mModelFirebase.addGroup(group);
     }
 
     public interface GetStudentsListener {

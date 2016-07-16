@@ -25,65 +25,83 @@ import java.util.List;
  */
 public class Model {
     private final static Model instance = new Model();
-    Context context;
-    ModelFirebase modelFirebase;
-    ModelCoulinary modelCloudinary;
 
-    private Model(){
-        context = MyApplication.getAppContext();
-        modelFirebase = new ModelFirebase(MyApplication.getAppContext());
-        modelCloudinary = new ModelCoulinary();
+    Context mContext;
+
+    ModelFirebase mModelFirebase;
+    ModelCloudinary mModelCloudinary;
+
+    private Model() {
+        mContext = MyApplication.getAppContext();
+        mModelFirebase = new ModelFirebase(MyApplication.getAppContext());
+        mModelCloudinary = new ModelCloudinary();
     }
 
-    public static Model getInstance(){
+    public static Model getInstance() {
         return instance;
     }
 
-    public interface GetStudentsListener{
+    public interface AuthListener {
+        void onDone(String userId, Exception e);
+    }
+
+    public void login(String email, String pwd, AuthListener listener) {
+        mModelFirebase.login(email, pwd, listener);
+    }
+
+    public void signup(String email, String pwd, AuthListener listener) {
+        mModelFirebase.signup(email, pwd, listener);
+    }
+
+    public interface GetStudentsListener {
         public void onResult(List<Student> students);
+
         public void onCancel();
     }
 
-    public void getAllStudentsAsynch(GetStudentsListener listener){
-        modelFirebase.getAllStudentsAsynch(listener);
+    public void getAllStudentsAsynch(GetStudentsListener listener) {
+        mModelFirebase.getAllStudentsAsynch(listener);
     }
 
-    public interface GetStudent{
+    public interface GetStudent {
         public void onResult(Student student);
+
         public void onCancel();
     }
-    public void getStudentById(String id,GetStudent listener){
-        modelFirebase.getStudentById(id,listener);
+
+    public void getStudentById(String id, GetStudent listener) {
+        mModelFirebase.getStudentById(id, listener);
     }
 
-    public void add(Student st){
-        modelFirebase.add(st);
+    public void add(Student st) {
+        mModelFirebase.add(st);
     }
 
 
     public void saveImage(final Bitmap imageBitmap, final String imageName) {
-        saveImageToFile(imageBitmap,imageName); // synchronously save image locally
+        saveImageToFile(imageBitmap, imageName); // synchronously save image locally
         Thread d = new Thread(new Runnable() {  // asynchronously save image to parse
             @Override
             public void run() {
-                modelCloudinary.saveImage(imageBitmap,imageName);
+                mModelCloudinary.saveImage(imageBitmap, imageName);
             }
         });
         d.start();
     }
 
-    public interface LoadImageListener{
+    public interface LoadImageListener {
         public void onResult(Bitmap imageBmp);
     }
 
     public void loadImage(final String imageName, final LoadImageListener listener) {
-        AsyncTask<String,String,Bitmap> task = new AsyncTask<String, String, Bitmap >() {
+        AsyncTask<String, String, Bitmap> task = new AsyncTask<String, String, Bitmap>() {
             @Override
             protected Bitmap doInBackground(String... params) {
                 Bitmap bmp = loadImageFromFile(imageName);              //first try to fin the image on the device
                 if (bmp == null) {                                      //if image not found - try downloading it from parse
-                    bmp = modelCloudinary.loadImage(imageName);
-                    if (bmp != null) saveImageToFile(bmp,imageName);    //save the image locally for next time
+                    bmp = mModelCloudinary.loadImage(imageName);
+                    if (bmp != null)
+                        saveImageToFile(bmp, imageName);    //save the image locally for next time
                 }
                 return bmp;
             }
@@ -96,7 +114,7 @@ public class Model {
         task.execute();
     }
 
-    private void saveImageToFile(Bitmap imageBitmap, String imageFileName){
+    private void saveImageToFile(Bitmap imageBitmap, String imageFileName) {
         FileOutputStream fos;
         OutputStream out = null;
         try {
@@ -106,7 +124,7 @@ public class Model {
             if (!dir.exists()) {
                 dir.mkdir();
             }
-            File imageFile = new File(dir,imageFileName);
+            File imageFile = new File(dir, imageFileName);
             imageFile.createNewFile();
 
             out = new FileOutputStream(imageFile);
@@ -117,8 +135,8 @@ public class Model {
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             Uri contentUri = Uri.fromFile(imageFile);
             mediaScanIntent.setData(contentUri);
-            context.sendBroadcast(mediaScanIntent);
-            Log.d("tag","add image to cache: " + imageFileName);
+            mContext.sendBroadcast(mediaScanIntent);
+            Log.d("tag", "add image to cache: " + imageFileName);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -127,17 +145,17 @@ public class Model {
         }
     }
 
-    private Bitmap loadImageFromFile(String imageFileName){
+    private Bitmap loadImageFromFile(String imageFileName) {
         String str = null;
         Bitmap bitmap = null;
         try {
             File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            File imageFile = new File(dir,imageFileName);
+            File imageFile = new File(dir, imageFileName);
 
-            //File dir = context.getExternalFilesDir(null);
+            //File dir = mContext.getExternalFilesDir(null);
             InputStream inputStream = new FileInputStream(imageFile);
             bitmap = BitmapFactory.decodeStream(inputStream);
-            Log.d("tag","got image from cache: " + imageFileName);
+            Log.d("tag", "got image from cache: " + imageFileName);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

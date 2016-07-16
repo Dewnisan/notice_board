@@ -24,7 +24,7 @@ import java.util.List;
  * Created by eliav.menachi on 25/03/2015.
  */
 public class Model {
-    private final static Model instance = new Model();
+    private final static Model mInstance = new Model();
 
     Context mContext;
 
@@ -38,7 +38,11 @@ public class Model {
     }
 
     public static Model getInstance() {
-        return instance;
+        return mInstance;
+    }
+
+    public List<Group> getGroups() {
+        return null;
     }
 
     public interface AuthListener {
@@ -49,8 +53,8 @@ public class Model {
         mModelFirebase.login(email, pwd, listener);
     }
 
-    public void signup(String email, String pwd, AuthListener listener) {
-        mModelFirebase.signup(email, pwd, listener);
+    public void register(String email, String pwd, AuthListener listener) {
+        mModelFirebase.register(email, pwd, listener);
     }
 
     public interface GetStudentsListener {

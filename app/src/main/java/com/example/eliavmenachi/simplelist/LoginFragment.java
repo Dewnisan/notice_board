@@ -1,7 +1,6 @@
 package com.example.eliavmenachi.simplelist;
 
-import android.content.Context;
-import android.net.Uri;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -59,6 +58,8 @@ public class LoginFragment extends Fragment {
                     public void onDone(String userId, Exception e) {
                         if (e == null) {
                             Log.d("LoginFragment", "Login success");
+                            mListener = (OnFragmentInteractionListener) getActivity();
+                            mListener.onLogin(userId);
                         } else {
                             Log.d("LoginFragment", e.getMessage());
                         }
@@ -73,13 +74,20 @@ public class LoginFragment extends Fragment {
                 String email = ((EditText) getActivity().findViewById(R.id.fragment_login_et_user_name)).getText().toString();
                 String password = ((EditText) getActivity().findViewById(R.id.fragment_login_et_password)).getText().toString();
 
-                Model.getInstance().signup(email, password, new Model.AuthListener() {
+                Model.getInstance().register(email, password, new Model.AuthListener() {
                     @Override
                     public void onDone(String userId, Exception e) {
                         if (e == null) {
-                            Log.d("LoginFragment", "Signup success");
+                            MyAlertDialog dialog = MyAlertDialog.newInstance("Registration Succeeded");
+                            dialog.setDelegate(new MyAlertDialog.Delegate() {
+                                @Override
+                                public void onOk() {
+                                    Log.d("LoginFragment", "OK pressed");
+                                }
+                            });
 
-
+                            FragmentManager fragmentManager = getFragmentManager();
+                            dialog.show(fragmentManager, "LoginFragment");
                         } else {
                             Log.d("LoginFragment", e.getMessage());
                         }
@@ -91,31 +99,13 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onLogin(String userId);
     }
 }

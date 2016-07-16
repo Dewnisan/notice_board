@@ -25,7 +25,7 @@ public class ModelFirebase {
     }
 
 
-    public void signup(String email, String password, final Model.AuthListener listener) {
+    public void register(String email, String password, final Model.AuthListener listener) {
         mFirebase.createUser(email, password, new Firebase.ValueResultHandler<Map<String, Object>>() {
             @Override
             public void onSuccess(Map<String, Object> result) {

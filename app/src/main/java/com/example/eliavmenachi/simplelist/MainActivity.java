@@ -7,14 +7,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements LoginFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        LoginFragment fragment = new LoginFragment();
+        LoginFragment fragment = LoginFragment.newInstance();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.add(R.id.activity_main_fragment_container, fragment);
@@ -37,9 +37,20 @@ public class MainActivity extends Activity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_add:
-                return true;
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onLogin(String userId) {
+        GroupsFragment fragment = GroupsFragment.newInstance();
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.activity_main_fragment_container, fragment);
+        transaction.addToBackStack(null);
+
+        transaction.commit();
     }
 }

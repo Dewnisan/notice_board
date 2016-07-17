@@ -29,7 +29,7 @@ public class ModelFirebase {
     }
 
 
-    public void register(String email, String password, final Model.AuthListener listener) {
+    public void signUp(String email, String password, final Model.AuthListener listener) {
         mFirebase.createUser(email, password, new Firebase.ValueResultHandler<Map<String, Object>>() {
             @Override
             public void onSuccess(Map<String, Object> result) {
@@ -43,7 +43,7 @@ public class ModelFirebase {
         });
     }
 
-    public void login(String email, String password, final Model.AuthListener listener) {
+    public void signIn(String email, String password, final Model.AuthListener listener) {
         mFirebase.authWithPassword(email, password, new Firebase.AuthResultHandler() {
             @Override
             public void onAuthenticated(AuthData authData) {
@@ -55,6 +55,10 @@ public class ModelFirebase {
                 listener.onDone(null, firebaseError.toException());
             }
         });
+    }
+
+    public void signOut() {
+        mFirebase.unauth();
     }
 
     public String getUserId() {
@@ -71,20 +75,20 @@ public class ModelFirebase {
         ref.push().setValue(group);
     }
 
-    public void getAllStudentsAsynch(final Model.GetStudentsListener listener) {
-        Firebase stRef = mFirebase.child("student");
+    public void getAllUsersAsync(final Model.GetUsersListener listener) {
+        Firebase ref = mFirebase.child("users");
         // Attach an listener to read the data at our posts reference
-        stRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                final List<Student> stList = new LinkedList<Student>();
-                Log.d("TAG", "There are " + snapshot.getChildrenCount() + " blog posts");
-                for (DataSnapshot stSnapshot : snapshot.getChildren()) {
-                    Student st = stSnapshot.getValue(Student.class);
-                    Log.d("TAG", st.getFname() + " - " + st.getId());
-                    stList.add(st);
+                final List<User> list = new LinkedList<User>();
+
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    User user = userSnapshot.getValue(User.class);
+                    list.add(user);
                 }
-                listener.onResult(stList);
+
+                listener.onResult(list);
             }
 
             @Override
@@ -95,14 +99,13 @@ public class ModelFirebase {
         });
     }
 
-    public void getStudentById(String id, final Model.GetStudent listener) {
-        Firebase stRef = mFirebase.child("student").child(id);
-        stRef.addListenerForSingleValueEvent(new ValueEventListener() {
+    public void getUserById(String id, final Model.GetUser listener) {
+        Firebase ref = mFirebase.child("users").child(id);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Student st = snapshot.getValue(Student.class);
-                Log.d("TAG", st.getFname() + " - " + st.getId());
-                listener.onResult(st);
+                User user = snapshot.getValue(User.class);
+                listener.onResult(user);
             }
 
             @Override
@@ -113,9 +116,9 @@ public class ModelFirebase {
         });
     }
 
-    public void add(Student st) {
-        Firebase stRef = mFirebase.child("student").child(st.getId());
-        stRef.setValue(st);
+    public void add(User user) {
+        Firebase ref = mFirebase.child("user").child(user.getId());
+        ref.setValue(user);
     }
 
     public void getAllUserGroupsAsync(final Model.GetGroupsListener listener) {

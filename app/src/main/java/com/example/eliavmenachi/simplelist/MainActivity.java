@@ -1,15 +1,14 @@
 package com.example.eliavmenachi.simplelist;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends Activity implements RegisterFragment.OnFragmentInteractionListener,
-        LoginFragment.OnFragmentInteractionListener,
+public class MainActivity extends Activity implements SignUpFragment.OnFragmentInteractionListener,
+        SignInFragment.OnFragmentInteractionListener,
         GroupsFragment.OnFragmentInteractionListener,
         CreateGroupFragment.OnFragmentInteractionListener {
 
@@ -18,7 +17,7 @@ public class MainActivity extends Activity implements RegisterFragment.OnFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        LoginFragment fragment = LoginFragment.newInstance();
+        SignInFragment fragment = SignInFragment.newInstance();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.add(R.id.activity_main_fragment_container, fragment);
@@ -60,7 +59,7 @@ public class MainActivity extends Activity implements RegisterFragment.OnFragmen
 
     @Override
     public void onRegister() {
-        RegisterFragment fragment = RegisterFragment.newInstance();
+        SignUpFragment fragment = SignUpFragment.newInstance();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 

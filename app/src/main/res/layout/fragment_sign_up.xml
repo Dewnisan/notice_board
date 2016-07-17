@@ -7,21 +7,21 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.eliavmenachi.simplelist.RegisterFragment">
+    tools:context=".SignUpFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/fragment_register_lbl_name"
+            android:id="@+id/fragment_sign_up_lbl_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/fragment_register_et_name"
+            android:labelFor="@+id/fragment_sign_up_et_name"
             android:text="Name: " />
 
         <EditText
-            android:id="@id/fragment_register_et_name"
+            android:id="@id/fragment_sign_up_et_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
@@ -33,14 +33,14 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/fragment_register_lbl_password"
+            android:id="@+id/fragment_sign_up_lbl_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/fragment_register_et_password"
+            android:labelFor="@+id/fragment_sign_up_et_password"
             android:text="Password: " />
 
         <EditText
-            android:id="@id/fragment_register_et_password"
+            android:id="@id/fragment_sign_up_et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
@@ -52,14 +52,14 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/fragment_register_lbl_password_again"
+            android:id="@+id/fragment_sign_up_lbl_password_again"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/fragment_register_et_password_again"
+            android:labelFor="@+id/fragment_sign_up_et_password_again"
             android:text="Password: " />
 
         <EditText
-            android:id="@id/fragment_register_et_password_again"
+            android:id="@id/fragment_sign_up_et_password_again"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
@@ -72,14 +72,14 @@
         android:gravity="bottom|end">
 
         <Button
-            android:id="@+id/fragment_register_btn_cancel"
+            android:id="@+id/fragment_sign_up_btn_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Cancel" />
 
         <Button
-            android:id="@+id/fragment_register_btn_save"
+            android:id="@+id/fragment_sign_up_btn_save"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

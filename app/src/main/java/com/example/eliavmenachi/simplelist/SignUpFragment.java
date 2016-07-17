@@ -1,7 +1,5 @@
 package com.example.eliavmenachi.simplelist;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -13,16 +11,16 @@ import android.widget.EditText;
 import com.example.eliavmenachi.simplelist.model.Model;
 
 
-public class RegisterFragment extends Fragment {
+public class SignUpFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public RegisterFragment() {
+    public SignUpFragment() {
         // Required empty public constructor
     }
 
-    public static RegisterFragment newInstance() {
-        RegisterFragment fragment = new RegisterFragment();
+    public static SignUpFragment newInstance() {
+        SignUpFragment fragment = new SignUpFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -39,21 +37,21 @@ public class RegisterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_register, container, false);
+        View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
-        view.findViewById(R.id.fragment_register_btn_save).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.fragment_sign_up_btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = ((EditText) getActivity().findViewById(R.id.fragment_register_et_name)).getText().toString();
+                String email = ((EditText) getActivity().findViewById(R.id.fragment_sign_up_et_name)).getText().toString();
 
-                String password = ((EditText) getActivity().findViewById(R.id.fragment_register_et_password)).getText().toString();
-                String passwordAgain = ((EditText) getActivity().findViewById(R.id.fragment_register_et_password_again)).getText().toString();
+                String password = ((EditText) getActivity().findViewById(R.id.fragment_sign_up_et_password)).getText().toString();
+                String passwordAgain = ((EditText) getActivity().findViewById(R.id.fragment_sign_up_et_password_again)).getText().toString();
 
                 if (!passwordsMatch(password, passwordAgain)) {
                     return;
                 }
 
-                Model.getInstance().register(email, password, new Model.AuthListener() {
+                Model.getInstance().signUp(email, password, new Model.AuthListener() {
                     @Override
                     public void onDone(String userId, Exception e) {
                         MyAlertDialog dialog;
@@ -70,17 +68,17 @@ public class RegisterFragment extends Fragment {
                         dialog.setDelegate(new MyAlertDialog.Delegate() {
                             @Override
                             public void onOk() {
-                                Log.d("RegisterFragment", "OK pressed");
+                                Log.d("SignUpFragment", "OK pressed");
                             }
                         });
 
-                        dialog.show(getFragmentManager(), "RegisterFragment");
+                        dialog.show(getFragmentManager(), "SignUpFragment");
                     }
                 });
             }
         });
 
-        view.findViewById(R.id.fragment_register_btn_cancel).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.fragment_sign_up_btn_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener = (OnFragmentInteractionListener) getActivity();
@@ -97,11 +95,11 @@ public class RegisterFragment extends Fragment {
             dialog.setDelegate(new MyAlertDialog.Delegate() {
                 @Override
                 public void onOk() {
-                    Log.d("RegisterFragment", "OK pressed");
+                    Log.d("SignUpFragment", "OK pressed");
                 }
             });
 
-            dialog.show(getFragmentManager(), "RegisterFragment");
+            dialog.show(getFragmentManager(), "SignUpFragment");
 
             return false;
         }

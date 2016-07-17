@@ -18,6 +18,8 @@ import java.util.Map;
  * Created by eliav.menachi on 17/05/2016.
  */
 public class ModelCloudinary {
+    private static final String CLOUDINARY_URL = "cloudinary://421694581797959:TIm0KXgFla2e129ByOKaYCucxjc@doipsyjoy";
+
     Cloudinary cloudinary;
 
     public ModelCloudinary() {
@@ -33,9 +35,11 @@ public class ModelCloudinary {
                     imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                     byte[] bitmapdata = bos.toByteArray();
                     ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
-                    String name = imageName.substring(0,imageName.lastIndexOf("."));
-                    Map res = cloudinary.uploader().upload(bs , ObjectUtils.asMap("public_id", name));
-                    Log.d("TAG","save image to url" + res.get("url"));
+                    String name = imageName.substring(0, imageName.lastIndexOf("."));
+                    Map res = cloudinary.uploader().upload(bs, ObjectUtils.asMap("public_id", name));
+
+                    Log.d("ModelCloudinary", "save image to url" + res.get("url"));
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -46,9 +50,12 @@ public class ModelCloudinary {
 
     public Bitmap loadImage(String imageName) {
         URL url = null;
+
         try {
             url = new URL(cloudinary.url().generate(imageName));
-            Log.d("TAG", "load image from url" + url);
+
+            Log.d("ModelCloudinary", "load image from url" + url);
+
             Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
             return bmp;
         } catch (MalformedURLException e) {
@@ -56,6 +63,7 @@ public class ModelCloudinary {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         Log.d("TAG", "url" + url);
 
         //http://res.cloudinary.com/menachi/image/upload/v1460463378/test.jpg.png

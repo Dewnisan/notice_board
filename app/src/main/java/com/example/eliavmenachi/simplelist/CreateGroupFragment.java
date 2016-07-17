@@ -45,7 +45,7 @@ public class CreateGroupFragment extends Fragment {
             public void onClick(View v) {
                 String name = ((EditText) getActivity().findViewById(R.id.fragment_create_group_et_name)).getText().toString();
                 String owner = Model.getInstance().getUserId();
-                Group group = new Group(name, owner);
+                Group group = new Group("id", name, owner, "image");
 
                 Model.getInstance().addGroup(group);
 

@@ -26,29 +26,33 @@ import java.util.List;
 public class Model {
     private final static Model mInstance = new Model();
 
-    Context mContext;
-
-    ModelFirebase mModelFirebase;
-    ModelCloudinary mModelCloudinary;
+    private Context mContext;
+    private ModelFirebase mModelFirebase;
+    private ModelCloudinary mModelCloudinary;
+    private ModelSql mModelSql;
 
     private Model() {
         mContext = MyApplication.getAppContext();
         mModelFirebase = new ModelFirebase(MyApplication.getAppContext());
         mModelCloudinary = new ModelCloudinary();
+        mModelSql = new ModelSql(MyApplication.getAppContext());
     }
 
     public static Model getInstance() {
         return mInstance;
     }
 
-    public void login(String email, String pwd, AuthListener listener) {
-        mModelFirebase.login(email, pwd, listener);
+    public void signUp(String email, String pwd, AuthListener listener) {
+        mModelFirebase.signUp(email, pwd, listener);
     }
 
-    public void register(String email, String pwd, AuthListener listener) {
-        mModelFirebase.register(email, pwd, listener);
+    public void signIn(String email, String pwd, AuthListener listener) {
+        mModelFirebase.signIn(email, pwd, listener);
     }
 
+    public void signOut() {
+        mModelFirebase.signOut();
+    }
 
     public String getUserId() {
         return mModelFirebase.getUserId();
@@ -72,28 +76,28 @@ public class Model {
         mModelFirebase.addGroup(group);
     }
 
-    public interface GetStudentsListener {
-        public void onResult(List<Student> students);
+    public interface GetUsersListener {
+        public void onResult(List<User> Users);
 
         public void onCancel();
     }
 
-    public void getAllStudentsAsynch(GetStudentsListener listener) {
-        mModelFirebase.getAllStudentsAsynch(listener);
+    public void getAllUsersAsync(GetUsersListener listener) {
+        mModelFirebase.getAllUsersAsync(listener);
     }
 
-    public interface GetStudent {
-        public void onResult(Student student);
+    public interface GetUser {
+        public void onResult(User user);
 
         public void onCancel();
     }
 
-    public void getStudentById(String id, GetStudent listener) {
-        mModelFirebase.getStudentById(id, listener);
+    public void getUserById(String id, GetUser listener) {
+        mModelFirebase.getUserById(id, listener);
     }
 
-    public void add(Student st) {
-        mModelFirebase.add(st);
+    public void add(User user) {
+        mModelFirebase.add(user);
     }
 
 

@@ -11,9 +11,12 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * Created by eliav.menachi on 17/05/2016.
@@ -70,11 +73,6 @@ public class ModelFirebase {
         }
     }
 
-    public void addGroup(Group group) {
-        Firebase ref = mFirebase.child("groups");
-        ref.push().setValue(group);
-    }
-
     public void getAllUsersAsync(final Model.GetUsersListener listener) {
         Firebase ref = mFirebase.child("users");
         // Attach an listener to read the data at our posts reference
@@ -121,9 +119,11 @@ public class ModelFirebase {
         ref.setValue(user);
     }
 
-    public void getAllUserGroupsAsync(final Model.GetGroupsListener listener) {
+    public void getAllUserGroupsAsync(final Model.GetGroupsListener listener, String lastUpdateDate) {
         Firebase ref = mFirebase.child("groups");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);
+
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 final List<Group> list = new LinkedList<Group>();
@@ -144,6 +144,21 @@ public class ModelFirebase {
                 listener.onCancel();
             }
         });
+    }
+
+    public void addGroup(Group group) {
+        SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+        SimpleDateFormat dateFormatLocal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = null;
+        date = dateFormatGmt.format(new Date()).toString();
+
+        group.setLastUpdated(date);
+        Firebase ref = mFirebase.child("groups");
+
+        Firebase newGroupRef = ref.push();
+        group.setId(newGroupRef.getKey());
+        newGroupRef.setValue(group);
     }
 }
 

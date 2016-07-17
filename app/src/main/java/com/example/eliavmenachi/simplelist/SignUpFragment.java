@@ -6,9 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.eliavmenachi.simplelist.model.Model;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class SignUpFragment extends Fragment {
@@ -39,7 +43,8 @@ public class SignUpFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
-        view.findViewById(R.id.fragment_sign_up_btn_save).setOnClickListener(new View.OnClickListener() {
+        Button btnSave = (Button) view.findViewById(R.id.fragment_sign_up_btn_save);
+        btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = ((EditText) getActivity().findViewById(R.id.fragment_sign_up_et_name)).getText().toString();

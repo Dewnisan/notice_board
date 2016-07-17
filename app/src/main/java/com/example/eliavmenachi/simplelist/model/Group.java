@@ -13,6 +13,8 @@ public class Group {
     private List<String> mMembers;
     private String mImageName;
 
+    private String mLastUpdated;
+
     public Group(String id, String name, String owner, List<String> members, String imageName) {
         this(id, name, owner, imageName);
         setMembers(members);
@@ -53,6 +55,10 @@ public class Group {
         return mImageName;
     }
 
+    public String getLastUpdated() {
+        return mLastUpdated;
+    }
+
     public void setId(String id) {
         this.mId = id;
     }
@@ -71,5 +77,9 @@ public class Group {
 
     public void setImageName(String imageName) {
         this.mImageName = imageName;
+    }
+
+    public void setLastUpdated(String lastUpdated) {
+        this.mLastUpdated = lastUpdated;
     }
 }

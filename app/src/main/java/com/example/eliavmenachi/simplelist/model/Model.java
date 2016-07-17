@@ -60,12 +60,38 @@ public class Model {
 
     public interface GetGroupsListener {
         public void onResult(List<Group> groups);
-
         public void onCancel();
     }
 
-    public void getAllUserGroupsAsync(GetGroupsListener listener) {
-        mModelFirebase.getAllUserGroupsAsync(listener);
+    public void getAllUserGroupsAsync(final GetGroupsListener listener) {
+        final String lastUpdateDate = GroupSql.getLastUpdateDate(mModelSql.getReadbleDB());
+        mModelFirebase.getAllUserGroupsAsync(new GetGroupsListener() {
+            @Override
+            public void onResult(List<Group> groups) {
+                if (groups != null && groups.size() > 0) {
+                    //update the local DB
+                    String reacentUpdate = lastUpdateDate;
+                    for (Group group : groups) {
+                        GroupSql.add(mModelSql.getWritableDB(), group);
+                        if (reacentUpdate == null || group.getLastUpdated().compareTo(reacentUpdate) > 0) {
+                            reacentUpdate = group.getLastUpdated();
+                        }
+                    }
+
+                    GroupSql.setLastUpdateDate(mModelSql.getWritableDB(), reacentUpdate);
+                }
+                //return the complete student list to the caller
+                List<Group> res = GroupSql.getAllGroups(mModelSql.getReadbleDB());
+                listener.onResult(res);
+            }
+
+            @Override
+            public void onCancel() {
+                listener.onCancel();
+            }
+        }, lastUpdateDate);
+
+        mModelFirebase.getAllUserGroupsAsync(listener, lastUpdateDate);
     }
 
     public interface AuthListener {

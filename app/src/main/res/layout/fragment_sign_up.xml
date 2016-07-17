@@ -72,17 +72,18 @@
         android:gravity="bottom|end">
 
         <Button
+            android:id="@+id/fragment_sign_up_btn_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Save" />
+
+        <Button
             android:id="@+id/fragment_sign_up_btn_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Cancel" />
 
-        <Button
-            android:id="@+id/fragment_sign_up_btn_save"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Save" />
     </LinearLayout>
 </LinearLayout>

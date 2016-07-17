@@ -1,17 +1,31 @@
 package com.example.eliavmenachi.simplelist;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.eliavmenachi.simplelist.model.Group;
 import com.example.eliavmenachi.simplelist.model.Model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class CreateGroupFragment extends Fragment {
+    private ImageView mImageView;
+    private String mImageFileName;
+    private Bitmap mImageBitmap;
 
     private OnFragmentInteractionListener mListener;
 
@@ -40,14 +54,27 @@ public class CreateGroupFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_create_group, container, false);
         getActivity().setTitle(R.string.title_fragment_create_group);
 
-        view.findViewById(R.id.fragment_create_group_btn_save).setOnClickListener(new View.OnClickListener() {
+        mImageView = (ImageView) view.findViewById(R.id.fragment_create_group_img);
+
+        Button btnSave = (Button) view.findViewById(R.id.fragment_create_group_btn_save);
+        btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
                 String name = ((EditText) getActivity().findViewById(R.id.fragment_create_group_et_name)).getText().toString();
                 String owner = Model.getInstance().getUserId();
-                Group group = new Group("id", name, owner, "image");
 
+                if (mImageBitmap != null) {
+                    mImageFileName = name + timeStamp + ".jpg";
+                }
+
+                Group group = new Group("id", name, owner, mImageFileName);
                 Model.getInstance().addGroup(group);
+
+                if (mImageBitmap != null) {
+                    Model.getInstance().saveImage(mImageBitmap, mImageFileName);
+                }
 
                 mListener = (OnFragmentInteractionListener) getActivity();
                 mListener.onSave();
@@ -73,6 +100,13 @@ public class CreateGroupFragment extends Fragment {
             }
         });
 
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takingPicture();
+            }
+        });
+
         return view;
     }
 
@@ -86,5 +120,23 @@ public class CreateGroupFragment extends Fragment {
         void onSave();
 
         void onCancel();
+    }
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private void takingPicture() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            Bundle extras = data.getExtras();
+            mImageBitmap = (Bitmap) extras.get("data");
+            mImageView.setImageBitmap(mImageBitmap);
+        }
     }
 }

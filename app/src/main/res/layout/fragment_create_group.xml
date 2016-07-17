@@ -9,6 +9,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.eliavmenachi.simplelist.CreateGroupFragment">
 
+    <ImageView
+        android:id="@+id/fragment_create_group_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginBottom="10px"
+        android:layout_marginTop="10px" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -33,17 +41,19 @@
         android:gravity="bottom|end">
 
         <Button
+            android:id="@+id/fragment_create_group_btn_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Save" />
+
+        <Button
             android:id="@+id/fragment_create_group_btn_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Cancel" />
 
-        <Button
-            android:id="@+id/fragment_create_group_btn_save"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Save" />
+
     </LinearLayout>
 </LinearLayout>

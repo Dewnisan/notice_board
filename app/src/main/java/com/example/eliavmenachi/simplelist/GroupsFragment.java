@@ -1,8 +1,10 @@
 package com.example.eliavmenachi.simplelist;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -162,18 +165,38 @@ public class GroupsFragment extends Fragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
                 convertView = inflater.inflate(R.layout.activity_group_list_row, null);
             }
 
-            TextView name = (TextView) convertView.findViewById(R.id.activity_group_list_row_tv_name);
-            ImageView image = (ImageView) convertView.findViewById(R.id.activity_group_list_row_img);
+            final TextView name = (TextView) convertView.findViewById(R.id.activity_group_list_row_tv_name);
+            final ImageView image = (ImageView) convertView.findViewById(R.id.activity_group_list_row_img);
+            name.setTag(new Integer(position));
+            convertView.setTag(position);
 
-            Group st = mData.get(position);
+            Group group = mData.get(position);
 
-            name.setText(st.getName());
+            name.setText(group.getName());
+
+            if (group.getImageName() != null) {
+                final ProgressBar progress = (ProgressBar) convertView.findViewById(R.id.activity_group_list_row_pb);
+                progress.setVisibility(View.VISIBLE);
+
+                Model.getInstance().loadImage(group.getImageName(), new Model.LoadImageListener() {
+                    @Override
+                    public void onResult(Bitmap imageBmp) {
+                        if ((Integer) name.getTag() == position) {
+                            progress.setVisibility(View.GONE);
+
+                            if (imageBmp != null) {
+                                image.setImageBitmap(imageBmp);
+                            }
+                        }
+                    }
+                });
+            }
 
             return convertView;
         }

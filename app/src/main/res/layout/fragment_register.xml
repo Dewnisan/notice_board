@@ -7,21 +7,21 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.eliavmenachi.simplelist.LoginFragment">
+    tools:context="com.example.eliavmenachi.simplelist.RegisterFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/fragment_login_lbl_name"
+            android:id="@+id/fragment_register_lbl_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/fragment_login_et_name"
+            android:labelFor="@+id/fragment_register_et_name"
             android:text="Name: " />
 
         <EditText
-            android:id="@id/fragment_login_et_name"
+            android:id="@id/fragment_register_et_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
@@ -33,37 +33,56 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/fragment_login_lbl_password"
+            android:id="@+id/fragment_register_lbl_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/fragment_login_et_password"
+            android:labelFor="@+id/fragment_register_et_password"
             android:text="Password: " />
 
         <EditText
-            android:id="@id/fragment_login_et_password"
+            android:id="@id/fragment_register_et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:text="123456" />
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/fragment_login_btn_login"
+        <TextView
+            android:id="@+id/fragment_register_lbl_password_again"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/fragment_register_et_password_again"
+            android:text="Password: " />
+
+        <EditText
+            android:id="@id/fragment_register_et_password_again"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Login" />
+            android:inputType="textPassword"
+            android:text="123456" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom|end">
 
         <Button
-            android:id="@+id/fragment_login_btn_register"
-            android:layout_width="match_parent"
+            android:id="@+id/fragment_register_btn_cancel"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Register"
-            android:layout_below="@id/fragment_login_btn_login" />
+            android:layout_weight="1"
+            android:text="Cancel" />
 
-    </RelativeLayout>
-
+        <Button
+            android:id="@+id/fragment_register_btn_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Save" />
+    </LinearLayout>
 </LinearLayout>

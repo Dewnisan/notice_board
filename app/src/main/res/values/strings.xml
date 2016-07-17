@@ -7,8 +7,5 @@
     <string name="action_create_group">Create Group</string>
     <string name="title_fragment_groups">Groups</string>
     <string name="title_fragment_create_group">Create Group</string>
-    <string name="title_activity_student_details">NewStudentActivity</string>
-    <string name="title_activity_new_student">NewStudentActivity</string>
-
 
 </resources>

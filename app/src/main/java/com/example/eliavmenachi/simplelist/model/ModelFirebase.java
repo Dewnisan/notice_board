@@ -4,9 +4,11 @@ import android.content.Context;
 import android.util.Log;
 
 import com.firebase.client.AuthData;
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
 import java.util.LinkedList;
@@ -17,11 +19,13 @@ import java.util.Map;
  * Created by eliav.menachi on 17/05/2016.
  */
 public class ModelFirebase {
+    private static final String FIREBASE_URL = "https://sweltering-inferno-2745.firebaseio.com/";
+
     Firebase mFirebase;
 
     ModelFirebase(Context context) {
         Firebase.setAndroidContext(context);
-        mFirebase = new Firebase("https://sweltering-inferno-2745.firebaseio.com/");
+        mFirebase = new Firebase(FIREBASE_URL);
     }
 
 
@@ -116,17 +120,17 @@ public class ModelFirebase {
 
     public void getAllUserGroupsAsync(final Model.GetGroupsListener listener) {
         Firebase ref = mFirebase.child("groups");
-
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 final List<Group> list = new LinkedList<Group>();
-                Log.d("ModelFirebase", "There are " + snapshot.getChildrenCount() + " groups");
 
                 for (DataSnapshot groupSnapshot : snapshot.getChildren()) {
                     Group group = groupSnapshot.getValue(Group.class);
 
-                    list.add(group);
+                    if (group.getMembers().contains(Model.getInstance().getUserId())) {
+                        list.add(group);
+                    }
                 }
 
                 listener.onResult(list);
@@ -134,7 +138,6 @@ public class ModelFirebase {
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("The read failed: " + firebaseError.getMessage());
                 listener.onCancel();
             }
         });

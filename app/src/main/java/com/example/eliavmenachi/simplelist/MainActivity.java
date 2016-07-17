@@ -8,7 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends Activity implements LoginFragment.OnFragmentInteractionListener, GroupsFragment.OnFragmentInteractionListener, CreateGroupFragment.OnFragmentInteractionListener {
+public class MainActivity extends Activity implements RegisterFragment.OnFragmentInteractionListener,
+        LoginFragment.OnFragmentInteractionListener,
+        GroupsFragment.OnFragmentInteractionListener,
+        CreateGroupFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,18 @@ public class MainActivity extends Activity implements LoginFragment.OnFragmentIn
     }
 
     @Override
+    public void onRegister() {
+        RegisterFragment fragment = RegisterFragment.newInstance();
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.activity_main_fragment_container, fragment);
+        transaction.addToBackStack(null);
+
+        transaction.commit();
+    }
+
+    @Override
     public void onCreateGroupItemSelected() {
         CreateGroupFragment fragment = CreateGroupFragment.newInstance();
 
@@ -74,11 +89,12 @@ public class MainActivity extends Activity implements LoginFragment.OnFragmentIn
 
     @Override
     public void onSave() {
-        getFragmentManager().popBackStack(1, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getFragmentManager().popBackStack();
     }
 
     @Override
     public void onCancel() {
-        getFragmentManager().popBackStack(1, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        //1, FragmentManager.POP_BACK_STACK_INCLUSIVE
+        getFragmentManager().popBackStack();
     }
 }

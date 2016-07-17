@@ -10,13 +10,23 @@ public class Group {
     private String mName;
     private String mOwner;
 
-    private List<User> mMembers;
+    private List<String> mMembers;
+
+    public Group(String name, String owner, List<String> mMembers) {
+        this(name, owner);
+        setMembers(mMembers);
+    }
 
     public Group(String name, String owner) {
-        this.mName = name;
-        this.mOwner = owner;
+        setName(name);
+        setOwner(owner);
 
-        this.mMembers = new LinkedList<User>();
+        this.mMembers = new LinkedList<String>();
+        this.mMembers.add(mOwner);
+    }
+
+    public Group() {
+        this.mMembers = new LinkedList<String>();
     }
 
     public String getName() {
@@ -25,5 +35,21 @@ public class Group {
 
     public String getOwner() {
         return mOwner;
+    }
+
+    public List<String> getMembers() {
+        return mMembers;
+    }
+
+    public void setName(String name) {
+        this.mName = name;
+    }
+
+    public void setOwner(String owner) {
+        this.mOwner = owner;
+    }
+
+    public void setMembers(List<String> members) {
+        this.mMembers = members;
     }
 }

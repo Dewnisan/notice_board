@@ -13,11 +13,13 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.eliavmenachi.simplelist.model.Group;
 import com.example.eliavmenachi.simplelist.model.Model;
 
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -31,8 +33,9 @@ import java.util.List;
  */
 public class GroupsFragment extends Fragment {
     private ListView mList;
-    private List<Group> mData;
+    private List<Group> mData = new LinkedList<Group>();
     private MyAdapter mAdapter;
+    ProgressBar mProgressBar;
 
     private OnFragmentInteractionListener mListener;
 
@@ -60,25 +63,44 @@ public class GroupsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_groups, container, false);
-
         getActivity().setTitle(R.string.title_fragment_groups);
 
         setHasOptionsMenu(true);
 
-//        mList = (ListView) view.findViewById(R.id.fragment_group_list_lv);
-//        Model.getInstance().getAllUserGroupsAsync(null);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.fragment_groups_pb);
 
-//        mAdapter = new MyAdapter();
-//        mList.setAdapter(mAdapter);
-//
-//        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                String studentId = mData.get(position).getId();
-//            }
-//        });
+        loadGroupsData();
+
+        mList = (ListView) view.findViewById(R.id.fragment_group_list_lv);
+
+        mAdapter = new MyAdapter();
+        mList.setAdapter(mAdapter);
+
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
 
         return view;
+    }
+
+    void loadGroupsData() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        Model.getInstance().getAllUserGroupsAsync(new Model.GetGroupsListener() {
+            @Override
+            public void onResult(List<Group> groups) {
+                mProgressBar.setVisibility(View.GONE);
+                mData = groups;
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
     }
 
     @Override
@@ -147,7 +169,7 @@ public class GroupsFragment extends Fragment {
             }
 
             TextView name = (TextView) convertView.findViewById(R.id.activity_group_list_row_tv_name);
-            ImageView image = (ImageView) convertView.findViewById(R.id.activity_students_list_row_img);
+            ImageView image = (ImageView) convertView.findViewById(R.id.activity_group_list_row_img);
 
             Group st = mData.get(position);
 

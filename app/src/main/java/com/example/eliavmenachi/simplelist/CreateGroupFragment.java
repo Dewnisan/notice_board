@@ -61,7 +61,7 @@ public class CreateGroupFragment extends Fragment {
 
                 });
 
-                dialog.show(getFragmentManager(), getResources().getString(R.string.title_activity_new_student));
+                dialog.show(getFragmentManager(), getResources().getString(R.string.title_fragment_create_group));
             }
         });
 

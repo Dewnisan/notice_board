@@ -53,7 +53,7 @@ public class LoginFragment extends Fragment {
         view.findViewById(R.id.fragment_login_btn_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = ((EditText) getActivity().findViewById(R.id.fragment_login_et_user_name)).getText().toString();
+                String email = ((EditText) getActivity().findViewById(R.id.fragment_login_et_name)).getText().toString();
                 String password = ((EditText) getActivity().findViewById(R.id.fragment_login_et_password)).getText().toString();
 
                 Model.getInstance().login(email, password, new Model.AuthListener() {
@@ -81,36 +81,8 @@ public class LoginFragment extends Fragment {
         view.findViewById(R.id.fragment_login_btn_register).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = ((EditText) getActivity().findViewById(R.id.fragment_login_et_user_name)).getText().toString();
-                String password = ((EditText) getActivity().findViewById(R.id.fragment_login_et_password)).getText().toString();
-
-                Model.getInstance().register(email, password, new Model.AuthListener() {
-                    @Override
-                    public void onDone(String userId, Exception e) {
-                        if (e == null) {
-                            MyAlertDialog dialog = MyAlertDialog.newInstance("Registration Succeeded");
-                            dialog.setDelegate(new MyAlertDialog.Delegate() {
-                                @Override
-                                public void onOk() {
-                                    Log.d("LoginFragment", "OK pressed");
-                                }
-                            });
-
-                            dialog.show(getFragmentManager(), "LoginFragment");
-                        } else {
-                            MyAlertDialog dialog = MyAlertDialog.newInstance("Registration Failed: " + e.getMessage());
-                            dialog.setDelegate(new MyAlertDialog.Delegate() {
-                                @Override
-                                public void onOk() {
-                                    Log.d("LoginFragment", "OK pressed");
-                                }
-                            });
-
-                            dialog.show(getFragmentManager(), "LoginFragment");
-                            ;
-                        }
-                    }
-                });
+                mListener = (OnFragmentInteractionListener) getActivity();
+                mListener.onRegister();
             }
         });
 
@@ -145,5 +117,7 @@ public class LoginFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onLogin();
+
+        void onRegister();
     }
 }

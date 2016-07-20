@@ -1,10 +1,8 @@
 package com.example.eliavmenachi.simplelist.model;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.firebase.client.AuthData;
-import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -30,7 +28,6 @@ public class ModelFirebase {
         Firebase.setAndroidContext(context);
         mFirebase = new Firebase(FIREBASE_URL);
     }
-
 
     public void signUp(String email, String password, final Model.AuthListener listener) {
         mFirebase.createUser(email, password, new Firebase.ValueResultHandler<Map<String, Object>>() {
@@ -73,6 +70,23 @@ public class ModelFirebase {
         }
     }
 
+    public void getUserById(String id, final Model.GetUserListener listener) {
+        Firebase ref = mFirebase.child("users").child(id);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                listener.onResult(user);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+                listener.onCancel();
+            }
+        });
+    }
+
     public void getAllUsersAsync(final Model.GetUsersListener listener) {
         Firebase ref = mFirebase.child("users");
         // Attach an listener to read the data at our posts reference
@@ -97,25 +111,13 @@ public class ModelFirebase {
         });
     }
 
-    public void getUserById(String id, final Model.GetUser listener) {
-        Firebase ref = mFirebase.child("users").child(id);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                User user = snapshot.getValue(User.class);
-                listener.onResult(user);
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("The read failed: " + firebaseError.getMessage());
-                listener.onCancel();
-            }
-        });
+    public void addUser(User user) {
+        Firebase ref = mFirebase.child("users").child(user.getId());
+        ref.setValue(user);
     }
 
-    public void add(User user) {
-        Firebase ref = mFirebase.child("user").child(user.getId());
+    public void editUser(User user) {
+        Firebase ref = mFirebase.child("users").child(user.getId());
         ref.setValue(user);
     }
 

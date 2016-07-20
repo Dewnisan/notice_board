@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.eliavmenachi.simplelist.model.Model;
@@ -49,7 +50,8 @@ public class SignInFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
 
-        view.findViewById(R.id.fragment_sign_in_btn_sign_in).setOnClickListener(new View.OnClickListener() {
+        Button btnSignIn = (Button) view.findViewById(R.id.fragment_sign_in_btn_sign_in);
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = ((EditText) getActivity().findViewById(R.id.fragment_sign_in_et_name)).getText().toString();
@@ -60,7 +62,7 @@ public class SignInFragment extends Fragment {
                     public void onDone(String userId, Exception e) {
                         if (e == null) {
                             mListener = (OnFragmentInteractionListener) getActivity();
-                            mListener.onLogin();
+                            mListener.onSignIn();
                         } else {
                             MyAlertDialog dialog = MyAlertDialog.newInstance("Login failed: " + e.getMessage());
                             dialog.setDelegate(new MyAlertDialog.Delegate() {
@@ -77,11 +79,12 @@ public class SignInFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.fragment_sign_in_btn_sign_up).setOnClickListener(new View.OnClickListener() {
+        Button btnSignUp = (Button) view.findViewById(R.id.fragment_sign_in_btn_sign_up);
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener = (OnFragmentInteractionListener) getActivity();
-                mListener.onRegister();
+                mListener.onSignUp();
             }
         });
 
@@ -107,16 +110,13 @@ public class SignInFragment extends Fragment {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_profile) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
 
     public interface OnFragmentInteractionListener {
-        void onLogin();
+        void onSignIn();
 
-        void onRegister();
+        void onSignUp();
     }
 }

@@ -17,9 +17,11 @@ public class MyAlertDialog extends DialogFragment {
 
     public static final MyAlertDialog newInstance(String message) {
         MyAlertDialog fragment = new MyAlertDialog();
+
         Bundle bundle = new Bundle(1);
         bundle.putString(ARG_MESSAGE, message);
         fragment.setArguments(bundle);
+
         return fragment;
     }
 

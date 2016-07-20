@@ -1,16 +1,24 @@
 package com.example.eliavmenachi.simplelist;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
 public class MainActivity extends Activity implements SignUpFragment.OnFragmentInteractionListener,
         SignInFragment.OnFragmentInteractionListener,
+        UserDetailsFragment.OnFragmentInteractionListener,
+        EditUserFragment.OnFragmentInteractionListener,
         GroupsFragment.OnFragmentInteractionListener,
         CreateGroupFragment.OnFragmentInteractionListener {
+
+    private int mDefaultFragmentIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +54,9 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
     }
 
     @Override
-    public void onLogin() {
+    public void onSignIn() {
+        mDefaultFragmentIndex = 1;
+
         GroupsFragment fragment = GroupsFragment.newInstance();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -58,7 +68,7 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
     }
 
     @Override
-    public void onRegister() {
+    public void onSignUp() {
         SignUpFragment fragment = SignUpFragment.newInstance();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -83,17 +93,37 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
 
     @Override
     public void onProfileItemSelected() {
+        UserDetailsFragment fragment = UserDetailsFragment.newInstance();
 
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.activity_main_fragment_container, fragment);
+        transaction.addToBackStack(null);
+
+        transaction.commit();
+    }
+
+    @Override
+    public void onEditUserItemSelected() {
+        EditUserFragment fragment = EditUserFragment.newInstance();
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.activity_main_fragment_container, fragment);
+        transaction.addToBackStack(null);
+
+        transaction.commit();
     }
 
     @Override
     public void onSave() {
-        getFragmentManager().popBackStack();
+        getFragmentManager().popBackStack(mDefaultFragmentIndex, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        ;
     }
 
     @Override
     public void onCancel() {
         //1, FragmentManager.POP_BACK_STACK_INCLUSIVE
-        getFragmentManager().popBackStack();
+        getFragmentManager().popBackStack(mDefaultFragmentIndex, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 }

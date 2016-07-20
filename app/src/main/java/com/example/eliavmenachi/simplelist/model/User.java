@@ -4,9 +4,9 @@ package com.example.eliavmenachi.simplelist.model;
  * Created by eliav.menachi on 25/03/2015.
  */
 public class User {
-    String mId;
-    String mName;
-    String mImageName;
+    private String mId;
+    private String mName;
+    private String mImageName;
 
     public User(String id, String mName, String imageName) {
         setId(id);

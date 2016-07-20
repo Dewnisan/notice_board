@@ -12,6 +12,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,10 +23,10 @@ import java.util.Map;
 public class ModelCloudinary {
     private static final String CLOUDINARY_URL = "cloudinary://421694581797959:TIm0KXgFla2e129ByOKaYCucxjc@doipsyjoy";
 
-    Cloudinary cloudinary;
+    Cloudinary mCloudinary;
 
     public ModelCloudinary() {
-        cloudinary = new Cloudinary(CLOUDINARY_URL);
+        mCloudinary = new Cloudinary(CLOUDINARY_URL);
     }
 
     public void saveImage(final Bitmap imageBitmap, final String imageName) {
@@ -35,11 +38,12 @@ public class ModelCloudinary {
                     imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                     byte[] bitmapdata = bos.toByteArray();
                     ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
+
                     String name = imageName.substring(0, imageName.lastIndexOf("."));
-                    Map res = cloudinary.uploader().upload(bs, ObjectUtils.asMap("public_id", name));
+                    Map res = mCloudinary.uploader().upload(bs, ObjectUtils.asMap("public_id", name));
 
-                    Log.d("ModelCloudinary", "save image to url" + res.get("url"));
 
+                    Log.d("ModelCloudinary", "Saved image to URL: " + res.get("url"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -52,11 +56,12 @@ public class ModelCloudinary {
         URL url = null;
 
         try {
-            url = new URL(cloudinary.url().generate(imageName));
+            url = new URL(mCloudinary.url().generate(imageName));
 
-            Log.d("ModelCloudinary", "load image from url" + url);
+            Log.d("ModelCloudinary", "Loaded image from URL: " + url);
 
             Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
             return bmp;
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -64,10 +69,21 @@ public class ModelCloudinary {
             e.printStackTrace();
         }
 
-        Log.d("TAG", "url" + url);
-
         //http://res.cloudinary.com/menachi/image/upload/v1460463378/test.jpg.png
         return null;
+    }
+
+    public void deleteImage(String imageName) {
+        List<String> list = new LinkedList<String>();
+        list.add(imageName);
+
+        try {
+            mCloudinary.api().deleteResources(list, ObjectUtils.emptyMap());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

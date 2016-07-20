@@ -10,9 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.eliavmenachi.simplelist.model.Model;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.example.eliavmenachi.simplelist.model.User;
 
 
 public class SignUpFragment extends Fragment {
@@ -47,7 +45,7 @@ public class SignUpFragment extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = ((EditText) getActivity().findViewById(R.id.fragment_sign_up_et_name)).getText().toString();
+                final String email = ((EditText) getActivity().findViewById(R.id.fragment_sign_up_et_name)).getText().toString();
 
                 String password = ((EditText) getActivity().findViewById(R.id.fragment_sign_up_et_password)).getText().toString();
                 String passwordAgain = ((EditText) getActivity().findViewById(R.id.fragment_sign_up_et_password_again)).getText().toString();
@@ -62,6 +60,8 @@ public class SignUpFragment extends Fragment {
                         MyAlertDialog dialog;
 
                         if (e == null) {
+                            Model.getInstance().addUser(new User(userId, email, null));
+
                             mListener = (OnFragmentInteractionListener) getActivity();
                             mListener.onSave();
 
@@ -83,7 +83,8 @@ public class SignUpFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.fragment_sign_up_btn_cancel).setOnClickListener(new View.OnClickListener() {
+        Button btnCancel = (Button) view.findViewById(R.id.fragment_sign_up_btn_cancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener = (OnFragmentInteractionListener) getActivity();

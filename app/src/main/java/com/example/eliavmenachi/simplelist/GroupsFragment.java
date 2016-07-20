@@ -1,10 +1,8 @@
 package com.example.eliavmenachi.simplelist;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -35,7 +32,7 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class GroupsFragment extends Fragment {
-    private ListView mList;
+    private ListView mListView;
     private List<Group> mData = new LinkedList<Group>();
     private MyAdapter mAdapter;
     ProgressBar mProgressBar;
@@ -74,12 +71,12 @@ public class GroupsFragment extends Fragment {
 
         loadGroupsData();
 
-        mList = (ListView) view.findViewById(R.id.fragment_group_list_lv);
+        mListView = (ListView) view.findViewById(R.id.fragment_group_list_lv);
 
         mAdapter = new MyAdapter();
-        mList.setAdapter(mAdapter);
+        mListView.setAdapter(mAdapter);
 
-        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -133,7 +130,7 @@ public class GroupsFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         switch (id) {
-            case R.id.action_profile:
+            case R.id.action_user_details:
                 mListener = (OnFragmentInteractionListener) getActivity();
                 mListener.onProfileItemSelected();
                 return true;

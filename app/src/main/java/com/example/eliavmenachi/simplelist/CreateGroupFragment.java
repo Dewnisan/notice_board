@@ -1,9 +1,7 @@
 package com.example.eliavmenachi.simplelist;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -56,13 +54,15 @@ public class CreateGroupFragment extends Fragment {
 
         mImageView = (ImageView) view.findViewById(R.id.fragment_create_group_img);
 
+        final EditText etName = ((EditText) getActivity().findViewById(R.id.fragment_create_group_et_name));
+
         Button btnSave = (Button) view.findViewById(R.id.fragment_create_group_btn_save);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
-                String name = ((EditText) getActivity().findViewById(R.id.fragment_create_group_et_name)).getText().toString();
+                String name = etName.getText().toString();
                 String owner = Model.getInstance().getUserId();
 
                 if (mImageBitmap != null) {
@@ -92,7 +92,8 @@ public class CreateGroupFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.fragment_create_group_btn_cancel).setOnClickListener(new View.OnClickListener() {
+        Button btnCancel = (Button) view.findViewById(R.id.fragment_create_group_btn_cancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener = (OnFragmentInteractionListener) getActivity();
@@ -103,7 +104,7 @@ public class CreateGroupFragment extends Fragment {
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                takingPicture();
+                takePicture();
             }
         });
 
@@ -116,15 +117,9 @@ public class CreateGroupFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        void onSave();
-
-        void onCancel();
-    }
-
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    private void takingPicture() {
+    private void takePicture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -138,5 +133,11 @@ public class CreateGroupFragment extends Fragment {
             mImageBitmap = (Bitmap) extras.get("data");
             mImageView.setImageBitmap(mImageBitmap);
         }
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onSave();
+
+        void onCancel();
     }
 }

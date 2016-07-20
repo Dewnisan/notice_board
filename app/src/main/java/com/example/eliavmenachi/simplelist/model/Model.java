@@ -58,9 +58,20 @@ public class Model {
         return mModelFirebase.getUserId();
     }
 
-    public interface GetGroupsListener {
-        public void onResult(List<Group> groups);
-        public void onCancel();
+    public void getUserById(String id, GetUserListener listener) {
+        mModelFirebase.getUserById(id, listener);
+    }
+
+    public void getAllUsersAsync(GetUsersListener listener) {
+        mModelFirebase.getAllUsersAsync(listener);
+    }
+
+    public void addUser(User user) {
+        mModelFirebase.addUser(user);
+    }
+
+    public void editUser(User user) {
+        mModelFirebase.editUser(user);
     }
 
     public void getAllUserGroupsAsync(final GetGroupsListener listener) {
@@ -94,38 +105,9 @@ public class Model {
         mModelFirebase.getAllUserGroupsAsync(listener, lastUpdateDate);
     }
 
-    public interface AuthListener {
-        void onDone(String userId, Exception e);
-    }
-
     public void addGroup(Group group) {
         mModelFirebase.addGroup(group);
     }
-
-    public interface GetUsersListener {
-        public void onResult(List<User> Users);
-
-        public void onCancel();
-    }
-
-    public void getAllUsersAsync(GetUsersListener listener) {
-        mModelFirebase.getAllUsersAsync(listener);
-    }
-
-    public interface GetUser {
-        public void onResult(User user);
-
-        public void onCancel();
-    }
-
-    public void getUserById(String id, GetUser listener) {
-        mModelFirebase.getUserById(id, listener);
-    }
-
-    public void add(User user) {
-        mModelFirebase.add(user);
-    }
-
 
     public void saveImage(final Bitmap imageBitmap, final String imageName) {
         saveImageToFile(imageBitmap, imageName); // synchronously save image locally
@@ -138,8 +120,8 @@ public class Model {
         d.start();
     }
 
-    public interface LoadImageListener {
-        public void onResult(Bitmap imageBmp);
+    public void deleteImage(String imageName) {
+        mModelCloudinary.deleteImage(imageName);
     }
 
     public void loadImage(final String imageName, final LoadImageListener listener) {
@@ -161,6 +143,26 @@ public class Model {
             }
         };
         task.execute();
+    }
+
+    private Bitmap loadImageFromFile(String imageFileName) {
+        String str = null;
+        Bitmap bitmap = null;
+        try {
+            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File imageFile = new File(dir, imageFileName);
+
+            //File dir = mContext.getExternalFilesDir(null);
+            InputStream inputStream = new FileInputStream(imageFile);
+            bitmap = BitmapFactory.decodeStream(inputStream);
+            Log.d("tag", "got image from cache: " + imageFileName);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 
     private void saveImageToFile(Bitmap imageBitmap, String imageFileName) {
@@ -194,23 +196,29 @@ public class Model {
         }
     }
 
-    private Bitmap loadImageFromFile(String imageFileName) {
-        String str = null;
-        Bitmap bitmap = null;
-        try {
-            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            File imageFile = new File(dir, imageFileName);
+    public interface AuthListener {
+        void onDone(String userId, Exception e);
+    }
 
-            //File dir = mContext.getExternalFilesDir(null);
-            InputStream inputStream = new FileInputStream(imageFile);
-            bitmap = BitmapFactory.decodeStream(inputStream);
-            Log.d("tag", "got image from cache: " + imageFileName);
+    public interface GetUserListener {
+        public void onResult(User user);
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
+        public void onCancel();
+    }
+
+    public interface GetUsersListener {
+        public void onResult(List<User> Users);
+
+        public void onCancel();
+    }
+
+    public interface GetGroupsListener {
+        public void onResult(List<Group> groups);
+
+        public void onCancel();
+    }
+
+    public interface LoadImageListener {
+        public void onResult(Bitmap imageBmp);
     }
 }

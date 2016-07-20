@@ -3,8 +3,12 @@
 
     <string name="app_name">Notice Board</string>
     <string name="action_settings">Settings</string>
-    <string name="action_profile">Profile</string>
+    <string name="action_user_details">Profile</string>
+    <string name="action_edit_user">Edit</string>
     <string name="action_create_group">Create Group</string>
+
+    <string name="title_fragment_user_details">Profile</string>
+    <string name="title_fragment_edit_user">Edit Profile</string>
     <string name="title_fragment_groups">Groups</string>
     <string name="title_fragment_create_group">Create Group</string>
 

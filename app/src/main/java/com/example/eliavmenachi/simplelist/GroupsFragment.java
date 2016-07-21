@@ -23,14 +23,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link GroupsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link GroupsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class GroupsFragment extends Fragment {
     private ListView mListView;
     private List<Group> mData = new LinkedList<Group>();
@@ -79,7 +71,9 @@ public class GroupsFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                String groupId = mData.get(position).getId();
+                mListener = (OnFragmentInteractionListener) getActivity();
+                mListener.onGroupSelected(groupId);
             }
         });
 
@@ -114,6 +108,8 @@ public class GroupsFragment extends Fragment {
         void onCreateGroupItemSelected();
 
         void onProfileItemSelected();
+
+        void onGroupSelected(String groupId);
     }
 
     @Override

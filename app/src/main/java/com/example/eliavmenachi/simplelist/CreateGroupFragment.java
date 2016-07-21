@@ -54,7 +54,7 @@ public class CreateGroupFragment extends Fragment {
 
         mImageView = (ImageView) view.findViewById(R.id.fragment_create_group_img);
 
-        final EditText etName = ((EditText) getActivity().findViewById(R.id.fragment_create_group_et_name));
+        final EditText etName = ((EditText) view.findViewById(R.id.fragment_create_group_et_name));
 
         Button btnSave = (Button) view.findViewById(R.id.fragment_create_group_btn_save);
         btnSave.setOnClickListener(new View.OnClickListener() {

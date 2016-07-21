@@ -7,33 +7,32 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
-    tools:context="com.example.eliavmenachi.simplelist.GroupListRowActivity">
+    tools:context="com.example.eliavmenachi.simplelist.PostListRowActivity">
 
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/rowImageFrame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/activity_group_list_row_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/activity_post_list_row_img"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:src="@mipmap/ic_launcher" />
 
         <ProgressBar
-            android:id="@+id/activity_group_list_row_pb"
+            android:id="@+id/activity_post_list_row_pb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone" />
-    </FrameLayout>
+    </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -44,10 +43,10 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/activity_group_list_row_tv_name"
+                android:id="@+id/activity_post_list_row_tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="mName" />
+                android:text="Name: " />
 
         </LinearLayout>
     </RelativeLayout>

@@ -22,20 +22,20 @@ public class User {
         return mId;
     }
 
-    public String getName() {
-        return mName;
-    }
-
-    public String getImageName() {
-        return mImageName;
-    }
-
     public void setId(String id) {
         this.mId = id;
     }
 
+    public String getName() {
+        return mName;
+    }
+
     public void setName(String name) {
         this.mName = name;
+    }
+
+    public String getImageName() {
+        return mImageName;
     }
 
     public void setImageName(String imageName) {

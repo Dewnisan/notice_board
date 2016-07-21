@@ -39,44 +39,44 @@ public class Group {
         return mId;
     }
 
-    public String getName() {
-        return mName;
-    }
-
-    public String getOwner() {
-        return mOwner;
-    }
-
-    public List<String> getMembers() {
-        return mMembers;
-    }
-
-    public String getImageName() {
-        return mImageName;
-    }
-
-    public String getLastUpdated() {
-        return mLastUpdated;
-    }
-
     public void setId(String id) {
         this.mId = id;
+    }
+
+    public String getName() {
+        return mName;
     }
 
     public void setName(String name) {
         this.mName = name;
     }
 
+    public String getOwner() {
+        return mOwner;
+    }
+
     public void setOwner(String owner) {
         this.mOwner = owner;
+    }
+
+    public List<String> getMembers() {
+        return mMembers;
     }
 
     public void setMembers(List<String> members) {
         this.mMembers = members;
     }
 
+    public String getImageName() {
+        return mImageName;
+    }
+
     public void setImageName(String imageName) {
         this.mImageName = imageName;
+    }
+
+    public String getLastUpdated() {
+        return mLastUpdated;
     }
 
     public void setLastUpdated(String lastUpdated) {

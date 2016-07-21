@@ -1,23 +1,33 @@
 package com.example.eliavmenachi.simplelist;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.example.eliavmenachi.simplelist.model.Model;
+import com.example.eliavmenachi.simplelist.model.Post;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link PostsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link PostsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.LinkedList;
+import java.util.List;
+
 public class PostsFragment extends Fragment {
+    public static String ARG_GROUP_ID = "GROUP_ID";
+
+    private String mGroupId;
+    private ListView mListView;
+    private List<Post> mData = new LinkedList<Post>();
+    private MyAdapter mAdapter;
+    ProgressBar mProgressBar;
 
     private OnFragmentInteractionListener mListener;
 
@@ -25,18 +35,10 @@ public class PostsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PostsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PostsFragment newInstance(String param1, String param2) {
+    public static PostsFragment newInstance(String groupId) {
         PostsFragment fragment = new PostsFragment();
         Bundle args = new Bundle();
+        args.putString(ARG_GROUP_ID, groupId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,6 +47,7 @@ public class PostsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            mGroupId = getArguments().getString(ARG_GROUP_ID);
         }
     }
 
@@ -71,5 +74,60 @@ public class PostsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    class MyAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return mData.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mData.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                convertView = inflater.inflate(R.layout.activity_post_list_row, null);
+            }
+
+            final TextView name = (TextView) convertView.findViewById(R.id.activity_post_list_row_tv_name);
+            final ImageView image = (ImageView) convertView.findViewById(R.id.activity_post_list_row_img);
+            name.setTag(new Integer(position));
+            convertView.setTag(position);
+
+            Post post = mData.get(position);
+
+            name.setText(post.getOwner());
+
+            if (post.getImageName() != null) {
+                final ProgressBar progress = (ProgressBar) convertView.findViewById(R.id.activity_post_list_row_pb);
+                progress.setVisibility(View.VISIBLE);
+
+                Model.getInstance().loadImage(post.getImageName(), new Model.LoadImageListener() {
+                    @Override
+                    public void onResult(Bitmap imageBmp) {
+                        if ((Integer) name.getTag() == position) {
+                            progress.setVisibility(View.GONE);
+
+                            if (imageBmp != null) {
+                                image.setImageBitmap(imageBmp);
+                            }
+                        }
+                    }
+                });
+            }
+
+            return convertView;
+        }
     }
 }

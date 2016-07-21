@@ -13,14 +13,18 @@ import java.util.List;
 public class PostSql {
     final static String TABLE = "posts";
     final static String TABLE_ID = "_id";
-    final static String TABLE_NAME = "name";
+    final static String TABLE_OWNER = "owner";
+    final static String TABLE_GROUP = "group";
+    final static String TABLE_MESSAGE = "message";
     final static String TABLE_IMAGE_NAME = "image_name";
     //final static String TABLE_DELETED = "deleted";
 
     static public void create(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE + " (" +
                 TABLE_ID + " TEXT PRIMARY KEY," +
-                TABLE_NAME + " TEXT," +
+                TABLE_OWNER + " TEXT," +
+                TABLE_GROUP + " TEXT," +
+                TABLE_MESSAGE + " TEXT," +
                 TABLE_IMAGE_NAME + " TEXT);");
     }
 
@@ -28,56 +32,66 @@ public class PostSql {
         db.execSQL("drop table " + TABLE + ";");
     }
 
-    public static List<User> getAll(SQLiteDatabase db) {
+    public static List<Post> getAll(SQLiteDatabase db) {
         Cursor cursor = db.query(TABLE, null, null, null, null, null, null);
-        List<User> users = new LinkedList<User>();
+        List<Post> posts = new LinkedList<Post>();
 
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(TABLE_ID);
-            int nameIndex = cursor.getColumnIndex(TABLE_NAME);
+            int ownerIndex = cursor.getColumnIndex(TABLE_OWNER);
+            int groupIndex = cursor.getColumnIndex(TABLE_GROUP);
+            int messageIndex = cursor.getColumnIndex(TABLE_MESSAGE);
             int imageNameIndex = cursor.getColumnIndex(TABLE_IMAGE_NAME);
 
             do {
                 String id = cursor.getString(idIndex);
-                String name = cursor.getString(nameIndex);
+                String owner = cursor.getString(ownerIndex);
+                String group = cursor.getString(groupIndex);
+                String message = cursor.getString(messageIndex);
                 String imageName = cursor.getString(imageNameIndex);
 
-                User user = new User(id, name, imageName);
-                users.add(user);
+                Post post = new Post(id, owner, group, message, imageName);
+                posts.add(post);
             } while (cursor.moveToNext());
         }
 
-        return users;
+        return posts;
     }
 
-    public static User getById(SQLiteDatabase db, String id) {
+    public static Post getById(SQLiteDatabase db, String id) {
         String where = TABLE_ID + " = ?";
         String[] args = {id};
         Cursor cursor = db.query(TABLE, null, where, args, null, null, null);
 
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(TABLE_ID);
-            int nameIndex = cursor.getColumnIndex(TABLE_NAME);
+            int ownerIndex = cursor.getColumnIndex(TABLE_OWNER);
+            int groupIndex = cursor.getColumnIndex(TABLE_GROUP);
+            int messageIndex = cursor.getColumnIndex(TABLE_MESSAGE);
             int imageNameIndex = cursor.getColumnIndex(TABLE_IMAGE_NAME);
 
             String _id = cursor.getString(idIndex);
-            String name = cursor.getString(nameIndex);
+            String owner = cursor.getString(ownerIndex);
+            String group = cursor.getString(groupIndex);
+            String message = cursor.getString(messageIndex);
             String imageName = cursor.getString(imageNameIndex);
 
-            User user = new User(_id, name, imageName);
+            Post post = new Post(_id, owner, group, message, imageName);
 
-            return user;
+            return post;
         }
 
         return null;
     }
 
-    public static void add(SQLiteDatabase db, User user) {
+    public static void add(SQLiteDatabase db, Post post) {
         ContentValues values = new ContentValues();
 
-        values.put(TABLE_ID, user.getId());
-        values.put(TABLE_NAME, user.getName());
-        values.put(TABLE_IMAGE_NAME, user.getImageName());
+        values.put(TABLE_ID, post.getId());
+        values.put(TABLE_OWNER, post.getOwner());
+        values.put(TABLE_GROUP, post.getGroup());
+        values.put(TABLE_MESSAGE, post.getMessage());
+        values.put(TABLE_IMAGE_NAME, post.getImageName());
 
         db.insertWithOnConflict(TABLE, TABLE_ID, values, SQLiteDatabase.CONFLICT_REPLACE);
     }

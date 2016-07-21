@@ -1,6 +1,7 @@
 package com.example.eliavmenachi.simplelist.model;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
@@ -70,9 +71,11 @@ public class ModelFirebase {
         }
     }
 
-    public void getUserById(String id, final Model.GetUserListener listener) {
+    public void getUserById(String id, final Model.GetUserListener listener, String lastUpdateDate) {
         Firebase ref = mFirebase.child("users").child(id);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);
+
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
@@ -81,16 +84,18 @@ public class ModelFirebase {
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("The read failed: " + firebaseError.getMessage());
+                Log.d("ModelFirebase", "The read failed: " + firebaseError.getMessage());
                 listener.onCancel();
             }
         });
     }
 
-    public void getAllUsersAsync(final Model.GetUsersListener listener) {
+    public void getAllUsersAsync(final Model.GetUsersListener listener, String lastUpdateDate) {
         Firebase ref = mFirebase.child("users");
+        Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);
+
         // Attach an listener to read the data at our posts reference
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 final List<User> list = new LinkedList<User>();
@@ -105,18 +110,24 @@ public class ModelFirebase {
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("The read failed: " + firebaseError.getMessage());
+                Log.d("ModelFirebase", "The read failed: " + firebaseError.getMessage());
                 listener.onCancel();
             }
         });
     }
 
     public void addUser(User user) {
+        String date = calculateDate();
+        user.setLastUpdated(date);
+
         Firebase ref = mFirebase.child("users").child(user.getId());
         ref.setValue(user);
     }
 
     public void editUser(User user) {
+        String date = calculateDate();
+        user.setLastUpdated(date);
+
         Firebase ref = mFirebase.child("users").child(user.getId());
         ref.setValue(user);
     }
@@ -143,24 +154,67 @@ public class ModelFirebase {
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
+                Log.d("ModelFirebase", "The read failed: " + firebaseError.getMessage());
                 listener.onCancel();
             }
         });
     }
 
     public void addGroup(Group group) {
+        String date = calculateDate();
+        group.setLastUpdated(date);
+
+        Firebase ref = mFirebase.child("groups");
+
+        Firebase newGroupRef = ref.push();
+        group.setId(newGroupRef.getKey());
+        newGroupRef.setValue(group);
+    }
+
+    public void getAllPostsByGroupIdAsync(String groupId, final Model.GetPostsListener listener) {
+        Firebase ref = mFirebase.child("posts");
+        Query queryRef = ref.orderByChild("group").equalTo(groupId);
+
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                final List<Post> list = new LinkedList<Post>();
+
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    Post post = postSnapshot.getValue(Post.class);
+                    list.add(post);
+                }
+
+                listener.onResult(list);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.d("ModelFirebase", "The read failed: " + firebaseError.getMessage());
+                listener.onCancel();
+            }
+        });
+    }
+
+    public void addPost(Post post) {
+        String date = calculateDate();
+        post.setLastUpdated(date);
+
+        Firebase ref = mFirebase.child("posts");
+
+        Firebase newPostRef = ref.push();
+        post.setId(newPostRef.getKey());
+        newPostRef.setValue(post);
+    }
+
+    private String calculateDate() {
         SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
         SimpleDateFormat dateFormatLocal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = null;
         date = dateFormatGmt.format(new Date()).toString();
 
-        group.setLastUpdated(date);
-        Firebase ref = mFirebase.child("groups");
-
-        Firebase newGroupRef = ref.push();
-        group.setId(newGroupRef.getKey());
-        newGroupRef.setValue(group);
+        return date;
     }
 }
 

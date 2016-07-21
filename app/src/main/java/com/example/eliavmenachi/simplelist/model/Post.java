@@ -10,6 +10,8 @@ public class Post {
     private String mMessage;
     private String mImageName;
 
+    private String mLastUpdated;
+
     public Post(String id, String owner, String group, String message, String imageName) {
         this.mId = id;
         this.mOwner = owner;
@@ -59,5 +61,13 @@ public class Post {
 
     public void setImageName(String imageName) {
         this.mImageName = imageName;
+    }
+
+    public String getLastUpdated() {
+        return mLastUpdated;
+    }
+
+    public void setLastUpdated(String lastUpdated) {
+        this.mLastUpdated = lastUpdated;
     }
 }

@@ -10,7 +10,7 @@
     tools:context="com.example.eliavmenachi.simplelist.CreateGroupFragment">
 
     <ImageView
-        android:id="@+id/fragment_create_group_img"
+        android:id="@+id/fragment_create_group_iv_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/ic_launcher"

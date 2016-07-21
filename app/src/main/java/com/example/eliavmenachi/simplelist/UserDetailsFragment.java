@@ -51,10 +51,10 @@ public class UserDetailsFragment extends Fragment {
         setHasOptionsMenu(true);
 
         final TextView tvName = (TextView) view.findViewById(R.id.fragment_user_details_tv_name);
-        mImageView = (ImageView) view.findViewById(R.id.fragment_user_details_img);
+        mImageView = (ImageView) view.findViewById(R.id.fragment_user_details_iv_image);
 
         final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.fragment_user_details_pb);
-        final ProgressBar imageProgressBar = (ProgressBar) view.findViewById(R.id.fragment_user_details_image_pb);
+        final ProgressBar imageProgressBar = (ProgressBar) view.findViewById(R.id.fragment_user_details_pb_image);
 
         progressBar.setVisibility(View.VISIBLE);
 

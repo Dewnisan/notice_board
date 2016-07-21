@@ -10,7 +10,7 @@
     tools:context="com.example.eliavmenachi.simplelist.CreatePostFragment">
 
     <ImageView
-        android:id="@+id/fragment_create_post_img"
+        android:id="@+id/fragment_create_post_iv_image"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:src="@mipmap/ic_launcher"

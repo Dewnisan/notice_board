@@ -48,10 +48,10 @@ public class EditUserFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit_user, container, false);
 
         final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.fragment_edit_user_pb);
-        final ProgressBar imageProgressBar = (ProgressBar) view.findViewById(R.id.fragment_edit_user_image_pb);
+        final ProgressBar imageProgressBar = (ProgressBar) view.findViewById(R.id.fragment_edit_user_pb_image);
 
         final TextView tvName = (TextView) view.findViewById(R.id.fragment_edit_user_tv_name);
-        mImageView = (ImageView) view.findViewById(R.id.fragment_edit_user_img);
+        mImageView = (ImageView) view.findViewById(R.id.fragment_edit_user_iv_image);
 
         String userId = Model.getInstance().getUserId();
         Model.getInstance().getUserById(userId, new Model.GetUserListener() {

@@ -18,6 +18,7 @@ public class GroupSql {
     final static String TABLE_OWNER = "owner";
     final static String TABLE_MEMBERS = "members";
     final static String TABLE_IMAGE_NAME = "image_name";
+    final static String TABLE_MESSAGES = "messages";
     //final static String TABLE_DELETED = "deleted";
 
     static public void create(SQLiteDatabase db) {
@@ -26,14 +27,15 @@ public class GroupSql {
                 TABLE_NAME + " TEXT," +
                 TABLE_OWNER + " TEXT," +
                 TABLE_MEMBERS + " TEXT," +
-                TABLE_IMAGE_NAME + " TEXT);");
+                TABLE_IMAGE_NAME + " TEXT," +
+                TABLE_MESSAGES + " TEXT);");
     }
 
     public static void drop(SQLiteDatabase db) {
         db.execSQL("drop table " + TABLE + ";");
     }
 
-    public static List<Group> getAllGroups(SQLiteDatabase db) {
+    public static List<Group> getAll(SQLiteDatabase db) {
         Cursor cursor = db.query(TABLE, null, null, null, null, null, null);
         List<Group> groups = new LinkedList<Group>();
 
@@ -43,6 +45,7 @@ public class GroupSql {
             int ownerIndex = cursor.getColumnIndex(TABLE_OWNER);
             int membersIndex = cursor.getColumnIndex(TABLE_MEMBERS);
             int imageNameIndex = cursor.getColumnIndex(TABLE_IMAGE_NAME);
+            int messagesIndex = cursor.getColumnIndex(TABLE_MESSAGES);
 
             do {
                 String id = cursor.getString(idIndex);
@@ -51,18 +54,22 @@ public class GroupSql {
 
                 String membersStr = cursor.getString(membersIndex);
                 List<String> members = new LinkedList<String>();
-                parseMembers(membersStr, members);
+                parseCollectionElements(membersStr, members);
 
                 String imageName = cursor.getString(imageNameIndex);
 
-                Group group = new Group(id, name, owner, members, imageName);
+                String messagesStr = cursor.getString(messagesIndex);
+                List<String> messages = new LinkedList<String>();
+                parseCollectionElements(messagesStr, messages);
+
+                Group group = new Group(id, name, owner, members, imageName, messages);
                 groups.add(group);
             } while (cursor.moveToNext());
         }
         return groups;
     }
 
-    public static Group getGroupById(SQLiteDatabase db, String id) {
+    public static Group getById(SQLiteDatabase db, String id) {
         String where = TABLE_ID + " = ?";
         String[] args = {id};
         Cursor cursor = db.query(TABLE, null, where, args, null, null, null);
@@ -73,6 +80,7 @@ public class GroupSql {
             int ownerIndex = cursor.getColumnIndex(TABLE_OWNER);
             int membersIndex = cursor.getColumnIndex(TABLE_MEMBERS);
             int imageNameIndex = cursor.getColumnIndex(TABLE_IMAGE_NAME);
+            int messagesIndex = cursor.getColumnIndex(TABLE_MESSAGES);
 
             String _id = cursor.getString(idIndex);
             String name = cursor.getString(nameIndex);
@@ -80,11 +88,15 @@ public class GroupSql {
 
             String membersStr = cursor.getString(membersIndex);
             List<String> members = new LinkedList<String>();
-            parseMembers(membersStr, members);
+            parseCollectionElements(membersStr, members);
 
             String imageName = cursor.getString(imageNameIndex);
 
-            Group group = new Group(_id, name, owner, members, imageName);
+            String messagesStr = cursor.getString(messagesIndex);
+            List<String> messages = new LinkedList<String>();
+            parseCollectionElements(messagesStr, messages);
+
+            Group group = new Group(_id, name, owner, members, imageName, messages);
 
             return group;
         }
@@ -99,10 +111,13 @@ public class GroupSql {
         values.put(TABLE_NAME, group.getName());
         values.put(TABLE_OWNER, group.getOwner());
 
-        String membersStr = concatMembers(group.getMembers());
+        String membersStr = concatCollectionElements(group.getMembers());
         values.put(TABLE_MEMBERS, membersStr);
 
         values.put(TABLE_IMAGE_NAME, group.getImageName());
+
+        String messagesStr = concatCollectionElements(group.getMessages());
+        values.put(TABLE_MESSAGES, messagesStr);
 
         db.insertWithOnConflict(TABLE, TABLE_ID, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
@@ -115,21 +130,21 @@ public class GroupSql {
         LastUpdateSql.setLastUpdate(db, TABLE, date);
     }
 
-    private static String concatMembers(Collection<String> members) {
+    private static String concatCollectionElements(Collection<String> elements) {
         StringBuilder result = new StringBuilder();
 
         String sep = ",";
-        for (String member : members) {
-            result.append(sep).append(member);
+        for (String element : elements) {
+            result.append(sep).append(element);
         }
 
         return result.toString();
     }
 
-    private static void parseMembers(String membersStr, Collection<String> output) {
-        String[] members = membersStr.split(",");
-        for (String member : members) {
-            output.add(member);
+    private static void parseCollectionElements(String elementsStr, Collection<String> output) {
+        String[] elements = elementsStr.split(",");
+        for (String element : elements) {
+            output.add(element);
         }
     }
 }

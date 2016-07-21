@@ -80,7 +80,7 @@ public class GroupsFragment extends Fragment {
         return view;
     }
 
-    void loadGroupsData() {
+    private void loadGroupsData() {
         mProgressBar.setVisibility(View.VISIBLE);
         Model.getInstance().getAllUserGroupsAsync(new Model.GetGroupsListener() {
             @Override
@@ -165,7 +165,7 @@ public class GroupsFragment extends Fragment {
             }
 
             final TextView name = (TextView) convertView.findViewById(R.id.activity_group_list_row_tv_name);
-            final ImageView image = (ImageView) convertView.findViewById(R.id.activity_group_list_row_img);
+            final ImageView image = (ImageView) convertView.findViewById(R.id.activity_group_list_row_iv_image);
             name.setTag(new Integer(position));
             convertView.setTag(position);
 
@@ -174,7 +174,7 @@ public class GroupsFragment extends Fragment {
             name.setText(group.getName());
 
             if (group.getImageName() != null) {
-                final ProgressBar progress = (ProgressBar) convertView.findViewById(R.id.activity_group_list_row_pb);
+                final ProgressBar progress = (ProgressBar) convertView.findViewById(R.id.activity_group_list_row_pb_image);
                 progress.setVisibility(View.VISIBLE);
 
                 Model.getInstance().loadImage(group.getImageName(), new Model.LoadImageListener() {

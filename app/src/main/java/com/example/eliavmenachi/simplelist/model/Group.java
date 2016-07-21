@@ -10,14 +10,17 @@ public class Group {
     private String mId;
     private String mName;
     private String mOwner;
-    private List<String> mMembers;
+    private List<String> mMembers = new LinkedList<String>();
     private String mImageName;
+
+    private List<String> mMessages = new LinkedList<String>();
 
     private String mLastUpdated;
 
-    public Group(String id, String name, String owner, List<String> members, String imageName) {
+    public Group(String id, String name, String owner, List<String> members, String imageName, List<String> messages) {
         this(id, name, owner, imageName);
         setMembers(members);
+        setMessages(messages);
     }
 
     public Group(String id, String name, String owner, String imageName) {
@@ -25,7 +28,6 @@ public class Group {
         setName(name);
         setOwner(owner);
 
-        this.mMembers = new LinkedList<String>();
         this.mMembers.add(mOwner);
 
         setImageName(imageName);
@@ -73,6 +75,14 @@ public class Group {
 
     public void setImageName(String imageName) {
         this.mImageName = imageName;
+    }
+
+    public List<String> getMessages() {
+        return mMessages;
+    }
+
+    public void setMessages(List<String> messages) {
+        this.mMessages = messages;
     }
 
     public String getLastUpdated() {

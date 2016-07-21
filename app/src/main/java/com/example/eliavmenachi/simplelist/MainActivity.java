@@ -16,7 +16,9 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
         UserDetailsFragment.OnFragmentInteractionListener,
         EditUserFragment.OnFragmentInteractionListener,
         GroupsFragment.OnFragmentInteractionListener,
-        CreateGroupFragment.OnFragmentInteractionListener {
+        CreateGroupFragment.OnFragmentInteractionListener,
+        PostsFragment.OnFragmentInteractionListener,
+        CreatePostFragment.OnFragmentInteractionListener {
 
     private int mDefaultFragmentIndex = 0;
 
@@ -128,9 +130,20 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
     }
 
     @Override
+    public void onCreatePostItemSelected(String groupId) {
+        CreatePostFragment fragment = CreatePostFragment.newInstance(groupId);
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.activity_main_fragment_container, fragment);
+        transaction.addToBackStack(null);
+
+        transaction.commit();
+    }
+
+    @Override
     public void onSave() {
         getFragmentManager().popBackStack(mDefaultFragmentIndex, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        ;
     }
 
     @Override

@@ -16,7 +16,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/activity_post_list_row_img"
+            android:id="@+id/activity_post_list_row_iv_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
@@ -25,7 +25,7 @@
             android:src="@mipmap/ic_launcher" />
 
         <ProgressBar
-            android:id="@+id/activity_post_list_row_pb"
+            android:id="@+id/activity_post_list_row_pb_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone" />
@@ -38,6 +38,7 @@
 
 
         <LinearLayout
+            android:paddingLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -46,7 +47,13 @@
                 android:id="@+id/activity_post_list_row_tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Name: " />
+                android:text="Name" />
+
+            <TextView
+                android:id="@+id/activity_post_list_row_tv_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Message" />
 
         </LinearLayout>
     </RelativeLayout>

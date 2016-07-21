@@ -1,13 +1,15 @@
 package com.example.eliavmenachi.simplelist;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.eliavmenachi.simplelist.model.Model;
 import com.example.eliavmenachi.simplelist.model.Post;
+import com.example.eliavmenachi.simplelist.model.User;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -55,14 +58,44 @@ public class PostsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_posts, container, false);
+        View view = inflater.inflate(R.layout.fragment_posts, container, false);
+        getActivity().setTitle(R.string.title_fragment_posts);
+
+        setHasOptionsMenu(true);
+
+        mProgressBar = (ProgressBar) view.findViewById(R.id.fragment_posts_pb);
+
+        loadPostsData();
+
+        mListView = (ListView) view.findViewById(R.id.fragment_posts_list_lv);
+
+        mAdapter = new MyAdapter();
+        mListView.setAdapter(mAdapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            }
+        });
+
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    private void loadPostsData() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        Model.getInstance().getAllPostsByGroupIdAsync(mGroupId, new Model.GetPostsListener() {
+            @Override
+            public void onResult(List<Post> posts) {
+                mProgressBar.setVisibility(View.GONE);
+                mData = posts;
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
     }
 
     @Override
@@ -71,9 +104,31 @@ public class PostsFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_posts, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        switch (id) {
+            case R.id.action_create_post:
+                mListener = (OnFragmentInteractionListener) getActivity();
+                mListener.onCreatePostItemSelected(mGroupId);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onCreatePostItemSelected(String groupId);
     }
 
     class MyAdapter extends BaseAdapter {
@@ -100,27 +155,40 @@ public class PostsFragment extends Fragment {
                 convertView = inflater.inflate(R.layout.activity_post_list_row, null);
             }
 
-            final TextView name = (TextView) convertView.findViewById(R.id.activity_post_list_row_tv_name);
-            final ImageView image = (ImageView) convertView.findViewById(R.id.activity_post_list_row_img);
-            name.setTag(new Integer(position));
+            final TextView tvName = (TextView) convertView.findViewById(R.id.activity_post_list_row_tv_name);
+            final TextView tvMessage = (TextView) convertView.findViewById(R.id.activity_post_list_row_tv_message);
+            final ImageView ivImage = (ImageView) convertView.findViewById(R.id.activity_post_list_row_iv_image);
+            tvName.setTag(new Integer(position));
             convertView.setTag(position);
 
             Post post = mData.get(position);
 
-            name.setText(post.getOwner());
+            Model.getInstance().getUserById(post.getOwner(), new Model.GetUserListener() {
+                @Override
+                public void onResult(User user) {
+                    tvName.setText(user.getName());
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
+
+            tvMessage.setText(post.getMessage());
 
             if (post.getImageName() != null) {
-                final ProgressBar progress = (ProgressBar) convertView.findViewById(R.id.activity_post_list_row_pb);
+                final ProgressBar progress = (ProgressBar) convertView.findViewById(R.id.activity_post_list_row_pb_image);
                 progress.setVisibility(View.VISIBLE);
 
                 Model.getInstance().loadImage(post.getImageName(), new Model.LoadImageListener() {
                     @Override
                     public void onResult(Bitmap imageBmp) {
-                        if ((Integer) name.getTag() == position) {
+                        if ((Integer) tvName.getTag() == position) {
                             progress.setVisibility(View.GONE);
 
                             if (imageBmp != null) {
-                                image.setImageBitmap(imageBmp);
+                                ivImage.setImageBitmap(imageBmp);
                             }
                         }
                     }

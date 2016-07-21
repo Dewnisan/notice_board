@@ -8,6 +8,8 @@ public class User {
     private String mName;
     private String mImageName;
 
+    private String mLastUpdated;
+
     public User(String id, String mName, String imageName) {
         setId(id);
         setName(mName);
@@ -40,5 +42,13 @@ public class User {
 
     public void setImageName(String imageName) {
         this.mImageName = imageName;
+    }
+
+    public String getLastUpdated() {
+        return mLastUpdated;
+    }
+
+    public void setLastUpdated(String lastUpdated) {
+        this.mLastUpdated = lastUpdated;
     }
 }

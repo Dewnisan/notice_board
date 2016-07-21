@@ -58,12 +58,60 @@ public class Model {
         return mModelFirebase.getUserId();
     }
 
-    public void getUserById(String id, GetUserListener listener) {
-        mModelFirebase.getUserById(id, listener);
+    public void getUserById(final String id, final GetUserListener listener) {
+        final String lastUpdateDate = GroupSql.getLastUpdateDate(mModelSql.getReadbleDB());
+        mModelFirebase.getUserById(id, new GetUserListener() {
+            @Override
+            public void onResult(User user) {
+                if (user != null) {
+                    //update the local DB
+                    String recentUpdate = lastUpdateDate;
+                    UserSql.add(mModelSql.getWritableDB(), user);
+                    if (recentUpdate == null || user.getLastUpdated().compareTo(recentUpdate) > 0) {
+                        recentUpdate = user.getLastUpdated();
+                    }
+
+                    UserSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
+                }
+
+                User res = UserSql.getById(mModelSql.getReadbleDB(), id);
+                listener.onResult(res);
+            }
+
+            @Override
+            public void onCancel() {
+                listener.onCancel();
+            }
+        }, lastUpdateDate);
     }
 
-    public void getAllUsersAsync(GetUsersListener listener) {
-        mModelFirebase.getAllUsersAsync(listener);
+    public void getAllUsersAsync(final GetUsersListener listener) {
+        final String lastUpdateDate = UserSql.getLastUpdateDate(mModelSql.getReadbleDB());
+        mModelFirebase.getAllUsersAsync(new GetUsersListener() {
+            @Override
+            public void onResult(List<User> users) {
+                if (users != null && users.size() > 0) {
+                    //update the local DB
+                    String recentUpdate = lastUpdateDate;
+                    for (User user : users) {
+                        UserSql.add(mModelSql.getWritableDB(), user);
+                        if (recentUpdate == null || user.getLastUpdated().compareTo(recentUpdate) > 0) {
+                            recentUpdate = user.getLastUpdated();
+                        }
+                    }
+
+                    UserSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
+                }
+                //return the complete student list to the caller
+                List<User> res = UserSql.getAll(mModelSql.getReadbleDB());
+                listener.onResult(res);
+            }
+
+            @Override
+            public void onCancel() {
+                listener.onCancel();
+            }
+        }, lastUpdateDate);
     }
 
     public void addUser(User user) {
@@ -81,18 +129,18 @@ public class Model {
             public void onResult(List<Group> groups) {
                 if (groups != null && groups.size() > 0) {
                     //update the local DB
-                    String reacentUpdate = lastUpdateDate;
+                    String recentUpdate = lastUpdateDate;
                     for (Group group : groups) {
                         GroupSql.add(mModelSql.getWritableDB(), group);
-                        if (reacentUpdate == null || group.getLastUpdated().compareTo(reacentUpdate) > 0) {
-                            reacentUpdate = group.getLastUpdated();
+                        if (recentUpdate == null || group.getLastUpdated().compareTo(recentUpdate) > 0) {
+                            recentUpdate = group.getLastUpdated();
                         }
                     }
 
-                    GroupSql.setLastUpdateDate(mModelSql.getWritableDB(), reacentUpdate);
+                    GroupSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
                 }
                 //return the complete student list to the caller
-                List<Group> res = GroupSql.getAllGroups(mModelSql.getReadbleDB());
+                List<Group> res = GroupSql.getAll(mModelSql.getReadbleDB());
                 listener.onResult(res);
             }
 
@@ -101,12 +149,18 @@ public class Model {
                 listener.onCancel();
             }
         }, lastUpdateDate);
-
-        mModelFirebase.getAllUserGroupsAsync(listener, lastUpdateDate);
     }
 
     public void addGroup(Group group) {
         mModelFirebase.addGroup(group);
+    }
+
+    public void getAllPostsByGroupIdAsync(String groupId, final GetPostsListener listener) {
+        mModelFirebase.getAllPostsByGroupIdAsync(groupId, listener);
+    }
+
+    public void addPost(Post post) {
+        mModelFirebase.addPost(post);
     }
 
     public void saveImage(final Bitmap imageBitmap, final String imageName) {
@@ -214,6 +268,12 @@ public class Model {
 
     public interface GetGroupsListener {
         public void onResult(List<Group> groups);
+
+        public void onCancel();
+    }
+
+    public interface GetPostsListener {
+        public void onResult(List<Post> posts);
 
         public void onCancel();
     }

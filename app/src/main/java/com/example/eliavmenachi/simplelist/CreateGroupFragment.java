@@ -52,7 +52,7 @@ public class CreateGroupFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_create_group, container, false);
         getActivity().setTitle(R.string.title_fragment_create_group);
 
-        mImageView = (ImageView) view.findViewById(R.id.fragment_create_group_img);
+        mImageView = (ImageView) view.findViewById(R.id.fragment_create_group_iv_image);
 
         final EditText etName = ((EditText) view.findViewById(R.id.fragment_create_group_et_name));
 

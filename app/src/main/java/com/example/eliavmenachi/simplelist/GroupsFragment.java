@@ -82,7 +82,7 @@ public class GroupsFragment extends Fragment {
 
     private void loadGroupsData() {
         mProgressBar.setVisibility(View.VISIBLE);
-        Model.getInstance().getAllUserGroupsAsync(new Model.GetGroupsListener() {
+        Model.getInstance().getAllUserGroups(new Model.GetGroupsListener() {
             @Override
             public void onResult(List<Group> groups) {
                 mProgressBar.setVisibility(View.GONE);

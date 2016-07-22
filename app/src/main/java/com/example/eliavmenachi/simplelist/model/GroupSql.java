@@ -15,7 +15,6 @@ public class GroupSql {
     final static String TABLE = "groups";
     final static String TABLE_ID = "_id";
     final static String TABLE_NAME = "name";
-    final static String TABLE_OWNER = "owner";
     final static String TABLE_MEMBERS = "members";
     final static String TABLE_IMAGE_NAME = "image_name";
     final static String TABLE_MESSAGES = "messages";
@@ -25,7 +24,6 @@ public class GroupSql {
         db.execSQL("create table " + TABLE + " (" +
                 TABLE_ID + " TEXT PRIMARY KEY," +
                 TABLE_NAME + " TEXT," +
-                TABLE_OWNER + " TEXT," +
                 TABLE_MEMBERS + " TEXT," +
                 TABLE_IMAGE_NAME + " TEXT," +
                 TABLE_MESSAGES + " TEXT);");
@@ -42,7 +40,6 @@ public class GroupSql {
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(TABLE_ID);
             int nameIndex = cursor.getColumnIndex(TABLE_NAME);
-            int ownerIndex = cursor.getColumnIndex(TABLE_OWNER);
             int membersIndex = cursor.getColumnIndex(TABLE_MEMBERS);
             int imageNameIndex = cursor.getColumnIndex(TABLE_IMAGE_NAME);
             int messagesIndex = cursor.getColumnIndex(TABLE_MESSAGES);
@@ -50,7 +47,6 @@ public class GroupSql {
             do {
                 String id = cursor.getString(idIndex);
                 String name = cursor.getString(nameIndex);
-                String owner = cursor.getString(ownerIndex);
 
                 String membersStr = cursor.getString(membersIndex);
                 List<String> members = new LinkedList<String>();
@@ -62,7 +58,7 @@ public class GroupSql {
                 List<String> messages = new LinkedList<String>();
                 parseCollectionElements(messagesStr, messages);
 
-                Group group = new Group(id, name, owner, members, imageName, messages);
+                Group group = new Group(id, name, members, imageName, messages);
                 groups.add(group);
             } while (cursor.moveToNext());
         }
@@ -77,14 +73,12 @@ public class GroupSql {
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(TABLE_ID);
             int nameIndex = cursor.getColumnIndex(TABLE_NAME);
-            int ownerIndex = cursor.getColumnIndex(TABLE_OWNER);
             int membersIndex = cursor.getColumnIndex(TABLE_MEMBERS);
             int imageNameIndex = cursor.getColumnIndex(TABLE_IMAGE_NAME);
             int messagesIndex = cursor.getColumnIndex(TABLE_MESSAGES);
 
             String _id = cursor.getString(idIndex);
             String name = cursor.getString(nameIndex);
-            String owner = cursor.getString(ownerIndex);
 
             String membersStr = cursor.getString(membersIndex);
             List<String> members = new LinkedList<String>();
@@ -96,7 +90,7 @@ public class GroupSql {
             List<String> messages = new LinkedList<String>();
             parseCollectionElements(messagesStr, messages);
 
-            Group group = new Group(_id, name, owner, members, imageName, messages);
+            Group group = new Group(_id, name, members, imageName, messages);
 
             return group;
         }
@@ -109,7 +103,6 @@ public class GroupSql {
 
         values.put(TABLE_ID, group.getId());
         values.put(TABLE_NAME, group.getName());
-        values.put(TABLE_OWNER, group.getOwner());
 
         String membersStr = concatCollectionElements(group.getMembers());
         values.put(TABLE_MEMBERS, membersStr);

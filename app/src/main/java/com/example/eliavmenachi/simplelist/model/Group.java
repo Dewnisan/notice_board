@@ -9,7 +9,6 @@ import java.util.List;
 public class Group {
     private String mId;
     private String mName;
-    private String mOwner;
     private List<String> mMembers = new LinkedList<String>();
     private String mImageName;
 
@@ -17,18 +16,15 @@ public class Group {
 
     private String mLastUpdated;
 
-    public Group(String id, String name, String owner, List<String> members, String imageName, List<String> messages) {
-        this(id, name, owner, imageName);
+    public Group(String id, String name, List<String> members, String imageName, List<String> messages) {
+        this(id, name, imageName);
         setMembers(members);
         setMessages(messages);
     }
 
-    public Group(String id, String name, String owner, String imageName) {
+    public Group(String id, String name, String imageName) {
         setId(id);
         setName(name);
-        setOwner(owner);
-
-        this.mMembers.add(mOwner);
 
         setImageName(imageName);
     }
@@ -51,14 +47,6 @@ public class Group {
 
     public void setName(String name) {
         this.mName = name;
-    }
-
-    public String getOwner() {
-        return mOwner;
-    }
-
-    public void setOwner(String owner) {
-        this.mOwner = owner;
     }
 
     public List<String> getMembers() {

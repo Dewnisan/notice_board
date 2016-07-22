@@ -69,7 +69,9 @@ public class CreateGroupFragment extends Fragment {
                     mImageFileName = name + timeStamp + ".jpg";
                 }
 
-                Group group = new Group("id", name, owner, mImageFileName);
+                Group group = new Group("id", name, mImageFileName);
+                group.getMembers().add(owner);
+
                 Model.getInstance().addGroup(group);
 
                 if (mImageBitmap != null) {

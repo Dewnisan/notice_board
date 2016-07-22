@@ -24,7 +24,7 @@ public class ModelSql {
         return mSqlDb.getWritableDatabase();
     }
 
-    public SQLiteDatabase getReadbleDB() {
+    public SQLiteDatabase getReadableDB() {
         return mSqlDb.getReadableDatabase();
     }
 
@@ -37,6 +37,7 @@ public class ModelSql {
         public void onCreate(SQLiteDatabase db) {
             UserSql.create(db);
             GroupSql.create(db);
+            PostSql.create(db);
             LastUpdateSql.create(db);
         }
 
@@ -44,6 +45,7 @@ public class ModelSql {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             UserSql.drop(db);
             GroupSql.drop(db);
+            PostSql.drop(db);
             LastUpdateSql.drop(db);
             onCreate(db);
         }

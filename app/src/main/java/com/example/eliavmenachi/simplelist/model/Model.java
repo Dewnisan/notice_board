@@ -59,7 +59,7 @@ public class Model {
     }
 
     public void getUserById(final String id, final GetUserListener listener) {
-        final String lastUpdateDate = GroupSql.getLastUpdateDate(mModelSql.getReadbleDB());
+        final String lastUpdateDate = UserSql.getLastUpdateDate(mModelSql.getReadableDB());
         mModelFirebase.getUserById(id, new GetUserListener() {
             @Override
             public void onResult(User user) {
@@ -74,7 +74,7 @@ public class Model {
                     UserSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
                 }
 
-                User res = UserSql.getById(mModelSql.getReadbleDB(), id);
+                User res = UserSql.getById(mModelSql.getReadableDB(), id);
                 listener.onResult(res);
             }
 
@@ -85,9 +85,9 @@ public class Model {
         }, lastUpdateDate);
     }
 
-    public void getAllUsersAsync(final GetUsersListener listener) {
-        final String lastUpdateDate = UserSql.getLastUpdateDate(mModelSql.getReadbleDB());
-        mModelFirebase.getAllUsersAsync(new GetUsersListener() {
+    public void getAllUsers(final GetUsersListener listener) {
+        final String lastUpdateDate = UserSql.getLastUpdateDate(mModelSql.getReadableDB());
+        mModelFirebase.getAllUsers(new GetUsersListener() {
             @Override
             public void onResult(List<User> users) {
                 if (users != null && users.size() > 0) {
@@ -103,7 +103,7 @@ public class Model {
                     UserSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
                 }
                 //return the complete student list to the caller
-                List<User> res = UserSql.getAll(mModelSql.getReadbleDB());
+                List<User> res = UserSql.getAll(mModelSql.getReadableDB());
                 listener.onResult(res);
             }
 
@@ -122,9 +122,9 @@ public class Model {
         mModelFirebase.editUser(user);
     }
 
-    public void getAllUserGroupsAsync(final GetGroupsListener listener) {
-        final String lastUpdateDate = GroupSql.getLastUpdateDate(mModelSql.getReadbleDB());
-        mModelFirebase.getAllUserGroupsAsync(new GetGroupsListener() {
+    public void getAllUserGroups(final GetGroupsListener listener) {
+        final String lastUpdateDate = GroupSql.getLastUpdateDate(mModelSql.getReadableDB());
+        mModelFirebase.getAllUserGroups(new GetGroupsListener() {
             @Override
             public void onResult(List<Group> groups) {
                 if (groups != null && groups.size() > 0) {
@@ -140,7 +140,7 @@ public class Model {
                     GroupSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
                 }
                 //return the complete student list to the caller
-                List<Group> res = GroupSql.getAll(mModelSql.getReadbleDB());
+                List<Group> res = GroupSql.getAll(mModelSql.getReadableDB());
                 listener.onResult(res);
             }
 
@@ -155,8 +155,60 @@ public class Model {
         mModelFirebase.addGroup(group);
     }
 
-    public void getAllPostsByGroupIdAsync(String groupId, final GetPostsListener listener) {
-        mModelFirebase.getAllPostsByGroupIdAsync(groupId, listener);
+    public void getAllPostsByGroupId(String id, final GetPostsListener listener) {
+        final String lastUpdateDate = PostSql.getLastUpdateDate(mModelSql.getReadableDB());
+        mModelFirebase.getAllPostsByGroupId(id, new GetPostsListener() {
+            @Override
+            public void onResult(List<Post> posts) {
+                if (posts != null && posts.size() > 0) {
+                    //update the local DB
+                    String recentUpdate = lastUpdateDate;
+                    for (Post post : posts) {
+                        PostSql.add(mModelSql.getWritableDB(), post);
+                        if (recentUpdate == null || post.getLastUpdated().compareTo(recentUpdate) > 0) {
+                            recentUpdate = post.getLastUpdated();
+                        }
+                    }
+
+                    PostSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
+                }
+
+                List<Post> res = PostSql.getAll(mModelSql.getReadableDB());
+                listener.onResult(res);
+            }
+
+            @Override
+            public void onCancel() {
+                listener.onCancel();
+            }
+        }, lastUpdateDate);
+    }
+
+    public void getPostById(final String id, final GetPostListener listener) {
+        final String lastUpdateDate = PostSql.getLastUpdateDate(mModelSql.getReadableDB());
+        mModelFirebase.getPostById(id, new GetPostListener() {
+            @Override
+            public void onResult(Post post) {
+                if (post != null) {
+                    //update the local DB
+                    String recentUpdate = lastUpdateDate;
+                    PostSql.add(mModelSql.getWritableDB(), post);
+                    if (recentUpdate == null || post.getLastUpdated().compareTo(recentUpdate) > 0) {
+                        recentUpdate = post.getLastUpdated();
+                    }
+
+                    PostSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
+                }
+
+                Post res = PostSql.getById(mModelSql.getReadableDB(), id);
+                listener.onResult(res);
+            }
+
+            @Override
+            public void onCancel() {
+                listener.onCancel();
+            }
+        }, lastUpdateDate);
     }
 
     public void addPost(Post post) {
@@ -274,6 +326,12 @@ public class Model {
 
     public interface GetPostsListener {
         public void onResult(List<Post> posts);
+
+        public void onCancel();
+    }
+
+    public interface GetPostListener {
+        public void onResult(Post post);
 
         public void onCancel();
     }

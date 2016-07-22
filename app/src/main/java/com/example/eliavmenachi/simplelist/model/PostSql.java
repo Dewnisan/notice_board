@@ -14,7 +14,7 @@ public class PostSql {
     final static String TABLE = "posts";
     final static String TABLE_ID = "_id";
     final static String TABLE_OWNER = "owner";
-    final static String TABLE_GROUP = "group";
+    final static String TABLE_GROUP = "_group";
     final static String TABLE_MESSAGE = "message";
     final static String TABLE_IMAGE_NAME = "image_name";
     //final static String TABLE_DELETED = "deleted";

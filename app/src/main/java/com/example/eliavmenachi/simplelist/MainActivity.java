@@ -130,8 +130,20 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
     }
 
     @Override
-    public void onCreatePostItemSelected(String groupId) {
-        CreatePostFragment fragment = CreatePostFragment.newInstance(groupId);
+    public void onCreatePostItemSelected(String id) {
+        CreatePostFragment fragment = CreatePostFragment.newInstance(id);
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.activity_main_fragment_container, fragment);
+        transaction.addToBackStack(null);
+
+        transaction.commit();
+    }
+
+    @Override
+    public void onPostSelected(String id) {
+        PostDetailsFragment fragment = PostDetailsFragment.newInstance(id);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 

@@ -90,7 +90,7 @@ public class ModelFirebase {
         });
     }
 
-    public void getAllUsersAsync(final Model.GetUsersListener listener, String lastUpdateDate) {
+    public void getAllUsers(final Model.GetUsersListener listener, String lastUpdateDate) {
         Firebase ref = mFirebase.child("users");
         Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);
 
@@ -132,7 +132,7 @@ public class ModelFirebase {
         ref.setValue(user);
     }
 
-    public void getAllUserGroupsAsync(final Model.GetGroupsListener listener, String lastUpdateDate) {
+    public void getAllUserGroups(final Model.GetGroupsListener listener, String lastUpdateDate) {
         Firebase ref = mFirebase.child("groups");
         Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);
 
@@ -171,7 +171,7 @@ public class ModelFirebase {
         newGroupRef.setValue(group);
     }
 
-    public void getAllPostsByGroupIdAsync(String groupId, final Model.GetPostsListener listener) {
+    public void getAllPostsByGroupId(String groupId, final Model.GetPostsListener listener, String lastUpdateDate) {
         Firebase ref = mFirebase.child("posts");
         Query queryRef = ref.orderByChild("group").equalTo(groupId);
 
@@ -205,6 +205,25 @@ public class ModelFirebase {
         Firebase newPostRef = ref.push();
         post.setId(newPostRef.getKey());
         newPostRef.setValue(post);
+    }
+
+    public void getPostById(String id, final Model.GetPostListener listener, String lastUpdateDate) {
+        Firebase ref = mFirebase.child("posts").child(id);
+        Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);
+
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Post post = snapshot.getValue(Post.class);
+                listener.onResult(post);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.d("ModelFirebase", "The read failed: " + firebaseError.getMessage());
+                listener.onCancel();
+            }
+        });
     }
 
     private String calculateDate() {

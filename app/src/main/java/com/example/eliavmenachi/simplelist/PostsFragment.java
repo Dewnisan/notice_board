@@ -75,6 +75,9 @@ public class PostsFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String postId = mData.get(position).getId();
+                mListener = (OnFragmentInteractionListener) getActivity();
+                mListener.onPostSelected(postId);
             }
         });
 
@@ -83,7 +86,7 @@ public class PostsFragment extends Fragment {
 
     private void loadPostsData() {
         mProgressBar.setVisibility(View.VISIBLE);
-        Model.getInstance().getAllPostsByGroupIdAsync(mGroupId, new Model.GetPostsListener() {
+        Model.getInstance().getAllPostsByGroupId(mGroupId, new Model.GetPostsListener() {
             @Override
             public void onResult(List<Post> posts) {
                 mProgressBar.setVisibility(View.GONE);
@@ -128,7 +131,9 @@ public class PostsFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        void onCreatePostItemSelected(String groupId);
+        void onCreatePostItemSelected(String id);
+
+        void onPostSelected(String id);
     }
 
     class MyAdapter extends BaseAdapter {

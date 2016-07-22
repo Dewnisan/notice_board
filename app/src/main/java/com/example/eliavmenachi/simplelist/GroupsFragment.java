@@ -160,7 +160,7 @@ public class GroupsFragment extends Fragment {
         public View getView(final int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
-                convertView = inflater.inflate(R.layout.activity_group_list_row, null);
+                convertView = inflater.inflate(R.layout.row_group_list, null);
             }
 
             final TextView name = (TextView) convertView.findViewById(R.id.activity_group_list_row_tv_name);

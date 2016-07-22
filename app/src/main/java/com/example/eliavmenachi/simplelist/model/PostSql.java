@@ -11,12 +11,12 @@ import java.util.List;
  * Created by eliav.menachi on 08/06/2016.
  */
 public class PostSql {
-    final static String TABLE = "posts";
-    final static String TABLE_ID = "_id";
-    final static String TABLE_OWNER = "owner";
-    final static String TABLE_GROUP = "_group";
-    final static String TABLE_MESSAGE = "message";
-    final static String TABLE_IMAGE_NAME = "image_name";
+    private final static String TABLE = "posts";
+    private final static String TABLE_ID = "_id";
+    private final static String TABLE_OWNER = "owner";
+    private final static String TABLE_GROUP = "_group";
+    private final static String TABLE_MESSAGE = "message";
+    private final static String TABLE_IMAGE_NAME = "image_name";
     //final static String TABLE_DELETED = "deleted";
 
     static public void create(SQLiteDatabase db) {

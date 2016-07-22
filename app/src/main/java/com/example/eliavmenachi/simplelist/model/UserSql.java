@@ -12,10 +12,10 @@ import java.util.List;
  * Created by eliav.menachi on 08/06/2016.
  */
 public class UserSql {
-    final static String TABLE = "users";
-    final static String TABLE_ID = "_id";
-    final static String TABLE_NAME = "name";
-    final static String TABLE_IMAGE_NAME = "image_name";
+    private final static String TABLE = "users";
+    private final static String TABLE_ID = "_id";
+    private final static String TABLE_NAME = "name";
+    private final static String TABLE_IMAGE_NAME = "image_name";
     //final static String TABLE_DELETED = "deleted";
 
     static public void create(SQLiteDatabase db) {

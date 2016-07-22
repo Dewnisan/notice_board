@@ -27,7 +27,7 @@ public class GroupsFragment extends Fragment {
     private ListView mListView;
     private List<Group> mData = new LinkedList<Group>();
     private MyAdapter mAdapter;
-    ProgressBar mProgressBar;
+    private ProgressBar mProgressBar;
 
     private OnFragmentInteractionListener mListener;
 
@@ -103,15 +103,6 @@ public class GroupsFragment extends Fragment {
         mListener = null;
     }
 
-
-    public interface OnFragmentInteractionListener {
-        void onCreateGroupItemSelected();
-
-        void onProfileItemSelected();
-
-        void onGroupSelected(String groupId);
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_groups, menu);
@@ -138,6 +129,14 @@ public class GroupsFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onCreateGroupItemSelected();
+
+        void onProfileItemSelected();
+
+        void onGroupSelected(String groupId);
     }
 
     class MyAdapter extends BaseAdapter {

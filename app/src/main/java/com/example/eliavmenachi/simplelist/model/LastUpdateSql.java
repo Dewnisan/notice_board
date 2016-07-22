@@ -8,9 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
  * Created by eliav.menachi on 08/06/2016.
  */
 public class LastUpdateSql {
-    final static String TABLE = "last_update";
-    final static String TABLE_NAME = "table_name";
-    final static String TABLE_DATE = "date";
+    private final static String TABLE = "last_update";
+    private final static String TABLE_NAME = "table_name";
+    private final static String TABLE_DATE = "date";
 
     static public void create(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE + " (" +

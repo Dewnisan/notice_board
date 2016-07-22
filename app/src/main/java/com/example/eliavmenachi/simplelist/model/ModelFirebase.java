@@ -17,15 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-/**
- * Created by eliav.menachi on 17/05/2016.
- */
 public class ModelFirebase {
     private static final String FIREBASE_URL = "https://sweltering-inferno-2745.firebaseio.com/";
 
-    Firebase mFirebase;
+    private Firebase mFirebase;
 
-    ModelFirebase(Context context) {
+    public ModelFirebase(Context context) {
         Firebase.setAndroidContext(context);
         mFirebase = new Firebase(FIREBASE_URL);
     }

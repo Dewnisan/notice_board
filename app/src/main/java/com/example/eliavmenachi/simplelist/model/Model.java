@@ -20,9 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-/**
- * Created by eliav.menachi on 25/03/2015.
- */
+
 public class Model {
     private final static Model mInstance = new Model();
 

@@ -21,6 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CreateGroupFragment extends Fragment {
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+
     private ImageView mImageView;
     private String mImageFileName;
     private Bitmap mImageBitmap;
@@ -119,21 +121,19 @@ public class CreateGroupFragment extends Fragment {
         mListener = null;
     }
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-
-    private void takePicture() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             Bundle extras = data.getExtras();
             mImageBitmap = (Bitmap) extras.get("data");
             mImageView.setImageBitmap(mImageBitmap);
+        }
+    }
+
+    private void takePicture() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 

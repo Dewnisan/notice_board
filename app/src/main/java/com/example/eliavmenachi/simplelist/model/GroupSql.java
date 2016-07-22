@@ -8,17 +8,13 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by eliav.menachi on 08/06/2016.
- */
 public class GroupSql {
-    final static String TABLE = "groups";
-    final static String TABLE_ID = "_id";
-    final static String TABLE_NAME = "name";
-    final static String TABLE_MEMBERS = "members";
-    final static String TABLE_IMAGE_NAME = "image_name";
-    final static String TABLE_MESSAGES = "messages";
-    //final static String TABLE_DELETED = "deleted";
+    private final static String TABLE = "groups";
+    private final static String TABLE_ID = "_id";
+    private final static String TABLE_NAME = "name";
+    private final static String TABLE_MEMBERS = "members";
+    private final static String TABLE_IMAGE_NAME = "image_name";
+    private final static String TABLE_MESSAGES = "messages";
 
     static public void create(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE + " (" +

@@ -95,6 +95,13 @@ public class SignUpFragment extends Fragment {
         return view;
     }
 
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
     private boolean passwordsMatch(String password, String passwordAgain) {
         if (!password.equals(passwordAgain)) {
             MyAlertDialog dialog = MyAlertDialog.newInstance("Passwords not match");
@@ -111,12 +118,6 @@ public class SignUpFragment extends Fragment {
         }
 
         return true;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     public interface OnFragmentInteractionListener {

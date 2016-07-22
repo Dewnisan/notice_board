@@ -12,7 +12,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,7 @@ import java.util.Map;
 public class ModelCloudinary {
     private static final String CLOUDINARY_URL = "cloudinary://421694581797959:TIm0KXgFla2e129ByOKaYCucxjc@doipsyjoy";
 
-    Cloudinary mCloudinary;
+    private Cloudinary mCloudinary;
 
     public ModelCloudinary() {
         mCloudinary = new Cloudinary(CLOUDINARY_URL);
@@ -36,8 +35,8 @@ public class ModelCloudinary {
                 try {
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
                     imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-                    byte[] bitmapdata = bos.toByteArray();
-                    ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
+                    byte[] bitmapData = bos.toByteArray();
+                    ByteArrayInputStream bs = new ByteArrayInputStream(bitmapData);
 
                     String name = imageName.substring(0, imageName.lastIndexOf("."));
                     Map res = mCloudinary.uploader().upload(bs, ObjectUtils.asMap("public_id", name));

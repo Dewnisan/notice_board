@@ -22,6 +22,7 @@ import java.util.Date;
 
 
 public class CreatePostFragment extends Fragment {
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static String ARG_GROUP_ID = "GROUP_ID";
 
     private OnFragmentInteractionListener mListener;
@@ -124,21 +125,19 @@ public class CreatePostFragment extends Fragment {
         mListener = null;
     }
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-
-    private void takePicture() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             Bundle extras = data.getExtras();
             mImageBitmap = (Bitmap) extras.get("data");
             mImageView.setImageBitmap(mImageBitmap);
+        }
+    }
+
+    private void takePicture() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 

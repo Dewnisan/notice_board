@@ -84,23 +84,6 @@ public class PostsFragment extends Fragment {
         return view;
     }
 
-    private void loadPostsData() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        Model.getInstance().getAllPostsByGroupId(mGroupId, new Model.GetPostsListener() {
-            @Override
-            public void onResult(List<Post> posts) {
-                mProgressBar.setVisibility(View.GONE);
-                mData = posts;
-                mAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
-    }
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -128,6 +111,23 @@ public class PostsFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void loadPostsData() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        Model.getInstance().getAllPostsByGroupId(mGroupId, new Model.GetPostsListener() {
+            @Override
+            public void onResult(List<Post> posts) {
+                mProgressBar.setVisibility(View.GONE);
+                mData = posts;
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
     }
 
     public interface OnFragmentInteractionListener {

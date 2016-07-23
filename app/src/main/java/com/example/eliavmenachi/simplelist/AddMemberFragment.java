@@ -14,19 +14,19 @@ import com.example.eliavmenachi.simplelist.model.Model;
 import com.example.eliavmenachi.simplelist.model.User;
 
 
-public class AddUserToGroupFragment extends Fragment {
+public class AddMemberFragment extends Fragment {
     private static String ARG_GROUP_ID = "GROUP_ID";
 
     private String mGroupId;
 
     private OnFragmentInteractionListener mListener;
 
-    public AddUserToGroupFragment() {
+    public AddMemberFragment() {
         // Required empty public constructor
     }
 
-    public static AddUserToGroupFragment newInstance(String groupId) {
-        AddUserToGroupFragment fragment = new AddUserToGroupFragment();
+    public static AddMemberFragment newInstance(String groupId) {
+        AddMemberFragment fragment = new AddMemberFragment();
         Bundle args = new Bundle();
         args.putString(ARG_GROUP_ID, groupId);
         fragment.setArguments(args);
@@ -45,7 +45,7 @@ public class AddUserToGroupFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_user_to_group, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_member, container, false);
         getActivity().setTitle(R.string.title_fragment_add_user);
 
         final EditText etName = (EditText) view.findViewById(R.id.fragment_add_user_et_name);
@@ -64,13 +64,15 @@ public class AddUserToGroupFragment extends Fragment {
                             dialog.setDelegate(new MyAlertDialog.Delegate() {
                                 @Override
                                 public void onOk() {
-                                    Log.d("AddUserToGroupFragment", "OK pressed");
+                                    Log.d("AddMemberFragment", "OK pressed");
                                 }
                             });
 
-                            dialog.show(getFragmentManager(), "AddUserToGroupFragment");
+                            dialog.show(getFragmentManager(), "AddMemberFragment");
                         } else {
-                            Model.getInstance().addUserToGroup(mGroupId, );
+                            Model.getInstance().addUserToGroup(user.getId(), mGroupId);
+                            mListener = (OnFragmentInteractionListener) getActivity();
+                            mListener.onAdd();
                         }
                     }
 

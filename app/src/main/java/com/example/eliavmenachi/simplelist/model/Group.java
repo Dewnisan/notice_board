@@ -1,20 +1,16 @@
 package com.example.eliavmenachi.simplelist.model;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Group {
     private String mId;
     private String mName;
-    private List<String> mMembers = new LinkedList<String>();
+    private Map<String, String> mMembers = new HashMap<String, String>();
     private String mImageName;
 
     private String mLastUpdated;
-
-    public Group(String id, String name, List<String> members, String imageName) {
-        this(id, name, imageName);
-        setMembers(members);
-    }
 
     public Group(String id, String name, String imageName) {
         setId(id);
@@ -23,7 +19,6 @@ public class Group {
     }
 
     public Group() {
-        this.mMembers = new LinkedList<String>();
     }
 
     public String getId() {
@@ -42,11 +37,11 @@ public class Group {
         this.mName = name;
     }
 
-    public List<String> getMembers() {
+    public Map<String, String> getMembers() {
         return mMembers;
     }
 
-    public void setMembers(List<String> members) {
+    public void setMembers(Map<String, String> members) {
         this.mMembers = members;
     }
 
@@ -64,5 +59,19 @@ public class Group {
 
     public void setLastUpdated(String lastUpdated) {
         this.mLastUpdated = lastUpdated;
+    }
+
+    public void addMember(String memberId) {
+        mMembers.put(memberId, memberId);
+    }
+
+    public void addMembers(Collection<String> members) {
+        for (String member : members) {
+            addMember(member);
+        }
+    }
+
+    public void removeMember(String memberId) {
+        mMembers.remove(memberId);
     }
 }

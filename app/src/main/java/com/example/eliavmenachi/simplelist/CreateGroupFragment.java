@@ -1,10 +1,10 @@
 package com.example.eliavmenachi.simplelist;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,7 +72,7 @@ public class CreateGroupFragment extends Fragment {
                 }
 
                 Group group = new Group("id", name, mImageFileName);
-                group.getMembers().add(owner);
+                group.addMember(owner);
 
                 Model.getInstance().addGroup(group);
 

@@ -14,7 +14,7 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
         EditUserFragment.OnFragmentInteractionListener,
         GroupsFragment.OnFragmentInteractionListener,
         CreateGroupFragment.OnFragmentInteractionListener,
-        AddUserToGroupFragment.OnFragmentInteractionListener,
+        AddMemberFragment.OnFragmentInteractionListener,
         PostsFragment.OnFragmentInteractionListener,
         CreatePostFragment.OnFragmentInteractionListener {
 
@@ -153,7 +153,7 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
 
     @Override
     public void onAddUserItemSelected(String groupId) {
-        AddUserToGroupFragment fragment = AddUserToGroupFragment.newInstance(groupId);
+        AddMemberFragment fragment = AddMemberFragment.newInstance(groupId);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 

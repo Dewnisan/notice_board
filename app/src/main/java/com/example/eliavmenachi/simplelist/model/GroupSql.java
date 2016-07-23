@@ -47,7 +47,9 @@ public class GroupSql {
 
                 String imageName = cursor.getString(imageNameIndex);
 
-                Group group = new Group(id, name, members, imageName);
+                Group group = new Group(id, name, imageName);
+                group.addMembers(members);
+
                 groups.add(group);
             } while (cursor.moveToNext());
         }
@@ -74,7 +76,8 @@ public class GroupSql {
 
             String imageName = cursor.getString(imageNameIndex);
 
-            Group group = new Group(_id, name, members, imageName);
+            Group group = new Group(_id, name, imageName);
+            group.addMembers(members);
 
             return group;
         }
@@ -88,7 +91,7 @@ public class GroupSql {
         values.put(TABLE_ID, group.getId());
         values.put(TABLE_NAME, group.getName());
 
-        String membersStr = concatCollectionElements(group.getMembers());
+        String membersStr = concatCollectionElements(new LinkedList(group.getMembers().values()));
         values.put(TABLE_MEMBERS, membersStr);
 
         values.put(TABLE_IMAGE_NAME, group.getImageName());

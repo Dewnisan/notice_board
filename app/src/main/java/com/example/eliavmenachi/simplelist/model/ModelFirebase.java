@@ -168,23 +168,14 @@ public class ModelFirebase {
         newGroupRef.setValue(group);
     }
 
-    public void addUserToGroupAsync(String userId, String groupId, final Model.AddUserToGroupListener listener, String lastUpdateDate) {
-        Firebase ref = mFirebase.child("groups").child(groupId).child("members");
-        Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);
+    public void addUserToGroup(String userId, String groupId) {
+        String date = calculateDate();
 
-        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                Group group = snapshot.getValue(Group.class);
-                listener.onResult(group);
-            }
+        Firebase ref = mFirebase.child("groups").child(groupId).child("members").child(userId);
+        ref.setValue(userId);
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                Log.d("ModelFirebase", "The read failed: " + firebaseError.getMessage());
-                listener.onCancel();
-            }
-        });
+        ref = mFirebase.child("groups").child(groupId).child("lastUpdated");
+        ref.setValue(date);
     }
 
     public void getGroupByIdAsync(String id, final Model.GetGroupListener listener, String lastUpdateDate) {
@@ -218,7 +209,7 @@ public class ModelFirebase {
                 for (DataSnapshot groupSnapshot : snapshot.getChildren()) {
                     Group group = groupSnapshot.getValue(Group.class);
 
-                    if (group.getMembers().contains(Model.getInstance().getUserId())) {
+                    if (group.getMembers().containsKey(Model.getInstance().getUserId())) {
                         list.add(group);
                     }
                 }

@@ -206,33 +206,8 @@ public class Model {
         mModelFirebase.addGroup(group);
     }
 
-    public void addUserToGroupAsync(String userId, String groupId, final AddUserToGroupListener listener) {
-        final String lastUpdateDate = PostSql.getLastUpdateDate(mModelSql.getReadableDB());
-        mModelFirebase.getGroupByIdAsync(groupId, new GetGroupListener() {
-            @Override
-            public void onResult(List<Post> posts) {
-                if (posts != null && posts.size() > 0) {
-                    //update the local DB
-                    String recentUpdate = lastUpdateDate;
-                    for (Post post : posts) {
-                        PostSql.add(mModelSql.getWritableDB(), post);
-                        if (recentUpdate == null || post.getLastUpdated().compareTo(recentUpdate) > 0) {
-                            recentUpdate = post.getLastUpdated();
-                        }
-                    }
-
-                    PostSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
-                }
-
-                List<Post> res = PostSql.getAll(mModelSql.getReadableDB());
-                listener.onResult(res);
-            }
-
-            @Override
-            public void onCancel() {
-                listener.onCancel();
-            }
-        }, lastUpdateDate);
+    public void addUserToGroup(String userId, String groupId) {
+        mModelFirebase.addUserToGroup(userId, groupId);
     }
 
     public void getAllGroupPostsAsync(String groupId, final GetPostsListener listener) {

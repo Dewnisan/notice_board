@@ -146,6 +146,33 @@ public class Model {
         mModelFirebase.editUser(user);
     }
 
+    public void getGroupByIdAsync(final String id, final GetGroupListener listener) {
+        final String lastUpdateDate = GroupSql.getLastUpdateDate(mModelSql.getReadableDB());
+        mModelFirebase.getGroupByIdAsync(id, new GetGroupListener() {
+            @Override
+            public void onResult(Group group) {
+                if (group != null) {
+                    //update the local DB
+                    String recentUpdate = lastUpdateDate;
+                    GroupSql.add(mModelSql.getWritableDB(), group);
+                    if (recentUpdate == null || group.getLastUpdated().compareTo(recentUpdate) > 0) {
+                        recentUpdate = group.getLastUpdated();
+                    }
+
+                    GroupSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
+                }
+
+                Group res = GroupSql.getById(mModelSql.getReadableDB(), id);
+                listener.onResult(res);
+            }
+
+            @Override
+            public void onCancel() {
+                listener.onCancel();
+            }
+        }, lastUpdateDate);
+    }
+
     public void getAllUserGroupsAsync(final GetGroupsListener listener) {
         final String lastUpdateDate = GroupSql.getLastUpdateDate(mModelSql.getReadableDB());
         mModelFirebase.getAllUserGroupsAsync(new GetGroupsListener() {
@@ -177,6 +204,35 @@ public class Model {
 
     public void addGroup(Group group) {
         mModelFirebase.addGroup(group);
+    }
+
+    public void addUserToGroupAsync(String userId, String groupId, final AddUserToGroupListener listener) {
+        final String lastUpdateDate = PostSql.getLastUpdateDate(mModelSql.getReadableDB());
+        mModelFirebase.getGroupByIdAsync(groupId, new GetGroupListener() {
+            @Override
+            public void onResult(List<Post> posts) {
+                if (posts != null && posts.size() > 0) {
+                    //update the local DB
+                    String recentUpdate = lastUpdateDate;
+                    for (Post post : posts) {
+                        PostSql.add(mModelSql.getWritableDB(), post);
+                        if (recentUpdate == null || post.getLastUpdated().compareTo(recentUpdate) > 0) {
+                            recentUpdate = post.getLastUpdated();
+                        }
+                    }
+
+                    PostSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
+                }
+
+                List<Post> res = PostSql.getAll(mModelSql.getReadableDB());
+                listener.onResult(res);
+            }
+
+            @Override
+            public void onCancel() {
+                listener.onCancel();
+            }
+        }, lastUpdateDate);
     }
 
     public void getAllGroupPostsAsync(String groupId, final GetPostsListener listener) {
@@ -342,8 +398,20 @@ public class Model {
         public void onCancel();
     }
 
+    public interface GetGroupListener {
+        public void onResult(Group group);
+
+        public void onCancel();
+    }
+
     public interface GetGroupsListener {
         public void onResult(List<Group> groups);
+
+        public void onCancel();
+    }
+
+    public interface AddUserToGroupListener {
+        public void onResult();
 
         public void onCancel();
     }

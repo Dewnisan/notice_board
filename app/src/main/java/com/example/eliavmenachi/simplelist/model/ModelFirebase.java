@@ -168,6 +168,44 @@ public class ModelFirebase {
         newGroupRef.setValue(group);
     }
 
+    public void addUserToGroupAsync(String userId, String groupId, final Model.AddUserToGroupListener listener, String lastUpdateDate) {
+        Firebase ref = mFirebase.child("groups").child(groupId).child("members");
+        Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);
+
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Group group = snapshot.getValue(Group.class);
+                listener.onResult(group);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.d("ModelFirebase", "The read failed: " + firebaseError.getMessage());
+                listener.onCancel();
+            }
+        });
+    }
+
+    public void getGroupByIdAsync(String id, final Model.GetGroupListener listener, String lastUpdateDate) {
+        Firebase ref = mFirebase.child("groups").child(id);
+        Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);
+
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Group group = snapshot.getValue(Group.class);
+                listener.onResult(group);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.d("ModelFirebase", "The read failed: " + firebaseError.getMessage());
+                listener.onCancel();
+            }
+        });
+    }
+
     public void getAllUserGroupsAsync(final Model.GetGroupsListener listener, String lastUpdateDate) {
         Firebase ref = mFirebase.child("groups");
         Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);

@@ -14,9 +14,6 @@ import com.example.eliavmenachi.simplelist.model.Model;
 import com.example.eliavmenachi.simplelist.model.User;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class AddUserToGroupFragment extends Fragment {
     private static String ARG_GROUP_ID = "GROUP_ID";
 
@@ -73,7 +70,7 @@ public class AddUserToGroupFragment extends Fragment {
 
                             dialog.show(getFragmentManager(), "AddUserToGroupFragment");
                         } else {
-
+                            Model.getInstance().addUserToGroup(mGroupId, );
                         }
                     }
 

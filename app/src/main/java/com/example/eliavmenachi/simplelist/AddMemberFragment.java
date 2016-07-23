@@ -70,7 +70,7 @@ public class AddMemberFragment extends Fragment {
 
                             dialog.show(getFragmentManager(), "AddMemberFragment");
                         } else {
-                            Model.getInstance().addUserToGroup(user.getId(), mGroupId);
+                            Model.getInstance().addMemberToGroup(user.getId(), mGroupId);
                             mListener = (OnFragmentInteractionListener) getActivity();
                             mListener.onAdd();
                         }

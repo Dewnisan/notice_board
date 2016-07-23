@@ -178,6 +178,16 @@ public class ModelFirebase {
         ref.setValue(date);
     }
 
+    public void removeUserFromGroup(String userId, String groupId) {
+        String date = calculateDate();
+
+        Firebase ref = mFirebase.child("groups").child(groupId).child("members").child(userId);
+        ref.removeValue();
+
+        ref = mFirebase.child("groups").child(groupId).child("lastUpdated");
+        ref.setValue(date);
+    }
+
     public void getGroupByIdAsync(String id, final Model.GetGroupListener listener, String lastUpdateDate) {
         Firebase ref = mFirebase.child("groups").child(id);
         Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);

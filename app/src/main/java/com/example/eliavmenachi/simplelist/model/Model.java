@@ -206,8 +206,12 @@ public class Model {
         mModelFirebase.addGroup(group);
     }
 
-    public void addUserToGroup(String userId, String groupId) {
+    public void addMemberToGroup(String userId, String groupId) {
         mModelFirebase.addUserToGroup(userId, groupId);
+    }
+
+    public void removeMemberFromGroup(String userId, String groupId) {
+        mModelFirebase.removeUserFromGroup(userId, groupId);
     }
 
     public void getAllGroupPostsAsync(String groupId, final GetPostsListener listener) {

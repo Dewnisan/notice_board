@@ -48,9 +48,9 @@ public class AddMemberFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_member, container, false);
         getActivity().setTitle(R.string.title_fragment_add_user);
 
-        final EditText etName = (EditText) view.findViewById(R.id.fragment_add_user_et_name);
+        final EditText etName = (EditText) view.findViewById(R.id.fragment_add_member_et_name);
 
-        Button btnAdd = (Button) view.findViewById(R.id.fragment_add_user_btn_add);
+        Button btnAdd = (Button) view.findViewById(R.id.fragment_add_member_btn_add);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +84,7 @@ public class AddMemberFragment extends Fragment {
             }
         });
 
-        Button btnCancel = (Button) view.findViewById(R.id.fragment_add_user_btn_cancel);
+        Button btnCancel = (Button) view.findViewById(R.id.fragment_add_member_btn_cancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

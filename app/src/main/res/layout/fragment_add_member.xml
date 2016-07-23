@@ -14,14 +14,14 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/fragment_add_user_lbl_name"
+            android:id="@+id/fragment_add_member_lbl_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/fragment_add_user_et_name"
+            android:labelFor="@+id/fragment_add_member_et_name"
             android:text="Name: " />
 
         <EditText
-            android:id="@id/fragment_add_user_et_name"
+            android:id="@id/fragment_add_member_et_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
@@ -34,14 +34,14 @@
         android:gravity="bottom|end">
 
         <Button
-            android:id="@+id/fragment_add_user_btn_add"
+            android:id="@+id/fragment_add_member_btn_add"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Add" />
 
         <Button
-            android:id="@+id/fragment_add_user_btn_cancel"
+            android:id="@+id/fragment_add_member_btn_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

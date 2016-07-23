@@ -12,13 +12,13 @@ import android.os.Bundle;
 public class MyAlertDialog extends DialogFragment {
     public static String ARG_MESSAGE = "MESSAGE";
 
-    private Delegate delegate;
+    private Delegate mDelegate;
     private String mMessage;
 
     public static final MyAlertDialog newInstance(String message) {
         MyAlertDialog fragment = new MyAlertDialog();
 
-        Bundle args = new Bundle(1);
+        Bundle args = new Bundle();
         args.putString(ARG_MESSAGE, message);
         fragment.setArguments(args);
 
@@ -26,7 +26,7 @@ public class MyAlertDialog extends DialogFragment {
     }
 
     public void setDelegate(Delegate delegate) {
-        this.delegate = delegate;
+        this.mDelegate = delegate;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class MyAlertDialog extends DialogFragment {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                delegate.onOk();
+                mDelegate.onOk();
             }
         });
 

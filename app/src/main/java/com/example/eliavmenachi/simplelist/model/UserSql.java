@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,28 +28,6 @@ public class UserSql {
         db.execSQL("drop table " + TABLE + ";");
     }
 
-    public static List<User> getAll(SQLiteDatabase db) {
-        Cursor cursor = db.query(TABLE, null, null, null, null, null, null);
-        List<User> users = new LinkedList<User>();
-
-        if (cursor.moveToFirst()) {
-            int idIndex = cursor.getColumnIndex(TABLE_ID);
-            int nameIndex = cursor.getColumnIndex(TABLE_NAME);
-            int imageNameIndex = cursor.getColumnIndex(TABLE_IMAGE_NAME);
-
-            do {
-                String id = cursor.getString(idIndex);
-                String name = cursor.getString(nameIndex);
-                String imageName = cursor.getString(imageNameIndex);
-
-                User user = new User(id, name, imageName);
-                users.add(user);
-            } while (cursor.moveToNext());
-        }
-
-        return users;
-    }
-
     public static User getById(SQLiteDatabase db, String id) {
         String where = TABLE_ID + " = ?";
         String[] args = {id};
@@ -71,6 +48,50 @@ public class UserSql {
         }
 
         return null;
+    }
+
+    public static User getByName(SQLiteDatabase db, String name) {
+        String where = TABLE_NAME + " = ?";
+        String[] args = {name};
+        Cursor cursor = db.query(TABLE, null, where, args, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(TABLE_ID);
+            int nameIndex = cursor.getColumnIndex(TABLE_NAME);
+            int imageNameIndex = cursor.getColumnIndex(TABLE_IMAGE_NAME);
+
+            String id = cursor.getString(idIndex);
+            String _name = cursor.getString(nameIndex);
+            String imageName = cursor.getString(imageNameIndex);
+
+            User user = new User(id, _name, imageName);
+
+            return user;
+        }
+
+        return null;
+    }
+
+    public static List<User> getAll(SQLiteDatabase db) {
+        Cursor cursor = db.query(TABLE, null, null, null, null, null, null);
+        List<User> users = new LinkedList<User>();
+
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(TABLE_ID);
+            int nameIndex = cursor.getColumnIndex(TABLE_NAME);
+            int imageNameIndex = cursor.getColumnIndex(TABLE_IMAGE_NAME);
+
+            do {
+                String id = cursor.getString(idIndex);
+                String name = cursor.getString(nameIndex);
+                String imageName = cursor.getString(imageNameIndex);
+
+                User user = new User(id, name, imageName);
+                users.add(user);
+            } while (cursor.moveToNext());
+        }
+
+        return users;
     }
 
     public static void add(SQLiteDatabase db, User user) {

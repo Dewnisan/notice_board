@@ -9,20 +9,16 @@ public class Group {
     private List<String> mMembers = new LinkedList<String>();
     private String mImageName;
 
-    private List<String> mMessages = new LinkedList<String>();
-
     private String mLastUpdated;
 
-    public Group(String id, String name, List<String> members, String imageName, List<String> messages) {
+    public Group(String id, String name, List<String> members, String imageName) {
         this(id, name, imageName);
         setMembers(members);
-        setMessages(messages);
     }
 
     public Group(String id, String name, String imageName) {
         setId(id);
         setName(name);
-
         setImageName(imageName);
     }
 
@@ -60,14 +56,6 @@ public class Group {
 
     public void setImageName(String imageName) {
         this.mImageName = imageName;
-    }
-
-    public List<String> getMessages() {
-        return mMessages;
-    }
-
-    public void setMessages(List<String> messages) {
-        this.mMessages = messages;
     }
 
     public String getLastUpdated() {

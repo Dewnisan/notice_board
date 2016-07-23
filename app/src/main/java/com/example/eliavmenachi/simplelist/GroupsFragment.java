@@ -1,8 +1,8 @@
 package com.example.eliavmenachi.simplelist;
 
+import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -82,7 +82,7 @@ public class GroupsFragment extends Fragment {
 
     private void loadGroupsData() {
         mProgressBar.setVisibility(View.VISIBLE);
-        Model.getInstance().getAllUserGroups(new Model.GetGroupsListener() {
+        Model.getInstance().getAllUserGroupsAsync(new Model.GetGroupsListener() {
             @Override
             public void onResult(List<Group> groups) {
                 mProgressBar.setVisibility(View.GONE);
@@ -176,7 +176,7 @@ public class GroupsFragment extends Fragment {
                 final ProgressBar progress = (ProgressBar) convertView.findViewById(R.id.activity_group_list_row_pb_image);
                 progress.setVisibility(View.VISIBLE);
 
-                Model.getInstance().loadImage(group.getImageName(), new Model.LoadImageListener() {
+                Model.getInstance().loadImageAsync(group.getImageName(), new Model.LoadImageListener() {
                     @Override
                     public void onResult(Bitmap imageBmp) {
                         if ((Integer) name.getTag() == position) {

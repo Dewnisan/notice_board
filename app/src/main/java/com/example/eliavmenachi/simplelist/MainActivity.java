@@ -3,10 +3,7 @@ package com.example.eliavmenachi.simplelist;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,6 +14,7 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
         EditUserFragment.OnFragmentInteractionListener,
         GroupsFragment.OnFragmentInteractionListener,
         CreateGroupFragment.OnFragmentInteractionListener,
+        AddUserToGroupFragment.OnFragmentInteractionListener,
         PostsFragment.OnFragmentInteractionListener,
         CreatePostFragment.OnFragmentInteractionListener {
 
@@ -130,8 +128,8 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
     }
 
     @Override
-    public void onCreatePostItemSelected(String id) {
-        CreatePostFragment fragment = CreatePostFragment.newInstance(id);
+    public void onCreatePostItemSelected(String groupId) {
+        CreatePostFragment fragment = CreatePostFragment.newInstance(groupId);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
@@ -142,8 +140,20 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
     }
 
     @Override
-    public void onPostSelected(String id) {
-        PostDetailsFragment fragment = PostDetailsFragment.newInstance(id);
+    public void onPostSelected(String postId) {
+        PostDetailsFragment fragment = PostDetailsFragment.newInstance(postId);
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.activity_main_fragment_container, fragment);
+        transaction.addToBackStack(null);
+
+        transaction.commit();
+    }
+
+    @Override
+    public void onAddUserItemSelected(String groupId) {
+        AddUserToGroupFragment fragment = AddUserToGroupFragment.newInstance(groupId);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
@@ -155,6 +165,11 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
 
     @Override
     public void onSave() {
+        getFragmentManager().popBackStack(mDefaultFragmentIndex, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+
+    @Override
+    public void onAdd() {
         getFragmentManager().popBackStack(mDefaultFragmentIndex, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 

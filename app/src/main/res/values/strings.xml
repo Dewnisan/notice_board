@@ -15,8 +15,10 @@
     <string name="title_fragment_edit_user">Edit Profile</string>
     <string name="title_fragment_groups">Groups</string>
     <string name="title_fragment_create_group">Create Group</string>
+    <string name="title_fragment_add_user">Add User</string>
     <string name="title_fragment_posts">Posts</string>
     <string name="title_fragment_create_post">Create Post</string>
     <string name="title_fragment_post_details">Post</string>
+
 
 </resources>

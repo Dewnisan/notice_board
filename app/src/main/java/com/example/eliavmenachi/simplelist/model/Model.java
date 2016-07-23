@@ -20,7 +20,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-
 public class Model {
     private final static Model mInstance = new Model();
 
@@ -56,9 +55,9 @@ public class Model {
         return mModelFirebase.getUserId();
     }
 
-    public void getUserById(final String id, final GetUserListener listener) {
+    public void getUserByIdAsync(final String id, final GetUserListener listener) {
         final String lastUpdateDate = UserSql.getLastUpdateDate(mModelSql.getReadableDB());
-        mModelFirebase.getUserById(id, new GetUserListener() {
+        mModelFirebase.getUserByIdAsync(id, new GetUserListener() {
             @Override
             public void onResult(User user) {
                 if (user != null) {
@@ -83,9 +82,36 @@ public class Model {
         }, lastUpdateDate);
     }
 
-    public void getAllUsers(final GetUsersListener listener) {
+    public void getUserByNameAsync(final String name, final GetUserListener listener) {
         final String lastUpdateDate = UserSql.getLastUpdateDate(mModelSql.getReadableDB());
-        mModelFirebase.getAllUsers(new GetUsersListener() {
+        mModelFirebase.getUserByNameAsync(name, new GetUserListener() {
+            @Override
+            public void onResult(User user) {
+                if (user != null) {
+                    //update the local DB
+                    String recentUpdate = lastUpdateDate;
+                    UserSql.add(mModelSql.getWritableDB(), user);
+                    if (recentUpdate == null || user.getLastUpdated().compareTo(recentUpdate) > 0) {
+                        recentUpdate = user.getLastUpdated();
+                    }
+
+                    UserSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
+                }
+
+                User res = UserSql.getByName(mModelSql.getReadableDB(), name);
+                listener.onResult(res);
+            }
+
+            @Override
+            public void onCancel() {
+                listener.onCancel();
+            }
+        }, lastUpdateDate);
+    }
+
+    public void getAllUsersAsync(final GetUsersListener listener) {
+        final String lastUpdateDate = UserSql.getLastUpdateDate(mModelSql.getReadableDB());
+        mModelFirebase.getAllUsersAsync(new GetUsersListener() {
             @Override
             public void onResult(List<User> users) {
                 if (users != null && users.size() > 0) {
@@ -120,9 +146,9 @@ public class Model {
         mModelFirebase.editUser(user);
     }
 
-    public void getAllUserGroups(final GetGroupsListener listener) {
+    public void getAllUserGroupsAsync(final GetGroupsListener listener) {
         final String lastUpdateDate = GroupSql.getLastUpdateDate(mModelSql.getReadableDB());
-        mModelFirebase.getAllUserGroups(new GetGroupsListener() {
+        mModelFirebase.getAllUserGroupsAsync(new GetGroupsListener() {
             @Override
             public void onResult(List<Group> groups) {
                 if (groups != null && groups.size() > 0) {
@@ -153,9 +179,9 @@ public class Model {
         mModelFirebase.addGroup(group);
     }
 
-    public void getAllPostsByGroupId(String id, final GetPostsListener listener) {
+    public void getAllGroupPostsAsync(String groupId, final GetPostsListener listener) {
         final String lastUpdateDate = PostSql.getLastUpdateDate(mModelSql.getReadableDB());
-        mModelFirebase.getAllPostsByGroupId(id, new GetPostsListener() {
+        mModelFirebase.getAllGroupPostsAsync(groupId, new GetPostsListener() {
             @Override
             public void onResult(List<Post> posts) {
                 if (posts != null && posts.size() > 0) {
@@ -182,9 +208,9 @@ public class Model {
         }, lastUpdateDate);
     }
 
-    public void getPostById(final String id, final GetPostListener listener) {
+    public void getPostByIdAsync(final String id, final GetPostListener listener) {
         final String lastUpdateDate = PostSql.getLastUpdateDate(mModelSql.getReadableDB());
-        mModelFirebase.getPostById(id, new GetPostListener() {
+        mModelFirebase.getPostByIdAsync(id, new GetPostListener() {
             @Override
             public void onResult(Post post) {
                 if (post != null) {
@@ -228,7 +254,7 @@ public class Model {
         mModelCloudinary.deleteImage(imageName);
     }
 
-    public void loadImage(final String imageName, final LoadImageListener listener) {
+    public void loadImageAsync(final String imageName, final LoadImageListener listener) {
         AsyncTask<String, String, Bitmap> task = new AsyncTask<String, String, Bitmap>() {
             @Override
             protected Bitmap doInBackground(String... params) {

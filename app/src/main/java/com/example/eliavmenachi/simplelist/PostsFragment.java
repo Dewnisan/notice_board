@@ -1,8 +1,8 @@
 package com.example.eliavmenachi.simplelist;
 
+import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -108,6 +108,10 @@ public class PostsFragment extends Fragment {
                 mListener = (OnFragmentInteractionListener) getActivity();
                 mListener.onCreatePostItemSelected(mGroupId);
                 return true;
+            case R.id.action_add_user:
+                mListener = (OnFragmentInteractionListener) getActivity();
+                mListener.onAddUserItemSelected(mGroupId);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -115,7 +119,7 @@ public class PostsFragment extends Fragment {
 
     private void loadPostsData() {
         mProgressBar.setVisibility(View.VISIBLE);
-        Model.getInstance().getAllPostsByGroupId(mGroupId, new Model.GetPostsListener() {
+        Model.getInstance().getAllGroupPostsAsync(mGroupId, new Model.GetPostsListener() {
             @Override
             public void onResult(List<Post> posts) {
                 mProgressBar.setVisibility(View.GONE);
@@ -133,7 +137,9 @@ public class PostsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         void onCreatePostItemSelected(String id);
 
-        void onPostSelected(String id);
+        void onPostSelected(String postId);
+
+        void onAddUserItemSelected(String groupId);
     }
 
     class MyAdapter extends BaseAdapter {
@@ -168,7 +174,7 @@ public class PostsFragment extends Fragment {
 
             Post post = mData.get(position);
 
-            Model.getInstance().getUserById(post.getOwner(), new Model.GetUserListener() {
+            Model.getInstance().getUserByIdAsync(post.getOwner(), new Model.GetUserListener() {
                 @Override
                 public void onResult(User user) {
                     tvName.setText(user.getName());
@@ -186,7 +192,7 @@ public class PostsFragment extends Fragment {
                 final ProgressBar progress = (ProgressBar) convertView.findViewById(R.id.activity_post_list_row_pb_image);
                 progress.setVisibility(View.VISIBLE);
 
-                Model.getInstance().loadImage(post.getImageName(), new Model.LoadImageListener() {
+                Model.getInstance().loadImageAsync(post.getImageName(), new Model.LoadImageListener() {
                     @Override
                     public void onResult(Bitmap imageBmp) {
                         if ((Integer) tvName.getTag() == position) {

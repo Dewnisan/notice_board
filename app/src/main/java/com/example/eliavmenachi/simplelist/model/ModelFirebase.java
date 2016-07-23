@@ -12,6 +12,7 @@ import com.firebase.client.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +69,23 @@ public class ModelFirebase {
         }
     }
 
-    public void getUserById(String id, final Model.GetUserListener listener, String lastUpdateDate) {
+    public void addUser(User user) {
+        String date = calculateDate();
+        user.setLastUpdated(date);
+
+        Firebase ref = mFirebase.child("users").child(user.getId());
+        ref.setValue(user);
+    }
+
+    public void editUser(User user) {
+        String date = calculateDate();
+        user.setLastUpdated(date);
+
+        Firebase ref = mFirebase.child("users").child(user.getId());
+        ref.setValue(user);
+    }
+
+    public void getUserByIdAsync(String id, final Model.GetUserListener listener, String lastUpdateDate) {
         Firebase ref = mFirebase.child("users").child(id);
         Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);
 
@@ -87,7 +104,33 @@ public class ModelFirebase {
         });
     }
 
-    public void getAllUsers(final Model.GetUsersListener listener, String lastUpdateDate) {
+    public void getUserByNameAsync(String name, final Model.GetUserListener listener, String lastUpdateDate) {
+        Firebase ref = mFirebase.child("users");
+        Query queryRef = ref.orderByChild("name").equalTo(name);
+
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Map<String, HashMap<String, String>> map = (HashMap<String, HashMap<String, String>>) snapshot.getValue();
+
+                Map.Entry<String, HashMap<String, String>> entry = map.entrySet().iterator().next();
+                String key = entry.getKey();
+                HashMap<String, String> value = entry.getValue();
+                User user = new User(key, value.get("name"), value.get("imageName"));
+                user.setLastUpdated(value.get("lastUpdated"));
+
+                listener.onResult(user);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.d("ModelFirebase", "The read failed: " + firebaseError.getMessage());
+                listener.onCancel();
+            }
+        });
+    }
+
+    public void getAllUsersAsync(final Model.GetUsersListener listener, String lastUpdateDate) {
         Firebase ref = mFirebase.child("users");
         Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);
 
@@ -113,23 +156,19 @@ public class ModelFirebase {
         });
     }
 
-    public void addUser(User user) {
-        String date = calculateDate();
-        user.setLastUpdated(date);
 
-        Firebase ref = mFirebase.child("users").child(user.getId());
-        ref.setValue(user);
+    public void addGroup(Group group) {
+        String date = calculateDate();
+        group.setLastUpdated(date);
+
+        Firebase ref = mFirebase.child("groups");
+
+        Firebase newGroupRef = ref.push();
+        group.setId(newGroupRef.getKey());
+        newGroupRef.setValue(group);
     }
 
-    public void editUser(User user) {
-        String date = calculateDate();
-        user.setLastUpdated(date);
-
-        Firebase ref = mFirebase.child("users").child(user.getId());
-        ref.setValue(user);
-    }
-
-    public void getAllUserGroups(final Model.GetGroupsListener listener, String lastUpdateDate) {
+    public void getAllUserGroupsAsync(final Model.GetGroupsListener listener, String lastUpdateDate) {
         Firebase ref = mFirebase.child("groups");
         Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);
 
@@ -157,18 +196,37 @@ public class ModelFirebase {
         });
     }
 
-    public void addGroup(Group group) {
+    public void addPost(Post post) {
         String date = calculateDate();
-        group.setLastUpdated(date);
+        post.setLastUpdated(date);
 
-        Firebase ref = mFirebase.child("groups");
+        Firebase ref = mFirebase.child("posts");
 
-        Firebase newGroupRef = ref.push();
-        group.setId(newGroupRef.getKey());
-        newGroupRef.setValue(group);
+        Firebase newPostRef = ref.push();
+        post.setId(newPostRef.getKey());
+        newPostRef.setValue(post);
     }
 
-    public void getAllPostsByGroupId(String groupId, final Model.GetPostsListener listener, String lastUpdateDate) {
+    public void getPostByIdAsync(String id, final Model.GetPostListener listener, String lastUpdateDate) {
+        Firebase ref = mFirebase.child("posts").child(id);
+        Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);
+
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Post post = snapshot.getValue(Post.class);
+                listener.onResult(post);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.d("ModelFirebase", "The read failed: " + firebaseError.getMessage());
+                listener.onCancel();
+            }
+        });
+    }
+
+    public void getAllGroupPostsAsync(String groupId, final Model.GetPostsListener listener, String lastUpdateDate) {
         Firebase ref = mFirebase.child("posts");
         Query queryRef = ref.orderByChild("group").equalTo(groupId);
 
@@ -183,36 +241,6 @@ public class ModelFirebase {
                 }
 
                 listener.onResult(list);
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                Log.d("ModelFirebase", "The read failed: " + firebaseError.getMessage());
-                listener.onCancel();
-            }
-        });
-    }
-
-    public void addPost(Post post) {
-        String date = calculateDate();
-        post.setLastUpdated(date);
-
-        Firebase ref = mFirebase.child("posts");
-
-        Firebase newPostRef = ref.push();
-        post.setId(newPostRef.getKey());
-        newPostRef.setValue(post);
-    }
-
-    public void getPostById(String id, final Model.GetPostListener listener, String lastUpdateDate) {
-        Firebase ref = mFirebase.child("posts").child(id);
-        Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);
-
-        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                Post post = snapshot.getValue(Post.class);
-                listener.onResult(post);
             }
 
             @Override

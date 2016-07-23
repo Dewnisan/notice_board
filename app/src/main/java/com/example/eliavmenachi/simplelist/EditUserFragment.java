@@ -1,11 +1,11 @@
 package com.example.eliavmenachi.simplelist;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,7 +56,7 @@ public class EditUserFragment extends Fragment {
         mImageView = (ImageView) view.findViewById(R.id.fragment_edit_user_iv_image);
 
         String userId = Model.getInstance().getUserId();
-        Model.getInstance().getUserById(userId, new Model.GetUserListener() {
+        Model.getInstance().getUserByIdAsync(userId, new Model.GetUserListener() {
             @Override
             public void onResult(final User user) {
                 mCurrentUser = user;
@@ -64,7 +64,7 @@ public class EditUserFragment extends Fragment {
                 tvName.setText(mCurrentUser.getName());
                 if (mCurrentUser.getImageName() != null) {
                     imageProgressBar.setVisibility(View.VISIBLE);
-                    Model.getInstance().loadImage(mCurrentUser.getImageName(), new Model.LoadImageListener() {
+                    Model.getInstance().loadImageAsync(mCurrentUser.getImageName(), new Model.LoadImageListener() {
                         @Override
                         public void onResult(Bitmap imageBmp) {
                             if (mImageView != null) {

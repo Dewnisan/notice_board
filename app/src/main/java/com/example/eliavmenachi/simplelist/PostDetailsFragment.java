@@ -1,10 +1,8 @@
 package com.example.eliavmenachi.simplelist;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +20,6 @@ public class PostDetailsFragment extends Fragment {
     private String mPostId;
     private ImageView mImageView;
     private Bitmap mImageBitmap;
-
-    private OnFragmentInteractionListener mListener;
 
     public PostDetailsFragment() {
         // Required empty public constructor
@@ -60,13 +56,13 @@ public class PostDetailsFragment extends Fragment {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        Model.getInstance().getPostById(mPostId, new Model.GetPostListener() {
+        Model.getInstance().getPostByIdAsync(mPostId, new Model.GetPostListener() {
             @Override
             public void onResult(Post post) {
                 tvMessage.setText(post.getMessage());
                 if (post.getImageName() != null) {
                     imageProgressBar.setVisibility(View.VISIBLE);
-                    Model.getInstance().loadImage(post.getImageName(), new Model.LoadImageListener() {
+                    Model.getInstance().loadImageAsync(post.getImageName(), new Model.LoadImageListener() {
                         @Override
                         public void onResult(Bitmap imageBmp) {
                             if (mImageView != null) {
@@ -94,10 +90,5 @@ public class PostDetailsFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
     }
 }

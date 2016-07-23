@@ -10,9 +10,13 @@ public class User {
 
     private String mLastUpdated;
 
-    public User(String id, String mName, String imageName) {
+    public User(String id, String name, String imageName) {
+        this(name, imageName);
         setId(id);
-        setName(mName);
+    }
+
+    public User(String name, String imageName) {
+        setName(name);
         setImageName(imageName);
     }
 

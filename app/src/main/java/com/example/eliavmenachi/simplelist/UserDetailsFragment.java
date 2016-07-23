@@ -1,8 +1,8 @@
 package com.example.eliavmenachi.simplelist;
 
+import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -59,13 +59,13 @@ public class UserDetailsFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
 
         String userId = Model.getInstance().getUserId();
-        Model.getInstance().getUserById(userId, new Model.GetUserListener() {
+        Model.getInstance().getUserByIdAsync(userId, new Model.GetUserListener() {
             @Override
             public void onResult(User user) {
                 tvName.setText(user.getName());
                 if (user.getImageName() != null) {
                     imageProgressBar.setVisibility(View.VISIBLE);
-                    Model.getInstance().loadImage(user.getImageName(), new Model.LoadImageListener() {
+                    Model.getInstance().loadImageAsync(user.getImageName(), new Model.LoadImageListener() {
                         @Override
                         public void onResult(Bitmap imageBmp) {
                             if (mImageView != null) {

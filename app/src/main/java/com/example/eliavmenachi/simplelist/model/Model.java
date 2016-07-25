@@ -190,7 +190,7 @@ public class Model {
 
                     GroupSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
                 }
-                //return the complete student list to the caller
+
                 List<Group> res = GroupSql.getAll(mModelSql.getReadableDB());
                 listener.onResult(res);
             }
@@ -217,11 +217,10 @@ public class Model {
                         }
                     }
 
-                    GroupSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
+                    UserSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
                 }
-                //return the complete student list to the caller
-                List<User> res = UserSql.getAll(mModelSql.getReadableDB());
-                listener.onResult(res);
+
+                listener.onResult(users);
             }
 
             @Override
@@ -261,8 +260,7 @@ public class Model {
                     PostSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
                 }
 
-                List<Post> res = PostSql.getAll(mModelSql.getReadableDB());
-                listener.onResult(res);
+                listener.onResult(posts);
             }
 
             @Override
@@ -414,12 +412,6 @@ public class Model {
 
     public interface GetGroupsListener {
         public void onResult(List<Group> groups);
-
-        public void onCancel();
-    }
-
-    public interface AddUserToGroupListener {
-        public void onResult();
 
         public void onCancel();
     }

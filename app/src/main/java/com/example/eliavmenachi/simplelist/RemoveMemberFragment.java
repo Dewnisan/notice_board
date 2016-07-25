@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -89,6 +90,14 @@ public class RemoveMemberFragment extends Fragment {
         Model.getInstance().getAllGroupUsersAsync(mGroupId, new Model.GetUsersListener() {
             @Override
             public void onResult(List<User> users) {
+                for (User user : users) {
+                    String userId = Model.getInstance().getUserId();
+                    if (user.getId().equals(userId)) {
+                        users.remove(user);
+                        break;
+                    }
+                }
+
                 mProgressBar.setVisibility(View.GONE);
                 mData = users;
                 mAdapter.notifyDataSetChanged();
@@ -133,10 +142,12 @@ public class RemoveMemberFragment extends Fragment {
 
             final TextView tvName = (TextView) convertView.findViewById(R.id.row_remove_member_list_tv_name);
             final ImageView ivImage = (ImageView) convertView.findViewById(R.id.row_remove_member_list_iv_image);
+            Button btnRemove = (Button) convertView.findViewById(R.id.row_remove_member_list_btn_remove);
+
             tvName.setTag(new Integer(position));
             convertView.setTag(position);
 
-            User user = mData.get(position);
+            final User user = mData.get(position);
 
             Model.getInstance().getUserByIdAsync(user.getId(), new Model.GetUserListener() {
                 @Override
@@ -167,6 +178,15 @@ public class RemoveMemberFragment extends Fragment {
                     }
                 });
             }
+
+            btnRemove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Model.getInstance().removeMemberFromGroup(user.getId(), mGroupId);
+                    loadUsersData();
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
 
             return convertView;
         }

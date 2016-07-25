@@ -202,6 +202,35 @@ public class Model {
         }, lastUpdateDate);
     }
 
+    public void getAllGroupUsersAsync(String groupId, final GetUsersListener listener) {
+        final String lastUpdateDate = UserSql.getLastUpdateDate(mModelSql.getReadableDB());
+        mModelFirebase.getAllGroupUsersAsync(groupId, new GetUsersListener() {
+            @Override
+            public void onResult(List<User> users) {
+                if (users != null && users.size() > 0) {
+                    //update the local DB
+                    String recentUpdate = lastUpdateDate;
+                    for (User user : users) {
+                        UserSql.add(mModelSql.getWritableDB(), user);
+                        if (recentUpdate == null || user.getLastUpdated().compareTo(recentUpdate) > 0) {
+                            recentUpdate = user.getLastUpdated();
+                        }
+                    }
+
+                    GroupSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
+                }
+                //return the complete student list to the caller
+                List<User> res = UserSql.getAll(mModelSql.getReadableDB());
+                listener.onResult(res);
+            }
+
+            @Override
+            public void onCancel() {
+                listener.onCancel();
+            }
+        }, lastUpdateDate);
+    }
+
     public void addGroup(Group group) {
         mModelFirebase.addGroup(group);
     }

@@ -11,12 +11,11 @@
 
 
     <RelativeLayout
-        android:id="@+id/rowImageFrame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/activity_post_list_row_iv_image"
+            android:id="@+id/row_post_list_iv_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
@@ -25,7 +24,7 @@
             android:src="@mipmap/ic_launcher" />
 
         <ProgressBar
-            android:id="@+id/activity_post_list_row_pb_image"
+            android:id="@+id/row_post_list_pb_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone" />
@@ -44,13 +43,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/activity_post_list_row_tv_name"
+                android:id="@+id/row_post_list_tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Name" />
 
             <TextView
-                android:id="@+id/activity_post_list_row_tv_message"
+                android:id="@+id/row_post_list_tv_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Message" />

@@ -235,6 +235,44 @@ public class ModelFirebase {
         });
     }
 
+    public void getAllGroupUsersAsync(String groupId, final Model.GetUsersListener listener, final String lastUpdateDate) {
+        Firebase ref = mFirebase.child("groups").child(groupId);
+        Query queryRef = ref.child("members");
+
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(final DataSnapshot snapshot) {
+                final List<User> list = new LinkedList<User>();
+
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    Firebase userRef = mFirebase.child("users").child(userSnapshot.getKey());
+                    userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            User user = dataSnapshot.getValue(User.class);
+                            list.add(user);
+
+                            if (list.size() == snapshot.getChildrenCount()) {
+                                listener.onResult(list);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.d("ModelFirebase", "The read failed: " + firebaseError.getMessage());
+                listener.onCancel();
+            }
+        });
+    }
+
     public void addPost(Post post) {
         String date = calculateDate();
         post.setLastUpdated(date);
@@ -291,13 +329,11 @@ public class ModelFirebase {
     }
 
     private String calculateDate() {
-        SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        format.setTimeZone(TimeZone.getTimeZone("GMT"));
         SimpleDateFormat dateFormatLocal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String date = null;
-        date = dateFormatGmt.format(new Date()).toString();
 
-        return date;
+        return format.format(new Date()).toString();
     }
 }
 

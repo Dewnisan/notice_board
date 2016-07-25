@@ -46,7 +46,7 @@ public class AddMemberFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_member, container, false);
-        getActivity().setTitle(R.string.title_fragment_add_user);
+        getActivity().setTitle(R.string.title_fragment_add_member);
 
         final EditText etName = (EditText) view.findViewById(R.id.fragment_add_member_et_name);
 

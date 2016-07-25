@@ -108,9 +108,13 @@ public class PostsFragment extends Fragment {
                 mListener = (OnFragmentInteractionListener) getActivity();
                 mListener.onCreatePostItemSelected(mGroupId);
                 return true;
-            case R.id.action_add_user:
+            case R.id.action_add_member:
                 mListener = (OnFragmentInteractionListener) getActivity();
-                mListener.onAddUserItemSelected(mGroupId);
+                mListener.onAddMemberItemSelected(mGroupId);
+                return true;
+            case R.id.action_remove_member:
+                mListener = (OnFragmentInteractionListener) getActivity();
+                mListener.onRemoveMemberItemSelected(mGroupId);
                 return true;
         }
 
@@ -139,7 +143,9 @@ public class PostsFragment extends Fragment {
 
         void onPostSelected(String postId);
 
-        void onAddUserItemSelected(String groupId);
+        void onAddMemberItemSelected(String groupId);
+
+        void onRemoveMemberItemSelected(String groupId);
     }
 
     class MyAdapter extends BaseAdapter {
@@ -166,9 +172,9 @@ public class PostsFragment extends Fragment {
                 convertView = inflater.inflate(R.layout.row_post_list, null);
             }
 
-            final TextView tvName = (TextView) convertView.findViewById(R.id.activity_post_list_row_tv_name);
-            final TextView tvMessage = (TextView) convertView.findViewById(R.id.activity_post_list_row_tv_message);
-            final ImageView ivImage = (ImageView) convertView.findViewById(R.id.activity_post_list_row_iv_image);
+            final TextView tvName = (TextView) convertView.findViewById(R.id.row_post_list_tv_name);
+            final TextView tvMessage = (TextView) convertView.findViewById(R.id.row_post_list_tv_message);
+            final ImageView ivImage = (ImageView) convertView.findViewById(R.id.row_post_list_iv_image);
             tvName.setTag(new Integer(position));
             convertView.setTag(position);
 
@@ -189,7 +195,7 @@ public class PostsFragment extends Fragment {
             tvMessage.setText(post.getMessage());
 
             if (post.getImageName() != null) {
-                final ProgressBar progress = (ProgressBar) convertView.findViewById(R.id.activity_post_list_row_pb_image);
+                final ProgressBar progress = (ProgressBar) convertView.findViewById(R.id.row_post_list_pb_image);
                 progress.setVisibility(View.VISIBLE);
 
                 Model.getInstance().loadImageAsync(post.getImageName(), new Model.LoadImageListener() {

@@ -7,16 +7,14 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="horizontal"
-    tools:context=".GroupListRow">
-
+    tools:context="com.example.eliavmenachi.simplelist.RemoveMemberRow">
 
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/row_group_list_iv_image"
+            android:id="@+id/row_remove_member_list_iv_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -25,30 +23,32 @@
             android:src="@mipmap/ic_launcher" />
 
         <ProgressBar
-            android:id="@+id/row_group_list_pb_image"
+            android:id="@+id/row_remove_member_list_pb_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone" />
     </FrameLayout>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:paddingLeft="10dp">
 
-
-        <LinearLayout
-            android:paddingLeft="10dp"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/row_remove_member_list_tv_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="Name" />
 
-            <TextView
-                android:id="@+id/row_group_list_tv_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Name" />
+        <Button
+            android:id="@+id/row_remove_member_list_btn_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="Remove" />
 
-        </LinearLayout>
     </RelativeLayout>
+
 </LinearLayout>
+
+

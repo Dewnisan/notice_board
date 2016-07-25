@@ -152,8 +152,20 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
     }
 
     @Override
-    public void onAddUserItemSelected(String groupId) {
+    public void onAddMemberItemSelected(String groupId) {
         AddMemberFragment fragment = AddMemberFragment.newInstance(groupId);
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.activity_main_fragment_container, fragment);
+        transaction.addToBackStack(null);
+
+        transaction.commit();
+    }
+
+    @Override
+    public void onRemoveMemberItemSelected(String groupId) {
+        RemoveMemberFragment fragment = RemoveMemberFragment.newInstance(groupId);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 

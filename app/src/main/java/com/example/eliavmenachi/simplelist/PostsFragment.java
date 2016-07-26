@@ -20,6 +20,7 @@ import com.example.eliavmenachi.simplelist.model.Model;
 import com.example.eliavmenachi.simplelist.model.Post;
 import com.example.eliavmenachi.simplelist.model.User;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -81,6 +82,7 @@ public class PostsFragment extends Fragment {
             }
         });
 
+
         return view;
     }
 
@@ -116,9 +118,19 @@ public class PostsFragment extends Fragment {
                 mListener = (OnFragmentInteractionListener) getActivity();
                 mListener.onRemoveMemberItemSelected(mGroupId);
                 return true;
+            case R.id.action_exit_group:
+                exitGroup();
+                mListener = (OnFragmentInteractionListener) getActivity();
+                mListener.onExitGroupItemSelected();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void exitGroup() {
+        String userId = Model.getInstance().getUserId();
+        Model.getInstance().removeMemberFromGroup(userId, mGroupId);
     }
 
     private void loadPostsData() {
@@ -127,7 +139,10 @@ public class PostsFragment extends Fragment {
             @Override
             public void onResult(List<Post> posts) {
                 mProgressBar.setVisibility(View.GONE);
+
+                Collections.sort(posts);
                 mData = posts;
+
                 mAdapter.notifyDataSetChanged();
             }
 
@@ -146,6 +161,8 @@ public class PostsFragment extends Fragment {
         void onAddMemberItemSelected(String groupId);
 
         void onRemoveMemberItemSelected(String groupId);
+
+        void onExitGroupItemSelected();
     }
 
     class MyAdapter extends BaseAdapter {
@@ -174,11 +191,14 @@ public class PostsFragment extends Fragment {
 
             final TextView tvName = (TextView) convertView.findViewById(R.id.row_post_list_tv_name);
             final TextView tvMessage = (TextView) convertView.findViewById(R.id.row_post_list_tv_message);
+            TextView tvTimestamp = (TextView) convertView.findViewById(R.id.row_post_list_tv_timestamp);
             final ImageView ivImage = (ImageView) convertView.findViewById(R.id.row_post_list_iv_image);
+
             tvName.setTag(new Integer(position));
             convertView.setTag(position);
 
             Post post = mData.get(position);
+            tvTimestamp.setText(post.getLastUpdated());
 
             Model.getInstance().getUserByIdAsync(post.getOwner(), new Model.GetUserListener() {
                 @Override

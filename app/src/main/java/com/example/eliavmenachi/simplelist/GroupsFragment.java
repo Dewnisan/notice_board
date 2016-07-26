@@ -58,6 +58,7 @@ public class GroupsFragment extends Fragment {
         getActivity().setTitle(R.string.title_fragment_groups);
 
         setHasOptionsMenu(true);
+        mListener = (OnFragmentInteractionListener) getActivity();
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.fragment_groups_pb);
 
@@ -72,7 +73,6 @@ public class GroupsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String groupId = mData.get(position).getId();
-                mListener = (OnFragmentInteractionListener) getActivity();
                 mListener.onGroupSelected(groupId);
             }
         });
@@ -101,13 +101,15 @@ public class GroupsFragment extends Fragment {
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_user_details:
-                mListener = (OnFragmentInteractionListener) getActivity();
                 mListener.onProfileItemSelected();
                 return true;
 
             case R.id.action_create_group:
-                mListener = (OnFragmentInteractionListener) getActivity();
                 mListener.onCreateGroupItemSelected();
+                return true;
+
+            case R.id.action_sign_out:
+                mListener.onSignOutItemSelected();
                 return true;
         }
 
@@ -137,6 +139,8 @@ public class GroupsFragment extends Fragment {
         void onProfileItemSelected();
 
         void onGroupSelected(String groupId);
+
+        void onSignOutItemSelected();
     }
 
     class MyAdapter extends BaseAdapter {

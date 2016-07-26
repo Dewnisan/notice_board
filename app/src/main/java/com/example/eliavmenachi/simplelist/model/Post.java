@@ -3,7 +3,7 @@ package com.example.eliavmenachi.simplelist.model;
 /**
  * Created by talni on 20/07/2016.
  */
-public class Post {
+public class Post implements Comparable<Post> {
     private String mId;
     private String mOwner;
     private String mGroup;
@@ -69,5 +69,10 @@ public class Post {
 
     public void setLastUpdated(String lastUpdated) {
         this.mLastUpdated = lastUpdated;
+    }
+
+    @Override
+    public int compareTo(Post post) {
+        return this.getLastUpdated().compareTo(post.getLastUpdated());
     }
 }

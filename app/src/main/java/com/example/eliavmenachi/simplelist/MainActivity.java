@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.eliavmenachi.simplelist.model.Model;
+
 
 public class MainActivity extends Activity implements SignUpFragment.OnFragmentInteractionListener,
         SignInFragment.OnFragmentInteractionListener,
@@ -116,6 +118,14 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
     }
 
     @Override
+    public void onSignOutItemSelected() {
+        Model.getInstance().signOut();
+
+        mDefaultFragmentIndex = 0;
+        getFragmentManager().popBackStack(mDefaultFragmentIndex, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+
+    @Override
     public void onEditUserItemSelected() {
         EditUserFragment fragment = EditUserFragment.newInstance();
 
@@ -173,6 +183,11 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
         transaction.addToBackStack(null);
 
         transaction.commit();
+    }
+
+    @Override
+    public void onExitGroupItemSelected() {
+        getFragmentManager().popBackStack(mDefaultFragmentIndex, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     @Override

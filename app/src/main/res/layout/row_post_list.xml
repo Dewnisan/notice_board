@@ -54,6 +54,12 @@
                 android:layout_height="wrap_content"
                 android:text="Message" />
 
+            <TextView
+                android:id="@+id/row_post_list_tv_timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time" />
+
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

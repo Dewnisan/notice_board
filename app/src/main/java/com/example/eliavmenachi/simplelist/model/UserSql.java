@@ -104,6 +104,10 @@ public class UserSql {
         db.insertWithOnConflict(TABLE, TABLE_ID, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
+    public static void remove(SQLiteDatabase db, String id) {
+        db.delete(TABLE, TABLE_ID + " = ?", new String[]{id});
+    }
+
     public static String getLastUpdateDate(SQLiteDatabase db) {
         return LastUpdateSql.getLastUpdate(db, TABLE);
     }

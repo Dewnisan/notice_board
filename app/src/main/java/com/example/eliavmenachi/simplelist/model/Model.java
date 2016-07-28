@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Model {
@@ -60,8 +61,10 @@ public class Model {
         mModelFirebase.getUserByIdAsync(id, new GetUserListener() {
             @Override
             public void onResult(User user) {
+                User result = null;
+
                 if (user != null) {
-                    //update the local DB
+                    // Update the local DB
                     String recentUpdate = lastUpdateDate;
                     UserSql.add(mModelSql.getWritableDB(), user);
                     if (recentUpdate == null || user.getLastUpdated().compareTo(recentUpdate) > 0) {
@@ -69,15 +72,21 @@ public class Model {
                     }
 
                     UserSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
+                    result = UserSql.getById(mModelSql.getReadableDB(), id);
                 }
 
-                User res = UserSql.getById(mModelSql.getReadableDB(), id);
-                listener.onResult(res);
+                listener.onResult(result);
             }
 
             @Override
             public void onCancel() {
-                listener.onCancel();
+                // Try to handle request with local data
+                User result = UserSql.getById(mModelSql.getReadableDB(), id);
+                if (result != null) {
+                    listener.onResult(result);
+                } else {
+                    listener.onCancel();
+                }
             }
         }, lastUpdateDate);
     }
@@ -87,8 +96,10 @@ public class Model {
         mModelFirebase.getUserByNameAsync(name, new GetUserListener() {
             @Override
             public void onResult(User user) {
+                User result = null;
+
                 if (user != null) {
-                    //update the local DB
+                    // Update the local DB
                     String recentUpdate = lastUpdateDate;
                     UserSql.add(mModelSql.getWritableDB(), user);
                     if (recentUpdate == null || user.getLastUpdated().compareTo(recentUpdate) > 0) {
@@ -96,15 +107,21 @@ public class Model {
                     }
 
                     UserSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
+                    result = UserSql.getByName(mModelSql.getReadableDB(), name);
                 }
 
-                User res = UserSql.getByName(mModelSql.getReadableDB(), name);
-                listener.onResult(res);
+                listener.onResult(result);
             }
 
             @Override
             public void onCancel() {
-                listener.onCancel();
+                // Try to handle request with local data
+                User result = UserSql.getByName(mModelSql.getReadableDB(), name);
+                if (result != null) {
+                    listener.onResult(result);
+                } else {
+                    listener.onCancel();
+                }
             }
         }, lastUpdateDate);
     }
@@ -114,8 +131,10 @@ public class Model {
         mModelFirebase.getAllUsersAsync(new GetUsersListener() {
             @Override
             public void onResult(List<User> users) {
+                List<User> result = null;
+
                 if (users != null && users.size() > 0) {
-                    //update the local DB
+                    // Update the local DB
                     String recentUpdate = lastUpdateDate;
                     for (User user : users) {
                         UserSql.add(mModelSql.getWritableDB(), user);
@@ -125,15 +144,21 @@ public class Model {
                     }
 
                     UserSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
+                    result = UserSql.getAll(mModelSql.getReadableDB());
                 }
-                //return the complete student list to the caller
-                List<User> res = UserSql.getAll(mModelSql.getReadableDB());
-                listener.onResult(res);
+
+                listener.onResult(result);
             }
 
             @Override
             public void onCancel() {
-                listener.onCancel();
+                // Try to handle request with local data
+                List<User> result = UserSql.getAll(mModelSql.getReadableDB());
+                if (result != null) {
+                    listener.onResult(result);
+                } else {
+                    listener.onCancel();
+                }
             }
         }, lastUpdateDate);
     }
@@ -151,8 +176,10 @@ public class Model {
         mModelFirebase.getGroupByIdAsync(id, new GetGroupListener() {
             @Override
             public void onResult(Group group) {
+                Group result = null;
+
                 if (group != null) {
-                    //update the local DB
+                    // Update the local DB
                     String recentUpdate = lastUpdateDate;
                     GroupSql.add(mModelSql.getWritableDB(), group);
                     if (recentUpdate == null || group.getLastUpdated().compareTo(recentUpdate) > 0) {
@@ -160,15 +187,21 @@ public class Model {
                     }
 
                     GroupSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
+                    result = GroupSql.getById(mModelSql.getReadableDB(), id);
                 }
 
-                Group res = GroupSql.getById(mModelSql.getReadableDB(), id);
-                listener.onResult(res);
+                listener.onResult(result);
             }
 
             @Override
             public void onCancel() {
-                listener.onCancel();
+                // Try to handle request with local data
+                Group result = GroupSql.getById(mModelSql.getReadableDB(), id);
+                if (result != null) {
+                    listener.onResult(result);
+                } else {
+                    listener.onCancel();
+                }
             }
         }, lastUpdateDate);
     }
@@ -178,8 +211,10 @@ public class Model {
         mModelFirebase.getAllUserGroupsAsync(new GetGroupsListener() {
             @Override
             public void onResult(List<Group> groups) {
+                List<Group> result = null;
+
                 if (groups != null && groups.size() > 0) {
-                    //update the local DB
+                    // Update the local DB
                     String recentUpdate = lastUpdateDate;
                     for (Group group : groups) {
                         GroupSql.add(mModelSql.getWritableDB(), group);
@@ -189,26 +224,34 @@ public class Model {
                     }
 
                     GroupSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
+                    result = GroupSql.getAllByUser(mModelSql.getReadableDB(), Model.getInstance().getUserId());
                 }
 
-                List<Group> res = GroupSql.getAll(mModelSql.getReadableDB());
-                listener.onResult(res);
+                listener.onResult(result);
             }
 
             @Override
             public void onCancel() {
-                listener.onCancel();
+                // Try to handle request with local data
+                List<Group> result = GroupSql.getAllByUser(mModelSql.getReadableDB(), Model.getInstance().getUserId());
+                if (result != null) {
+                    listener.onResult(result);
+                } else {
+                    listener.onCancel();
+                }
             }
         }, lastUpdateDate);
     }
 
-    public void getAllGroupUsersAsync(String groupId, final GetUsersListener listener) {
+    public void getAllGroupUsersAsync(final String groupId, final GetUsersListener listener) {
         final String lastUpdateDate = UserSql.getLastUpdateDate(mModelSql.getReadableDB());
         mModelFirebase.getAllGroupUsersAsync(groupId, new GetUsersListener() {
             @Override
             public void onResult(List<User> users) {
+                List<User> result = null;
+
                 if (users != null && users.size() > 0) {
-                    //update the local DB
+                    // Update the local DB
                     String recentUpdate = lastUpdateDate;
                     for (User user : users) {
                         UserSql.add(mModelSql.getWritableDB(), user);
@@ -218,14 +261,42 @@ public class Model {
                     }
 
                     UserSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
+
+                    result = new LinkedList<User>();
+                    Group group = GroupSql.getById(mModelSql.getReadableDB(), groupId);
+                    if (group != null) {
+                        for (String member : group.getMembers().values()) {
+                            User user = UserSql.getById(mModelSql.getReadableDB(), member);
+                            if (user != null) {
+                                result.add(user);
+                            }
+                        }
+                    }
                 }
 
-                listener.onResult(users);
+                listener.onResult(result);
             }
 
             @Override
             public void onCancel() {
-                listener.onCancel();
+                // Try to handle request with local data
+                List<User> result = new LinkedList<User>();
+
+                Group group = GroupSql.getById(mModelSql.getReadableDB(), groupId);
+                if (group != null) {
+                    for (String member : group.getMembers().values()) {
+                        User user = UserSql.getById(mModelSql.getReadableDB(), member);
+                        if (user != null) {
+                            result.add(user);
+                        }
+                    }
+                }
+
+                if (result != null) {
+                    listener.onResult(result);
+                } else {
+                    listener.onCancel();
+                }
             }
         }, lastUpdateDate);
     }
@@ -240,13 +311,16 @@ public class Model {
 
     public void removeMemberFromGroup(String userId, String groupId) {
         mModelFirebase.removeUserFromGroup(userId, groupId);
+        GroupSql.remove(mModelSql.getWritableDB(), groupId);
     }
 
-    public void getAllGroupPostsAsync(String groupId, final GetPostsListener listener) {
+    public void getAllGroupPostsAsync(final String groupId, final GetPostsListener listener) {
         final String lastUpdateDate = PostSql.getLastUpdateDate(mModelSql.getReadableDB());
         mModelFirebase.getAllGroupPostsAsync(groupId, new GetPostsListener() {
             @Override
             public void onResult(List<Post> posts) {
+                List<Post> result = null;
+
                 if (posts != null && posts.size() > 0) {
                     //update the local DB
                     String recentUpdate = lastUpdateDate;
@@ -258,14 +332,21 @@ public class Model {
                     }
 
                     PostSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
+                    result = PostSql.getAllByGroup(mModelSql.getReadableDB(), groupId);
                 }
 
-                listener.onResult(posts);
+                listener.onResult(result);
             }
 
             @Override
             public void onCancel() {
-                listener.onCancel();
+                // Try to handle request with local data
+                List<Post> result = PostSql.getAllByGroup(mModelSql.getReadableDB(), groupId);
+                if (result != null) {
+                    listener.onResult(result);
+                } else {
+                    listener.onCancel();
+                }
             }
         }, lastUpdateDate);
     }
@@ -275,6 +356,8 @@ public class Model {
         mModelFirebase.getPostByIdAsync(id, new GetPostListener() {
             @Override
             public void onResult(Post post) {
+                Post result = null;
+
                 if (post != null) {
                     //update the local DB
                     String recentUpdate = lastUpdateDate;
@@ -284,15 +367,21 @@ public class Model {
                     }
 
                     PostSql.setLastUpdateDate(mModelSql.getWritableDB(), recentUpdate);
+                    result = PostSql.getById(mModelSql.getReadableDB(), id);
                 }
 
-                Post res = PostSql.getById(mModelSql.getReadableDB(), id);
-                listener.onResult(res);
+                listener.onResult(result);
             }
 
             @Override
             public void onCancel() {
-                listener.onCancel();
+                // Try to handle request with local data
+                Post result = PostSql.getById(mModelSql.getReadableDB(), id);
+                if (result != null) {
+                    listener.onResult(result);
+                } else {
+                    listener.onCancel();
+                }
             }
         }, lastUpdateDate);
     }

@@ -122,7 +122,11 @@ public class GroupsFragment extends Fragment {
             @Override
             public void onResult(List<Group> groups) {
                 mProgressBar.setVisibility(View.GONE);
-                mData = groups;
+
+                if (groups != null) {
+                    mData = groups;
+                }
+
                 mAdapter.notifyDataSetChanged();
             }
 

@@ -148,21 +148,10 @@ public class RemoveMemberFragment extends Fragment {
             convertView.setTag(position);
 
             final User user = mData.get(position);
-
-            Model.getInstance().getUserByIdAsync(user.getId(), new Model.GetUserListener() {
-                @Override
-                public void onResult(User user) {
-                    tvName.setText(user.getName());
-                }
-
-                @Override
-                public void onCancel() {
-
-                }
-            });
+            tvName.setText(user.getName());
 
             if (user.getImageName() != null) {
-                final ProgressBar progress = (ProgressBar) convertView.findViewById(R.id.row_post_list_pb_image);
+                final ProgressBar progress = (ProgressBar) convertView.findViewById(R.id.row_remove_member_list_pb_image);
                 progress.setVisibility(View.VISIBLE);
 
                 Model.getInstance().loadImageAsync(user.getImageName(), new Model.LoadImageListener() {

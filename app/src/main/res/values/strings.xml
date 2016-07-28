@@ -7,7 +7,7 @@
     <string name="action_edit_user">Edit</string>
     <string name="action_create_group">+</string>
     <string name="action_sign_out">Sign Out</string>
-    <string name="action_create_post">Add</string>
+    <string name="action_create_post">+</string>
     <string name="action_add_member">Add Member</string>
     <string name="action_remove_member">Remove Member</string>
     <string name="action_exit_group">Exit Group</string>

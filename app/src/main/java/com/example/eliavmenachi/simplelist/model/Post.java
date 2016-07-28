@@ -1,5 +1,7 @@
 package com.example.eliavmenachi.simplelist.model;
 
+import java.util.Date;
+
 /**
  * Created by talni on 20/07/2016.
  */
@@ -7,10 +9,22 @@ public class Post implements Comparable<Post> {
     private String mId;
     private String mOwner;
     private String mGroup;
+    private long mTimestamp;
     private String mMessage;
     private String mImageName;
 
     private String mLastUpdated;
+
+    public Post(String id, String owner, String group, long timestamp, String message, String imageName) {
+        this.mId = id;
+        this.mOwner = owner;
+        this.mGroup = group;
+        this.mTimestamp = timestamp;
+        this.mMessage = message;
+        this.mImageName = imageName;
+
+        this.mTimestamp = (new Date()).getTime();
+    }
 
     public Post(String id, String owner, String group, String message, String imageName) {
         this.mId = id;
@@ -18,9 +32,12 @@ public class Post implements Comparable<Post> {
         this.mGroup = group;
         this.mMessage = message;
         this.mImageName = imageName;
+
+        this.mTimestamp = (new Date()).getTime();
     }
 
     public Post() {
+        this.mTimestamp = (new Date()).getTime();
     }
 
     public String getId() {
@@ -45,6 +62,14 @@ public class Post implements Comparable<Post> {
 
     public void setGroup(String group) {
         this.mGroup = group;
+    }
+
+    public long getTimestamp() {
+        return mTimestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.mTimestamp = timestamp;
     }
 
     public String getMessage() {
@@ -73,6 +98,6 @@ public class Post implements Comparable<Post> {
 
     @Override
     public int compareTo(Post post) {
-        return this.getLastUpdated().compareTo(post.getLastUpdated());
+        return (int) (this.getTimestamp() - post.getTimestamp());
     }
 }

@@ -85,6 +85,39 @@ public class GroupSql {
         return null;
     }
 
+    public static List<Group> getAllByUser(SQLiteDatabase db, String userId) {
+        String selection = TABLE_MEMBERS + " LIKE ?";
+        String[] args = {"%" + userId + "%"};
+        Cursor cursor = db.query(TABLE, null, selection, args, null, null, null);
+
+        List<Group> groups = new LinkedList<Group>();
+
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(TABLE_ID);
+            int nameIndex = cursor.getColumnIndex(TABLE_NAME);
+            int membersIndex = cursor.getColumnIndex(TABLE_MEMBERS);
+            int imageNameIndex = cursor.getColumnIndex(TABLE_IMAGE_NAME);
+
+            do {
+                String id = cursor.getString(idIndex);
+                String name = cursor.getString(nameIndex);
+
+                String membersStr = cursor.getString(membersIndex);
+                List<String> members = new LinkedList<String>();
+                parseCollectionElements(membersStr, members);
+
+                String imageName = cursor.getString(imageNameIndex);
+
+                Group group = new Group(id, name, imageName);
+                group.addMembers(members);
+
+                groups.add(group);
+            } while (cursor.moveToNext());
+        }
+
+        return groups;
+    }
+
     public static void add(SQLiteDatabase db, Group group) {
         ContentValues values = new ContentValues();
 
@@ -97,6 +130,10 @@ public class GroupSql {
         values.put(TABLE_IMAGE_NAME, group.getImageName());
 
         db.insertWithOnConflict(TABLE, TABLE_ID, values, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public static void remove(SQLiteDatabase db, String id) {
+        db.delete(TABLE, TABLE_ID + " = ?", new String[]{id});
     }
 
     public static String getLastUpdateDate(SQLiteDatabase db) {

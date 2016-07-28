@@ -15,15 +15,16 @@ public class PostSql {
     private final static String TABLE_ID = "_id";
     private final static String TABLE_OWNER = "owner";
     private final static String TABLE_GROUP = "_group";
+    private final static String TABLE_TIMESTAMP = "timestamp";
     private final static String TABLE_MESSAGE = "message";
     private final static String TABLE_IMAGE_NAME = "image_name";
-    //final static String TABLE_DELETED = "deleted";
 
     static public void create(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE + " (" +
                 TABLE_ID + " TEXT PRIMARY KEY," +
                 TABLE_OWNER + " TEXT," +
                 TABLE_GROUP + " TEXT," +
+                TABLE_TIMESTAMP + " INTEGER," +
                 TABLE_MESSAGE + " TEXT," +
                 TABLE_IMAGE_NAME + " TEXT);");
     }
@@ -40,6 +41,7 @@ public class PostSql {
             int idIndex = cursor.getColumnIndex(TABLE_ID);
             int ownerIndex = cursor.getColumnIndex(TABLE_OWNER);
             int groupIndex = cursor.getColumnIndex(TABLE_GROUP);
+            int timestampIndex = cursor.getColumnIndex(TABLE_TIMESTAMP);
             int messageIndex = cursor.getColumnIndex(TABLE_MESSAGE);
             int imageNameIndex = cursor.getColumnIndex(TABLE_IMAGE_NAME);
 
@@ -47,10 +49,42 @@ public class PostSql {
                 String id = cursor.getString(idIndex);
                 String owner = cursor.getString(ownerIndex);
                 String group = cursor.getString(groupIndex);
+                long timestamp = cursor.getLong(timestampIndex);
                 String message = cursor.getString(messageIndex);
                 String imageName = cursor.getString(imageNameIndex);
 
-                Post post = new Post(id, owner, group, message, imageName);
+                Post post = new Post(id, owner, group, timestamp, message, imageName);
+                posts.add(post);
+            } while (cursor.moveToNext());
+        }
+
+        return posts;
+    }
+
+    public static List<Post> getAllByGroup(SQLiteDatabase db, String groupId) {
+        String where = TABLE_GROUP + " = ?";
+        String[] args = {groupId};
+        Cursor cursor = db.query(TABLE, null, where, args, null, null, null);
+
+        List<Post> posts = new LinkedList<Post>();
+
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(TABLE_ID);
+            int ownerIndex = cursor.getColumnIndex(TABLE_OWNER);
+            int groupIndex = cursor.getColumnIndex(TABLE_GROUP);
+            int timestampIndex = cursor.getColumnIndex(TABLE_TIMESTAMP);
+            int messageIndex = cursor.getColumnIndex(TABLE_MESSAGE);
+            int imageNameIndex = cursor.getColumnIndex(TABLE_IMAGE_NAME);
+
+            do {
+                String id = cursor.getString(idIndex);
+                String owner = cursor.getString(ownerIndex);
+                String group = cursor.getString(groupIndex);
+                long timestamp = cursor.getLong(timestampIndex);
+                String message = cursor.getString(messageIndex);
+                String imageName = cursor.getString(imageNameIndex);
+
+                Post post = new Post(id, owner, group, timestamp, message, imageName);
                 posts.add(post);
             } while (cursor.moveToNext());
         }
@@ -67,16 +101,18 @@ public class PostSql {
             int idIndex = cursor.getColumnIndex(TABLE_ID);
             int ownerIndex = cursor.getColumnIndex(TABLE_OWNER);
             int groupIndex = cursor.getColumnIndex(TABLE_GROUP);
+            int timestampIndex = cursor.getColumnIndex(TABLE_TIMESTAMP);
             int messageIndex = cursor.getColumnIndex(TABLE_MESSAGE);
             int imageNameIndex = cursor.getColumnIndex(TABLE_IMAGE_NAME);
 
             String _id = cursor.getString(idIndex);
             String owner = cursor.getString(ownerIndex);
             String group = cursor.getString(groupIndex);
+            long timestamp = cursor.getLong(timestampIndex);
             String message = cursor.getString(messageIndex);
             String imageName = cursor.getString(imageNameIndex);
 
-            Post post = new Post(_id, owner, group, message, imageName);
+            Post post = new Post(_id, owner, group, timestamp, message, imageName);
 
             return post;
         }
@@ -90,6 +126,7 @@ public class PostSql {
         values.put(TABLE_ID, post.getId());
         values.put(TABLE_OWNER, post.getOwner());
         values.put(TABLE_GROUP, post.getGroup());
+        values.put(TABLE_TIMESTAMP, post.getTimestamp());
         values.put(TABLE_MESSAGE, post.getMessage());
         values.put(TABLE_IMAGE_NAME, post.getImageName());
 

@@ -86,8 +86,8 @@ public class ModelFirebase {
     }
 
     public void getUserByIdAsync(String id, final Model.GetUserListener listener, String lastUpdateDate) {
-        Firebase ref = mFirebase.child("users").child(id);
-        Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);
+        Firebase ref = mFirebase.child("users");
+        Query queryRef = ref.child(id);
 
         queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -236,8 +236,8 @@ public class ModelFirebase {
     }
 
     public void getAllGroupUsersAsync(String groupId, final Model.GetUsersListener listener, final String lastUpdateDate) {
-        Firebase ref = mFirebase.child("groups").child(groupId);
-        Query queryRef = ref.child("members");
+        Firebase ref = mFirebase.child("groups");
+        Query queryRef = ref.child(groupId).child("members");
 
         queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -285,8 +285,8 @@ public class ModelFirebase {
     }
 
     public void getPostByIdAsync(String id, final Model.GetPostListener listener, String lastUpdateDate) {
-        Firebase ref = mFirebase.child("posts").child(id);
-        Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);
+        Firebase ref = mFirebase.child("posts");
+        Query queryRef = ref.child(id);
 
         queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -310,14 +310,14 @@ public class ModelFirebase {
         queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                final List<Post> list = new LinkedList<Post>();
+                final List<Post> posts = new LinkedList<Post>();
 
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     Post post = postSnapshot.getValue(Post.class);
-                    list.add(post);
+                    posts.add(post);
                 }
 
-                listener.onResult(list);
+                listener.onResult(posts);
             }
 
             @Override

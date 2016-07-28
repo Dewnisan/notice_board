@@ -21,6 +21,7 @@ import com.example.eliavmenachi.simplelist.model.Post;
 import com.example.eliavmenachi.simplelist.model.User;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -63,6 +64,7 @@ public class PostsFragment extends Fragment {
         getActivity().setTitle(R.string.title_fragment_posts);
 
         setHasOptionsMenu(true);
+        mListener = (OnFragmentInteractionListener) getActivity();
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.fragment_posts_pb);
 
@@ -77,7 +79,6 @@ public class PostsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String postId = mData.get(position).getId();
-                mListener = (OnFragmentInteractionListener) getActivity();
                 mListener.onPostSelected(postId);
             }
         });
@@ -107,20 +108,16 @@ public class PostsFragment extends Fragment {
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_create_post:
-                mListener = (OnFragmentInteractionListener) getActivity();
                 mListener.onCreatePostItemSelected(mGroupId);
                 return true;
             case R.id.action_add_member:
-                mListener = (OnFragmentInteractionListener) getActivity();
                 mListener.onAddMemberItemSelected(mGroupId);
                 return true;
             case R.id.action_remove_member:
-                mListener = (OnFragmentInteractionListener) getActivity();
                 mListener.onRemoveMemberItemSelected(mGroupId);
                 return true;
             case R.id.action_exit_group:
                 exitGroup();
-                mListener = (OnFragmentInteractionListener) getActivity();
                 mListener.onExitGroupItemSelected();
                 return true;
         }
@@ -140,8 +137,10 @@ public class PostsFragment extends Fragment {
             public void onResult(List<Post> posts) {
                 mProgressBar.setVisibility(View.GONE);
 
-                Collections.sort(posts);
-                mData = posts;
+                if (posts != null) {
+                    Collections.sort(posts);
+                    mData = posts;
+                }
 
                 mAdapter.notifyDataSetChanged();
             }
@@ -198,7 +197,9 @@ public class PostsFragment extends Fragment {
             convertView.setTag(position);
 
             Post post = mData.get(position);
-            tvTimestamp.setText(post.getLastUpdated());
+
+            Date date = new Date(post.getTimestamp());
+            tvTimestamp.setText(date.toString());
 
             Model.getInstance().getUserByIdAsync(post.getOwner(), new Model.GetUserListener() {
                 @Override

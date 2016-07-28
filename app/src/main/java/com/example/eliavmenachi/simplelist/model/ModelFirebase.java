@@ -328,6 +328,23 @@ public class ModelFirebase {
         });
     }
 
+    public void addListenerForValueEvent(String table, final ValueEventListener listener) {
+        Firebase ref = mFirebase.child(table);
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                listener.onDataChange(snapshot);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.d("ModelFirebase", "The read failed: " + firebaseError.getMessage());
+                listener.onCancelled(firebaseError);
+            }
+        });
+    }
+
     private String calculateDate() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         format.setTimeZone(TimeZone.getTimeZone("GMT"));

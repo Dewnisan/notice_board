@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.example.eliavmenachi.simplelist.MyApplication;
+import com.firebase.client.ValueEventListener;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -476,6 +477,11 @@ public class Model {
             e.printStackTrace();
         }
     }
+
+    public void addListenerForValueEvent(String table, ValueEventListener listener) {
+        mModelFirebase.addListenerForValueEvent(table, listener);
+    }
+
 
     public interface AuthListener {
         void onDone(String userId, Exception e);

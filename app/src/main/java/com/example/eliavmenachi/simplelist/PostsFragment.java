@@ -19,6 +19,9 @@ import android.widget.TextView;
 import com.example.eliavmenachi.simplelist.model.Model;
 import com.example.eliavmenachi.simplelist.model.Post;
 import com.example.eliavmenachi.simplelist.model.User;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.Collections;
 import java.util.Date;
@@ -83,6 +86,18 @@ public class PostsFragment extends Fragment {
             }
         });
 
+        Model.getInstance().addListenerForValueEvent("posts", new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                loadPostsData();
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
 
         return view;
     }

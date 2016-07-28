@@ -18,6 +18,9 @@ import android.widget.TextView;
 
 import com.example.eliavmenachi.simplelist.model.Group;
 import com.example.eliavmenachi.simplelist.model.Model;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -74,6 +77,19 @@ public class GroupsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String groupId = mData.get(position).getId();
                 mListener.onGroupSelected(groupId);
+            }
+        });
+
+        Model.getInstance().addListenerForValueEvent("groups", new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                loadGroupsData();
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
             }
         });
 

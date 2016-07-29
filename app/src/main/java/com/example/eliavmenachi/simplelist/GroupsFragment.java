@@ -139,6 +139,7 @@ public class GroupsFragment extends Fragment {
             public void onResult(List<Group> groups) {
                 mProgressBar.setVisibility(View.GONE);
 
+                mData.clear();
                 if (groups != null) {
                     mData = groups;
                 }

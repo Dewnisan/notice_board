@@ -11,6 +11,8 @@
     <string name="action_add_member">Add Member</string>
     <string name="action_remove_member">Remove Member</string>
     <string name="action_exit_group">Exit Group</string>
+    <string name="action_group_details">Group Details</string>
+
 
     <string name="title_fragment_user_details">Profile</string>
     <string name="title_fragment_edit_user">Edit Profile</string>
@@ -21,6 +23,7 @@
     <string name="title_fragment_posts">Posts</string>
     <string name="title_fragment_create_post">Create Post</string>
     <string name="title_fragment_post_details">Post</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

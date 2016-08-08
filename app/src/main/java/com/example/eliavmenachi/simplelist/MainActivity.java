@@ -181,6 +181,16 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
 
         transaction.replace(R.id.activity_main_fragment_container, fragment);
         transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    @Override
+    public void onGroupDetailsItemSelected(String id) {
+        GroupDetailsFragment fragment = GroupDetailsFragment.newInstance(id);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.activity_main_fragment_container, fragment);
+        transaction.addToBackStack(null);
 
         transaction.commit();
     }

@@ -189,8 +189,8 @@ public class ModelFirebase {
     }
 
     public void getGroupByIdAsync(String id, final Model.GetGroupListener listener, String lastUpdateDate) {
-        Firebase ref = mFirebase.child("groups").child(id);
-        Query queryRef = ref.orderByChild("lastUpdated").startAt(lastUpdateDate);
+        Firebase ref = mFirebase.child("groups");
+        Query queryRef = ref.child(id);
 
         queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

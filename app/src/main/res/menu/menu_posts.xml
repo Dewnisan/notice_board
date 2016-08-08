@@ -19,6 +19,12 @@
         android:title="@string/action_remove_member" />
 
     <item
+        android:id="@+id/action_group_details"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_group_details" />
+
+    <item
         android:id="@+id/action_exit_group"
         android:orderInCategory="100"
         android:showAsAction="never"

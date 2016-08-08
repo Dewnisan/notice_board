@@ -135,6 +135,9 @@ public class PostsFragment extends Fragment {
                 exitGroup();
                 mListener.onExitGroupItemSelected();
                 return true;
+            case R.id.action_group_details:
+                mListener.onGroupDetailsItemSelected(mGroupId);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -175,6 +178,8 @@ public class PostsFragment extends Fragment {
         void onAddMemberItemSelected(String groupId);
 
         void onRemoveMemberItemSelected(String groupId);
+
+        void onGroupDetailsItemSelected(String id);
 
         void onExitGroupItemSelected();
     }

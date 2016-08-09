@@ -41,7 +41,6 @@ public class GroupDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.mGroupId = getArguments().getString(ARG_GROUP_ID);
-
         }
     }
 

@@ -27,9 +27,11 @@ public class PostDetailsFragment extends Fragment {
 
     public static PostDetailsFragment newInstance(String postId) {
         PostDetailsFragment fragment = new PostDetailsFragment();
+
         Bundle args = new Bundle();
         args.putString(ARG_POST_ID, postId);
         fragment.setArguments(args);
+
         return fragment;
     }
 

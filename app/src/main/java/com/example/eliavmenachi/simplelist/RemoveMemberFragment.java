@@ -40,9 +40,11 @@ public class RemoveMemberFragment extends Fragment {
 
     public static RemoveMemberFragment newInstance(String groupId) {
         RemoveMemberFragment fragment = new RemoveMemberFragment();
+
         Bundle args = new Bundle();
         args.putString(ARG_GROUP_ID, groupId);
         fragment.setArguments(args);
+
         return fragment;
     }
 

@@ -111,13 +111,18 @@ public class ModelFirebase {
         queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+                User user = null;
+
                 Map<String, HashMap<String, String>> map = (HashMap<String, HashMap<String, String>>) snapshot.getValue();
 
-                Map.Entry<String, HashMap<String, String>> entry = map.entrySet().iterator().next();
-                String key = entry.getKey();
-                HashMap<String, String> value = entry.getValue();
-                User user = new User(key, value.get("name"), value.get("imageName"));
-                user.setLastUpdated(value.get("lastUpdated"));
+                if (map != null) {
+                    Map.Entry<String, HashMap<String, String>> entry = map.entrySet().iterator().next();
+                    String key = entry.getKey();
+                    HashMap<String, String> value = entry.getValue();
+
+                    user = new User(key, value.get("name"), value.get("imageName"));
+                    user.setLastUpdated(value.get("lastUpdated"));
+                }
 
                 listener.onResult(user);
             }

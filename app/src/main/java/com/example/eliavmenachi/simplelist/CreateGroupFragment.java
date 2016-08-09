@@ -35,8 +35,6 @@ public class CreateGroupFragment extends Fragment {
 
     public static CreateGroupFragment newInstance() {
         CreateGroupFragment fragment = new CreateGroupFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 

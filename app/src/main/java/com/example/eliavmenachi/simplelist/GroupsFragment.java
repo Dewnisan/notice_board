@@ -40,8 +40,6 @@ public class GroupsFragment extends Fragment {
 
     public static GroupsFragment newInstance() {
         GroupsFragment fragment = new GroupsFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 

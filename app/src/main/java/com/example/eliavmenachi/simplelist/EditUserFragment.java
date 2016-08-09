@@ -38,8 +38,6 @@ public class EditUserFragment extends Fragment {
 
     public static EditUserFragment newInstance() {
         EditUserFragment fragment = new EditUserFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 

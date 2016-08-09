@@ -1,7 +1,7 @@
 package com.example.eliavmenachi.simplelist;
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,8 +32,6 @@ public class SignInFragment extends Fragment {
 
     public static SignInFragment newInstance() {
         SignInFragment fragment = new SignInFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 

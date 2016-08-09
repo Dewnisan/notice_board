@@ -29,8 +29,6 @@ public class UserDetailsFragment extends Fragment {
 
     public static UserDetailsFragment newInstance() {
         UserDetailsFragment fragment = new UserDetailsFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 

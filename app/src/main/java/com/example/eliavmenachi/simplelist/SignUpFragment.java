@@ -1,7 +1,7 @@
 package com.example.eliavmenachi.simplelist;
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +23,6 @@ public class SignUpFragment extends Fragment {
 
     public static SignUpFragment newInstance() {
         SignUpFragment fragment = new SignUpFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 

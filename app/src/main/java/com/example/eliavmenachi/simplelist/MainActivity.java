@@ -3,7 +3,6 @@ package com.example.eliavmenachi.simplelist;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -228,10 +227,5 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
     public void onCancel() {
         //1, FragmentManager.POP_BACK_STACK_INCLUSIVE
         getFragmentManager().popBackStack(mDefaultFragmentIndex, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 }

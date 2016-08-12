@@ -18,7 +18,7 @@ import com.example.eliavmenachi.simplelist.model.Model;
 
 public class GroupDetailsFragment extends Fragment {
 
-    private static final String ARG_GROUP_ID = "GroupId";
+    private static final String ARG_GROUP_ID = "GROUP_ID";
 
     private String mGroupId;
     private ImageView mImageView;
@@ -32,9 +32,11 @@ public class GroupDetailsFragment extends Fragment {
 
     public static GroupDetailsFragment newInstance(String groupId) {
         GroupDetailsFragment fragment = new GroupDetailsFragment();
+
         Bundle args = new Bundle();
         args.putString(ARG_GROUP_ID, groupId);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -57,7 +59,8 @@ public class GroupDetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_group_details, container, false);
         setHasOptionsMenu(true);
-        getActivity().setTitle("Group");
+
+        getActivity().setTitle(R.string.title_fragment_group_details);
         mListener = (OnFragmentInteractionListener) getActivity();
 
         final TextView tvName = (TextView) view.findViewById(R.id.fragment_group_details_tv_name);
@@ -120,7 +123,6 @@ public class GroupDetailsFragment extends Fragment {
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_edit_group:
-                mListener = (OnFragmentInteractionListener) getActivity();
                 mListener.onEditGroupItemSelected(mGroupId);
                 return true;
         }

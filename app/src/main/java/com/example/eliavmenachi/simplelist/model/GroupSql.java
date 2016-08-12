@@ -149,7 +149,7 @@ public class GroupSql {
 
         String sep = ",";
         for (String element : elements) {
-            result.append(sep).append(element);
+            result.append(element).append(sep);
         }
 
         return result.toString();

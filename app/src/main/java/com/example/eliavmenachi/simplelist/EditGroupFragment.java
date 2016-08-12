@@ -2,7 +2,6 @@ package com.example.eliavmenachi.simplelist;
 
 import android.app.Fragment;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,23 +19,18 @@ import com.example.eliavmenachi.simplelist.model.Model;
 public class EditGroupFragment extends Fragment {
 
     private static final String ARG_GROUP_ID = "GROUP_ID";
+
     private String mGroupId;
     private ImageView mImageView;
     private String mImageFileName;
     private Bitmap mImageBitmap;
+
     private Group mCurrentGroup;
+
     private OnFragmentInteractionListener mListener;
 
     public EditGroupFragment() {
 
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            this.mGroupId = getArguments().getString(ARG_GROUP_ID);
-        }
     }
 
     public static EditGroupFragment newInstance(String id) {
@@ -50,11 +44,22 @@ public class EditGroupFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            this.mGroupId = getArguments().getString(ARG_GROUP_ID);
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_edit_group, container, false);
+
+        getActivity().setTitle(R.string.title_fragment_edit_group);
         mListener = (OnFragmentInteractionListener) getActivity();
+
         final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.fragment_edit_group_pb);
         final ProgressBar imageProgressBar = (ProgressBar) view.findViewById(R.id.fragment_edit_group_pb_image);
         final EditText etName = (EditText) view.findViewById(R.id.fragment_edit_group_tv_name);
@@ -65,6 +70,7 @@ public class EditGroupFragment extends Fragment {
             public void onResult(Group group) {
                 mCurrentGroup = group;
                 etName.setText(mCurrentGroup.getName());
+
                 if (mCurrentGroup.getImageName() != null) {
                     imageProgressBar.setVisibility(View.VISIBLE);
                     Model.getInstance().loadImageAsync(mCurrentGroup.getImageName(), new Model.LoadImageListener() {
@@ -80,6 +86,7 @@ public class EditGroupFragment extends Fragment {
                         }
                     });
                 }
+
                 progressBar.setVisibility(View.GONE);
             }
 
@@ -103,12 +110,12 @@ public class EditGroupFragment extends Fragment {
                 dialog.setDelegate(new MyAlertDialog.Delegate() {
                     @Override
                     public void onOk() {
-                        Log.d("EditUserFragment", "OK pressed");
+                        Log.d("EditGroupFragment", "OK pressed");
                     }
 
                 });
 
-                dialog.show(getFragmentManager(), getResources().getString(R.string.title_fragment_edit_user));
+                dialog.show(getFragmentManager(), getResources().getString(R.string.title_fragment_edit_group));
             }
         });
 
@@ -123,13 +130,6 @@ public class EditGroupFragment extends Fragment {
         return view;
     }
 
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -137,9 +137,6 @@ public class EditGroupFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-
         void onCancel();
 
         void onSave();

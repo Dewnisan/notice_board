@@ -7,10 +7,10 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".GroupDetailsFragment">
+    tools:context=".EditGroupFragment">
 
     <ProgressBar
-        android:id="@+id/fragment_group_details_pb"
+        android:id="@+id/fragment_edit_group_pb"
         style="@android:style/Widget.Holo.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,14 +23,14 @@
 
 
         <ImageView
-            android:id="@+id/fragment_group_details_iv_image"
+            android:id="@+id/fragment_edit_group_iv_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10px"
             android:src="@mipmap/ic_launcher" />
 
         <ProgressBar
-            android:id="@+id/fragment_group_details_pb_image"
+            android:id="@+id/fragment_edit_group_pb_image"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:indeterminate="true"
@@ -44,19 +44,39 @@
         android:layout_width="fill_parent">
 
         <TextView
-            android:id="@+id/fragment_group_details_lbl_name"
+            android:id="@+id/fragment_edit_group_lbl_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Name:"
             android:layout_margin="10px" />
 
-        <TextView
-            android:id="@+id/fragment_group_details_tv_name"
+        <EditText
+            android:id="@+id/fragment_edit_group_tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_margin="10px" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom|end">
+
+        <Button
+            android:id="@+id/fragment_edit_group_btn_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Save" />
+
+        <Button
+            android:id="@+id/fragment_edit_group_btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel" />
 
     </LinearLayout>
 

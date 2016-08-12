@@ -172,6 +172,10 @@ public class Model {
         mModelFirebase.editUser(user);
     }
 
+    public void editGroup(Group group) {
+        mModelFirebase.editGroup(group);
+    }
+
     public void getGroupByIdAsync(final String id, final GetGroupListener listener) {
         final String lastUpdateDate = GroupSql.getLastUpdateDate(mModelSql.getReadableDB());
         mModelFirebase.getGroupByIdAsync(id, new GetGroupListener() {

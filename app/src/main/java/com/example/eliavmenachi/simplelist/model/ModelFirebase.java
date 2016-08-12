@@ -85,6 +85,15 @@ public class ModelFirebase {
         ref.setValue(user);
     }
 
+    public void editGroup(Group group) {
+        String date = calculateDate();
+        group.setLastUpdated(date);
+
+        String id = group.getId();
+        Firebase ref = mFirebase.child("groups").child(id);
+        ref.setValue(group);
+    }
+
     public void getUserByIdAsync(String id, final Model.GetUserListener listener, String lastUpdateDate) {
         Firebase ref = mFirebase.child("users");
         Query queryRef = ref.child(id);

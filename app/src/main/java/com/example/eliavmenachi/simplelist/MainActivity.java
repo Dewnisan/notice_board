@@ -1,7 +1,7 @@
 package com.example.eliavmenachi.simplelist;
 
 import android.app.Activity;
-import android.app.FragmentManager;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,8 +21,6 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
         EditGroupFragment.OnFragmentInteractionListener,
         PostsFragment.OnFragmentInteractionListener,
         CreatePostFragment.OnFragmentInteractionListener {
-
-    private int mDefaultFragmentIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,173 +57,110 @@ public class MainActivity extends Activity implements SignUpFragment.OnFragmentI
 
     @Override
     public void onSignIn() {
-        mDefaultFragmentIndex = 1;
-
         GroupsFragment fragment = GroupsFragment.newInstance();
-
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        transaction.replace(R.id.activity_main_fragment_container, fragment);
-        transaction.addToBackStack(null);
-
-        transaction.commit();
+        goToFragment(fragment);
     }
 
     @Override
     public void onSignUp() {
         SignUpFragment fragment = SignUpFragment.newInstance();
-
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        transaction.replace(R.id.activity_main_fragment_container, fragment);
-        transaction.addToBackStack(null);
-
-        transaction.commit();
+        goToFragment(fragment);
     }
 
     @Override
     public void onCreateGroupItemSelected() {
         CreateGroupFragment fragment = CreateGroupFragment.newInstance();
-
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        transaction.replace(R.id.activity_main_fragment_container, fragment);
-        transaction.addToBackStack(null);
-
-        transaction.commit();
+        goToFragment(fragment);
     }
 
     @Override
     public void onProfileItemSelected() {
         UserDetailsFragment fragment = UserDetailsFragment.newInstance();
-
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        transaction.replace(R.id.activity_main_fragment_container, fragment);
-        transaction.addToBackStack(null);
-
-        transaction.commit();
+        goToFragment(fragment);
     }
 
     @Override
     public void onGroupSelected(String groupId) {
         PostsFragment fragment = PostsFragment.newInstance(groupId);
-
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        transaction.replace(R.id.activity_main_fragment_container, fragment);
-        transaction.addToBackStack(null);
-
-        transaction.commit();
+        goToFragment(fragment);
     }
 
     @Override
     public void onSignOutItemSelected() {
         Model.getInstance().signOut();
-
-        mDefaultFragmentIndex = 0;
-        getFragmentManager().popBackStack(mDefaultFragmentIndex, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getFragmentManager().popBackStack();
     }
 
     @Override
     public void onEditUserItemSelected() {
         EditUserFragment fragment = EditUserFragment.newInstance();
-
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        transaction.replace(R.id.activity_main_fragment_container, fragment);
-        transaction.addToBackStack(null);
-
-        transaction.commit();
+        goToFragment(fragment);
     }
 
     @Override
     public void onCreatePostItemSelected(String groupId) {
         CreatePostFragment fragment = CreatePostFragment.newInstance(groupId);
-
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        transaction.replace(R.id.activity_main_fragment_container, fragment);
-        transaction.addToBackStack(null);
-
-        transaction.commit();
+        goToFragment(fragment);
     }
 
     @Override
     public void onPostSelected(String postId) {
         PostDetailsFragment fragment = PostDetailsFragment.newInstance(postId);
-
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        transaction.replace(R.id.activity_main_fragment_container, fragment);
-        transaction.addToBackStack(null);
-
-        transaction.commit();
+        goToFragment(fragment);
     }
 
     @Override
     public void onAddMemberItemSelected(String groupId) {
         AddMemberFragment fragment = AddMemberFragment.newInstance(groupId);
-
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        transaction.replace(R.id.activity_main_fragment_container, fragment);
-        transaction.addToBackStack(null);
-
-        transaction.commit();
+        goToFragment(fragment);
     }
 
     @Override
     public void onRemoveMemberItemSelected(String groupId) {
         RemoveMemberFragment fragment = RemoveMemberFragment.newInstance(groupId);
-
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        transaction.replace(R.id.activity_main_fragment_container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        goToFragment(fragment);
     }
 
 
     @Override
     public void onGroupDetailsItemSelected(String id) {
         GroupDetailsFragment fragment = GroupDetailsFragment.newInstance(id);
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        transaction.replace(R.id.activity_main_fragment_container, fragment);
-        transaction.addToBackStack(null);
-
-        transaction.commit();
+        goToFragment(fragment);
     }
 
     @Override
     public void onEditGroupItemSelected(String id) {
         EditGroupFragment fragment = EditGroupFragment.newInstance(id);
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.activity_main_fragment_container, fragment);
-        transaction.addToBackStack(null);
-
-        transaction.commit();
+        goToFragment(fragment);
     }
 
     @Override
     public void onExitGroupItemSelected() {
-        getFragmentManager().popBackStack(mDefaultFragmentIndex, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getFragmentManager().popBackStack();
     }
 
     @Override
     public void onSave() {
-        getFragmentManager().popBackStack(mDefaultFragmentIndex, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getFragmentManager().popBackStack();
     }
 
     @Override
     public void onAdd() {
-        getFragmentManager().popBackStack(mDefaultFragmentIndex, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getFragmentManager().popBackStack();
     }
 
     @Override
     public void onCancel() {
         //1, FragmentManager.POP_BACK_STACK_INCLUSIVE
-        getFragmentManager().popBackStack(mDefaultFragmentIndex, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getFragmentManager().popBackStack();
+    }
+
+    private void goToFragment(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.activity_main_fragment_container, fragment);
+        transaction.addToBackStack(null);
+
+        transaction.commit();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.eliavmenachi.simplelist;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,6 +17,9 @@ import android.widget.ProgressBar;
 
 import com.example.eliavmenachi.simplelist.model.Group;
 import com.example.eliavmenachi.simplelist.model.Model;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class EditGroupFragment extends Fragment {
@@ -161,6 +165,18 @@ public class EditGroupFragment extends Fragment {
         void onCancel();
 
         void onSave();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            Bundle extras = data.getExtras();
+            mImageBitmap = (Bitmap) extras.get("data");
+            mImageView.setImageBitmap(mImageBitmap);
+
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            mImageFileName = mCurrentGroup.getName() + timeStamp + ".jpg";
+        }
     }
 
     private void takePicture() {

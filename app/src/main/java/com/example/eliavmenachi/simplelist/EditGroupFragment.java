@@ -1,8 +1,10 @@
 package com.example.eliavmenachi.simplelist;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import com.example.eliavmenachi.simplelist.model.Model;
 public class EditGroupFragment extends Fragment {
 
     private static final String ARG_GROUP_ID = "GROUP_ID";
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private String mGroupId;
     private ImageView mImageView;
@@ -96,6 +99,12 @@ public class EditGroupFragment extends Fragment {
             }
         });
 
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takePicture();
+            }
+        });
         Button btnSave = (Button) view.findViewById(R.id.fragment_edit_group_btn_save);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +112,17 @@ public class EditGroupFragment extends Fragment {
                 String s = etName.getText().toString();
                 mCurrentGroup.setName(s);
                 Model.getInstance().editGroup(mCurrentGroup);
+
+                if (mImageBitmap != null && mImageFileName != mCurrentGroup.getImageName()) {
+                    if (mCurrentGroup.getImageName() != null) {
+                        Model.getInstance().deleteImage(mCurrentGroup.getImageName());
+                    }
+
+                    mCurrentGroup.setImageName(mImageFileName);
+
+                    Model.getInstance().saveImage(mImageBitmap, mImageFileName);
+                    Model.getInstance().editGroup(mCurrentGroup);
+                }
                 mListener = (OnFragmentInteractionListener) getActivity();
                 mListener.onSave();
 
@@ -123,7 +143,7 @@ public class EditGroupFragment extends Fragment {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener = (OnFragmentInteractionListener) getActivity();
+
                 mListener.onCancel();
             }
         });
@@ -140,5 +160,12 @@ public class EditGroupFragment extends Fragment {
         void onCancel();
 
         void onSave();
+    }
+
+    private void takePicture() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
     }
 }

@@ -46,6 +46,7 @@ public class EditUserFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_user, container, false);
+        mListener = (OnFragmentInteractionListener) getActivity();
 
         final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.fragment_edit_user_pb);
         final ProgressBar imageProgressBar = (ProgressBar) view.findViewById(R.id.fragment_edit_user_pb_image);
@@ -100,7 +101,6 @@ public class EditUserFragment extends Fragment {
                     Model.getInstance().editUser(mCurrentUser);
                 }
 
-                mListener = (OnFragmentInteractionListener) getActivity();
                 mListener.onSave();
 
                 MyAlertDialog dialog = MyAlertDialog.newInstance("Changes successfully saved");
@@ -120,7 +120,6 @@ public class EditUserFragment extends Fragment {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener = (OnFragmentInteractionListener) getActivity();
                 mListener.onCancel();
             }
         });

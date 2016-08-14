@@ -147,6 +147,7 @@ public class EditGroupFragment extends Fragment {
                 mListener.onCancel();
             }
         });
+
         return view;
     }
 

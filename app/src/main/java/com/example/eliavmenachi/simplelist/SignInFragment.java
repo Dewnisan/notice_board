@@ -45,6 +45,7 @@ public class SignInFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
+        getActivity().setTitle(R.string.app_name);
 
         Button btnSignIn = (Button) view.findViewById(R.id.fragment_sign_in_btn_sign_in);
         btnSignIn.setOnClickListener(new View.OnClickListener() {

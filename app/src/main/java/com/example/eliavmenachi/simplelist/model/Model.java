@@ -397,12 +397,14 @@ public class Model {
 
     public void saveImage(final Bitmap imageBitmap, final String imageName) {
         saveImageToFile(imageBitmap, imageName); // synchronously save image locally
+
         Thread d = new Thread(new Runnable() {  // asynchronously save image to parse
             @Override
             public void run() {
                 mModelCloudinary.saveImage(imageBitmap, imageName);
             }
         });
+
         d.start();
     }
 
@@ -414,12 +416,15 @@ public class Model {
         AsyncTask<String, String, Bitmap> task = new AsyncTask<String, String, Bitmap>() {
             @Override
             protected Bitmap doInBackground(String... params) {
-                Bitmap bmp = loadImageFromFile(imageName);              //first try to fin the image on the device
-                if (bmp == null) {                                      //if image not found - try downloading it from parse
+                Bitmap bmp = loadImageFromFile(imageName); // First try to find the image on the device
+
+                if (bmp == null) { // If image not found - try downloading it from parse
                     bmp = mModelCloudinary.loadImage(imageName);
-                    if (bmp != null)
-                        saveImageToFile(bmp, imageName);    //save the image locally for next time
+                    if (bmp != null) {
+                        saveImageToFile(bmp, imageName); // Save the image locally for next time
+                    }
                 }
+
                 return bmp;
             }
 
@@ -428,12 +433,14 @@ public class Model {
                 listener.onResult(result);
             }
         };
+
         task.execute();
     }
 
     private Bitmap loadImageFromFile(String imageFileName) {
         String str = null;
         Bitmap bitmap = null;
+
         try {
             File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
             File imageFile = new File(dir, imageFileName);
@@ -441,26 +448,29 @@ public class Model {
             //File dir = mContext.getExternalFilesDir(null);
             InputStream inputStream = new FileInputStream(imageFile);
             bitmap = BitmapFactory.decodeStream(inputStream);
-            Log.d("tag", "got image from cache: " + imageFileName);
 
+            Log.d("tag", "got image from cache: " + imageFileName);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return bitmap;
     }
 
     private void saveImageToFile(Bitmap imageBitmap, String imageFileName) {
         FileOutputStream fos;
         OutputStream out = null;
+
         try {
             //File dir = context.getExternalFilesDir(null);
-            File dir = Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES);
+            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
             if (!dir.exists()) {
                 dir.mkdir();
             }
+
             File imageFile = new File(dir, imageFileName);
             imageFile.createNewFile();
 
@@ -468,13 +478,13 @@ public class Model {
             imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.close();
 
-            //add the picture to the gallery so we dont need to manage the cache size
+            // Add the picture to the gallery so we don't need to manage the cache size
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             Uri contentUri = Uri.fromFile(imageFile);
             mediaScanIntent.setData(contentUri);
             mContext.sendBroadcast(mediaScanIntent);
-            Log.d("tag", "add image to cache: " + imageFileName);
 
+            Log.d("tag", "add image to cache: " + imageFileName);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
